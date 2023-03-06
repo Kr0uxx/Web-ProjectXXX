@@ -3,22 +3,27 @@ from requests.exceptions import ReadTimeout
 from openai.error import RateLimitError, InvalidRequestError
 import telebot
 from telebot import types
-
+from datetime import datetime
 
 
 # Предоставляем ключ API 
-openai.api_key = "Your_Key"
+openai.api_key = "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"
 bot = telebot.TeleBot('6135465665:AAFpRJAuVon1O2oBdvIuwFvV6yAqKHrR08k')
 
 
-def ask(prompt): # def которая отвечает за получение ответа , чтобы задать вопрос ask('вопрос')
+def ask(prompt, a): # def которая отвечает за получение ответа , чтобы задать вопрос ask('вопрос')
     completion = openai.Completion.create(engine="text-davinci-003", 
                                           prompt=prompt, 
                                           temperature=0.5, 
                                           max_tokens=1000)
     
-    answ = completion.choices[0]['text']
-    answer = f'Ответ на вопрос <{prompt}>:\n\n{answ}'
+    if a == 1:
+        answ = completion.choices[0]['text']
+        answer = f'Ответ на вопрос\n\n{prompt} :\n\n{answ}'
+        
+    elif a == 0:
+        answ = completion.choices[0]['text']
+        answer = f'{answ}'
     
     return answer
 
@@ -27,10 +32,10 @@ def ask(prompt): # def которая отвечает за получение �
 def start(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     
-    btn1 = types.KeyboardButton("👋 Поздороваться")
+    btn1 = types.KeyboardButton("👋")
     markup.add(btn1)
     
-    bot.send_message(message.from_user.id, "👋 Привет! Я бот, сделанный специально для проекта по WEB'у, во мне есть chat-gpt!", reply_markup=markup)
+    bot.send_message(message.from_user.id, "👋 Привет! Я бот, сделанный специально для проекта по WEB'у, у меня есть AI и не только!", reply_markup=markup)
 
 
 @bot.message_handler(content_types=['text'])
@@ -42,8 +47,10 @@ def get_text_messages(message):
         btn1 = types.KeyboardButton('🖥')
         btn2 = types.KeyboardButton('👪')
         btn3 = types.KeyboardButton('❓')
+        btn4 = types.KeyboardButton('🌤')
+        btn5 = types.KeyboardButton('⌚️')
         
-        markup.add(btn1, btn2, btn3)
+        markup.add(btn1, btn2, btn3, btn4, btn5)
         
         bot.send_message(message.from_user.id, 'Жду Ваши вопросы 😉', reply_markup=markup) #ответ бота
         
@@ -55,9 +62,21 @@ def get_text_messages(message):
 
     elif message.text == '❓':
         bot.send_message(message.from_user.id, 'Ну вообще 06.03.2023 я писался как хотелка Артема вопреки остальным тимейтам. Chat-GPT, хайп и все дела. Но я активно развиваюсь сейчас, стану выполнять такие же функции, как и наш проектный сайт!', parse_mode='Markdown') 
+    
+    elif message.text == '🌤':
+        bot.send_message(message.from_user.id, '...ищем данные у наших источников...', parse_mode='Markdown')
+        bot.send_message(message.from_user.id, '...смотрим гугл...', parse_mode='Markdown')
+        bot.send_message(message.from_user.id, ask('Погода сегодня', 0), parse_mode='Markdown')
+    
+    elif message.text == '⌚️':
+        bot.send_message(message.from_user.id, '...лезем на Сикстинскую капеллу ради Вас...', parse_mode='Markdown')
         
+        now = datetime.now()
+        bot.send_message(message.from_user.id, now.strftime("%d/%m/%Y %H:%M:%S"), parse_mode='Markdown')
+    
     else:
-        bot.send_animation(message.from_user.id, ask(message.text), parse_mode='Markdown')
+        bot.send_message(message.from_user.id, '...запрос обрабатывается, подождите...', parse_mode='Markdown')
+        bot.send_message(message.from_user.id, ask(message.text, 1), parse_mode='Markdown')
         
 
 
