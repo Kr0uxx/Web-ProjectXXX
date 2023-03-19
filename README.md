@@ -1,8 +1,13 @@
 # Web-ProjectXXX
 
+ЛУЧШАЯ ССЫЛКА С API --  https://itproger.com/news/10-otlichnih-api-dlya-vashih-proektov
+
+
 https://habr.com/ru/company/macloud/blog/562700/
 
 https://cyber-ed.ru/15-zabavnykh-api-dlya-vashego-proekta/
+
+https://proglib.io/p/7-besplatnyh-api-o-kotoryh-nikto-ne-govorit-2020-12-07
 
 
 
@@ -10,8 +15,12 @@ https://cyber-ed.ru/15-zabavnykh-api-dlya-vashego-proekta/
 
 спотик - https://developer.spotify.com/documentation/web-api/
 
+ютуб - https://developers.google.com/youtube?hl=ru
+
+цитаты - https://favqs.com/api/
 
 
+эмоджи - https://pypi.org/project/emoji/
 
 
 идеи:
