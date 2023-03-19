@@ -15,17 +15,19 @@ def moji(txt):
         'Clear': '☀️',
         'Clouds': '🌥'
         }
+    
     try:
         return dict_m[txt]
+    
     except Exception:
         return '🌫'
 
 
 def weather(coords):
     req = requests.get("https://api.openweathermap.org/data/2.5/weather?",
-                       params={'q': coords, 'units': 'metric', 'lang': 'ru', 'APPID': app_id})
+                       params={'q': coords, 'units': 'metric', 'lang': 'en', 'APPID': app_id})
     
-    #'lang': 'en' для англ версии 
+    #'lang': 'ru' для ru версии 
     
 
     data = req.json()
@@ -38,17 +40,17 @@ def weather(coords):
     sp = data['wind']['speed']
     d = data['wind']['deg']
     
-    dictt['wind'] = f'{sp}, {d}'
-    dictt['visibility'] = data['visibility']
+    dictt['wind'] = f"{sp} m/sec ; {d} deg"
+    dictt['visibility'] = str(int(data['visibility']) / 1000)
     dictt['humidity'] = data['main']['humidity']
     
     dictt['png'] = moji(data['weather'][0]['main'])
     
-    txt = f"Фух, нашли:\n\n {dictt['png']}\n\n {dictt['weather'].capitalize()} \n\n Температура: {dictt['temperature']} C \n Ветер: {dictt['wind']} \n Видимость: {dictt['visibility']} m \n Влажность: {dictt['humidity']} %"
+    txt = f"Oh, here u r:\n\n {dictt['png']}\n\n {dictt['weather'].capitalize()} \n\n Temperature: {dictt['temperature']} C \n Wind: {dictt['wind']} \n Visibility: {dictt['visibility']} km \n Humidity: {dictt['humidity']} %\n"
       
     return txt
     
-    
+
 # EXAMPLE --- print(weather('Ural'))
 
 
