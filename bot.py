@@ -5,27 +5,13 @@ import telebot
 from telebot import types
 from datetime import datetime
 
+from functions import gpt_func
+
 
 # Предоставляем ключ API 
-openai.api_key = "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"
 bot = telebot.TeleBot('6135465665:AAFpRJAuVon1O2oBdvIuwFvV6yAqKHrR08k')
 
 
-def ask(prompt, a): # def которая отвечает за получение ответа , чтобы задать вопрос ask('вопрос')
-    completion = openai.Completion.create(engine="text-davinci-003", 
-                                          prompt=prompt, 
-                                          temperature=0.5, 
-                                          max_tokens=1000)
-    
-    if a == 1:
-        answ = completion.choices[0]['text']
-        answer = f'Ответ на вопрос\n\n{prompt} :\n\n{answ}'
-        
-    elif a == 0:
-        answ = completion.choices[0]['text']
-        answer = f'{answ}'
-    
-    return answer
 
 
 @bot.message_handler(commands=['start'])
@@ -64,9 +50,10 @@ def get_text_messages(message):
         bot.send_message(message.from_user.id, 'Ну вообще 06.03.2023 я писался как хотелка Артема вопреки остальным тимейтам. Chat-GPT, хайп и все дела. Но я активно развиваюсь сейчас, стану выполнять такие же функции, как и наш проектный сайт!', parse_mode='Markdown') 
     
     elif message.text == '🌤':
+        bot.send_message(message.from_user.id, )
         bot.send_message(message.from_user.id, '...ищем данные у наших источников...', parse_mode='Markdown')
         bot.send_message(message.from_user.id, '...смотрим гугл...', parse_mode='Markdown')
-        bot.send_message(message.from_user.id, ask('Погода сегодня', 0), parse_mode='Markdown')
+        bot.send_message(message.from_user.id, gpt_func.ask('Погода сегодня', 0), parse_mode='Markdown')
     
     elif message.text == '⌚️':
         bot.send_message(message.from_user.id, '...лезем на Сикстинскую капеллу ради Вас...', parse_mode='Markdown')
@@ -76,7 +63,7 @@ def get_text_messages(message):
     
     else:
         bot.send_message(message.from_user.id, '...запрос обрабатывается, подождите...', parse_mode='Markdown')
-        bot.send_message(message.from_user.id, ask(message.text, 1), parse_mode='Markdown')
+        bot.send_message(message.from_user.id, gpt_func.ask(message.text, 1), parse_mode='Markdown')
         
 
 
