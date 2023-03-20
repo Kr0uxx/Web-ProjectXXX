@@ -42,7 +42,7 @@ https://proglib.io/p/7-besplatnyh-api-o-kotoryh-nikto-ne-govorit-2020-12-07
 
 -отслеживание рынка
 
--цитата дня https://favqs.com/api/
+-цитата дня (https://favqs.com/api/)
 
 -настраиваемые уведомления(связать с бд)
 
