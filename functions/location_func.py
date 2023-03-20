@@ -17,13 +17,14 @@ def get_address_from_coords(coords):
 
     try:
         r = requests.get(url="https://geocode-maps.yandex.ru/1.x/", params=PARAMS)
-        #получаем данные
         json_data = r.json()
-        #вытаскиваем из всего пришедшего json именно строку с полным адресом.
+        
         address_str = json_data["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["metaDataProperty"]["GeocoderMetaData"]["AddressDetails"]["Country"]["AddressLine"]
         #возвращаем полученный адрес
         return address_str
     
     except Exception as e:
-        #если не смогли, то возвращаем ошибку
         return "error"
+    
+    
+#print(get_address_from_coords('37.597576,55.771899'))
