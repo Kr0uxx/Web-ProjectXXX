@@ -44,7 +44,7 @@ https://proglib.io/p/7-besplatnyh-api-o-kotoryh-nikto-ne-govorit-2020-12-07
 
 -цитата дня (https://favqs.com/api/)
 
--настраиваемые уведомления(связать с бд)
+-настраиваемые уведомления + связать с бд
 
 -API
 
