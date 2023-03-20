@@ -33,6 +33,7 @@ https://proglib.io/p/7-besplatnyh-api-o-kotoryh-nikto-ne-govorit-2020-12-07
 -chatgpt
 
 Нужно:
+
 -возвращение mp3 из mp4
 
 -работа с картинками (PIL)
