@@ -8,6 +8,9 @@ from datetime import datetime
 from functions import gpt_func
 
 
+#ОБЯЗАТЕЛЬНО НАДО БУДЕТ ЗАПУСТИТЬ spec-scrip.py
+
+
 # Предоставляем ключ API 
 bot = telebot.TeleBot('6135465665:AAFpRJAuVon1O2oBdvIuwFvV6yAqKHrR08k')
 
