@@ -18,5 +18,5 @@ def quote():
     return text, img_url
     
 
-print(quote()[1])
-print(quote()[0])
+#print(quote()[1])
+#print(quote()[0])
