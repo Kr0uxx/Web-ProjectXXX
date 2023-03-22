@@ -2,10 +2,8 @@ import requests
 from wiki_photo_func import get_wiki_image 
 from translating_func import translator_qu
 
-def quote():
-    
-    req = requests.get('https://favqs.com/api/qotd')
-    
+def quote(): 
+    req = requests.get('https://favqs.com/api/qotd') 
     data = req.json()
     
     author = data["quote"]["author"]
@@ -15,8 +13,12 @@ def quote():
     text = f"{author} - \n\n"
     text += f"{translator_qu(txt)}"
     
+    if img_url == '0':
+        return text, 'error'
+    
     return text, img_url
     
 
-#print(quote()[1])
-#print(quote()[0])
+#a, b = quote()
+#print(a)
+#print('ссылка:  ',  b)
