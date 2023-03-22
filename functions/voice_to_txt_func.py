@@ -1,8 +1,11 @@
 import speech_recognition as sr
+import os
 
 #надо будет передать язык
 #файл будет лежать в папке files под название !   wav_file.wav  !
 #но его нужно создать еще будет 
+
+#написать форматирование из разных форматов в wav
 
 def voice(lang):
     try:
