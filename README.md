@@ -80,6 +80,8 @@ NLE Choppa - 'CAPO' , 'https://spotify/nlechopa/capo' (условно так)
 
 -цитата дня (https://favqs.com/api/)
 
+-новости
+
 
 Нужно:
 
