@@ -2,31 +2,32 @@ import wikipedia
 import requests
 import json
 
-#https://en.wikipedia.org/w/api.php?action=help&modules=query
 
-#возвращает ссылку на изображение из википедии 
+# https://en.wikipedia.org/w/api.php?action=help&modules=query
+
+# возвращает ссылку на изображение из википедии
 def get_wiki_image(search_term):
     try:
-        result = wikipedia.search(search_term, results = 1)
-        
+        result = wikipedia.search(search_term, results=1)
+
         wikipedia.set_lang('en')
-        wkpage = wikipedia.WikipediaPage(title = result[0])
+        wkpage = wikipedia.WikipediaPage(title=result[0])
         title = wkpage.title
-        
+
         req = requests.get("http://en.wikipedia.org/w/api.php?",
-                           params={'action': 'query', 'prop': 'pageimages', 'format': 'json', 'piprop': 'original', 'titles': title})
-        
+                           params={'action': 'query', 'prop': 'pageimages', 'format': 'json', 'piprop': 'original',
+                                   'titles': title})
+
         data = json.loads(req.text)
-        
-        img_link = list(data['query']['pages'].values())[0]['original']['source']  
-        
-        return img_link  
-     
+
+        img_link = list(data['query']['pages'].values())[0]['original']['source']
+
+        return img_link
+
     except Exception as e:
         return '0'
 
-
-#wiki_image = get_wiki_image('Sun Tzu')
-#print(wiki_image)
+# wiki_image = get_wiki_image('Sun Tzu')
+# print(wiki_image)
 
 # https://upload.wikimedia.org/wikipedia/commons/a/ab/Abraham_Lincoln_O-77_matte_collodion_print.jpg
