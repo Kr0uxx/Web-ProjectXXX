@@ -1,76 +1,65 @@
-import openai
-from requests.exceptions import ReadTimeout
-from openai.error import RateLimitError, InvalidRequestError
-import telebot
-from telebot import types
-from datetime import datetime
-
-from functions import gpt_func
-
-# ОБЯЗАТЕЛЬНО НАДО БУДЕТ ЗАПУСТИТЬ spec-scrip.py
+from telegram.ext import Application, MessageHandler, filters
+from telegram.ext import CommandHandler
+from telegram import ReplyKeyboardMarkup
+from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func
 
 
-# Предоставляем ключ API 
-bot = telebot.TeleBot('6135465665:AAFpRJAuVon1O2oBdvIuwFvV6yAqKHrR08k')
+reply_keyboard = [['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'],
+                  ['/dictionary'], ['/kitties'], ['/map'], ['/img'], ['/exchange rate'], ['/help'], ['/GIT']]
+markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 
-@bot.message_handler(commands=['start'])
-def start(message):
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+#доделать
+async def weather_command(update, context):
+    await update.message.reply_text(weather_func.weather('координаты'))
 
-    btn1 = types.KeyboardButton("👋")
-    markup.add(btn1)
+#доделать
+async def help_command(update, context):
+    await update.message.reply_text("help")
+ 
+ 
+async def quote_command(update, context):
+    await update.message.reply_text(quote_func.quote())
+       
 
-    bot.send_message(message.from_user.id,
-                     "👋 Привет! Я бот, сделанный специально для проекта по WEB'у, у меня есть AI и не только!",
-                     reply_markup=markup)
-
-
-@bot.message_handler(content_types=['text'])
-def get_text_messages(message):
-    if message.text == '👋':
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)  # создание новых кнопок
-
-        btn1 = types.KeyboardButton('🖥')
-        btn2 = types.KeyboardButton('👪')
-        btn3 = types.KeyboardButton('❓')
-        btn4 = types.KeyboardButton('🌤')
-        btn5 = types.KeyboardButton('⌚️')
-
-        markup.add(btn1, btn2, btn3, btn4, btn5)
-
-        bot.send_message(message.from_user.id, 'Жду Ваши вопросы 😉', reply_markup=markup)  # ответ бота
-
-    elif message.text == '🖥':
-        bot.send_message(message.from_user.id,
-                         'Вот ссылка на наш гит - ' + '[WEB-PROJECT](https://github.com/Kr0uxx/Web-ProjectXXX)',
-                         parse_mode='Markdown')
-
-    elif message.text == '👪':
-        bot.send_message(message.from_user.id,
-                         'Начнем с моего первого и главного отца - ' + '[Артема](https://github.com/YL-bot)' + '. Потом стоит упоминуть второго папу, по совместительству тим-лида - ' + '[Максим](https://github.com/Kr0uxx)' + ' . Ну и, конечно же, главная и единственная женщина команды - ' + '[Екатерина](https://github.com/katiarapter)',
-                         parse_mode='Markdown')
-
-    elif message.text == '❓':
-        bot.send_message(message.from_user.id,
-                         'Ну вообще 06.03.2023 я писался как хотелка Артема вопреки остальным тимейтам. Chat-GPT, хайп и все дела. Но я активно развиваюсь сейчас, стану выполнять такие же функции, как и наш проектный сайт!',
-                         parse_mode='Markdown')
-
-    elif message.text == '🌤':
-        bot.send_message(message.from_user.id, )
-        bot.send_message(message.from_user.id, '...ищем данные у наших источников...', parse_mode='Markdown')
-        bot.send_message(message.from_user.id, '...смотрим гугл...', parse_mode='Markdown')
-        bot.send_message(message.from_user.id, gpt_func.ask('Погода сегодня', 0), parse_mode='Markdown')
-
-    elif message.text == '⌚️':
-        bot.send_message(message.from_user.id, '...лезем на Сикстинскую капеллу ради Вас...', parse_mode='Markdown')
-
-        now = datetime.now()
-        bot.send_message(message.from_user.id, now.strftime("%d/%m/%Y %H:%M:%S"), parse_mode='Markdown')
-
-    else:
-        bot.send_message(message.from_user.id, '...запрос обрабатывается, подождите...', parse_mode='Markdown')
-        bot.send_message(message.from_user.id, gpt_func.ask(message.text, 1), parse_mode='Markdown')
+async def git_command(update, context):
+    await update.message.reply_text('Вот ссылка на наш гит:\n\nhttps://github.com/Kr0uxx/Web-ProjectXXX')
 
 
-bot.polling(none_stop=True, interval=0)  # обязательная для работы бота часть
+async def time_command(update, context):
+    await update.message.reply_text(time_func.time())
+    
+    
+async def message_answer(update, context):
+    txt = update.message.text
+    answer = gpt_func.ask(txt, 0)
+    await update.message.reply_text(answer)
+
+
+async def start_command(update, context):
+    user = update.effective_user
+    await update.message.reply_html(
+        rf"Здравствуй, {user.mention_html()}! Я бот с разными функциями, во мне даже есть GPT - можем пообщаться! Давай посмотрим на то, что я еще умею :D", reply_markup=markup)
+
+
+def main():
+    application = Application.builder().token('6118068525:AAF6TU-SIYuy5lUViZgxpLOUhYIzkNDo6q8').build()
+
+    text_handler = MessageHandler(filters.TEXT & ~filters.COMMAND, message_answer)
+    
+    application.add_handler(text_handler)
+    application.add_handler(CommandHandler("start", start_command))
+    application.add_handler(CommandHandler("help", help_command))
+    application.add_handler(CommandHandler("GIT", git_command))
+    application.add_handler(CommandHandler("time", time_command))
+    application.add_handler(CommandHandler("phrase_of_the_day", quote_command))
+    application.add_handler(CommandHandler("whether", weather_command))
+
+
+
+    application.run_polling()
+
+
+
+if __name__ == '__main__':
+    main()

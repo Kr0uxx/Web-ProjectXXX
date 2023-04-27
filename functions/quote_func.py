@@ -1,6 +1,6 @@
 import requests
-from wiki_photo_func import get_wiki_image
-from translating_func import translator_qu
+from .wiki_photo_func import get_wiki_image
+from .translating_func import translator_qu
 
 
 def quote():
