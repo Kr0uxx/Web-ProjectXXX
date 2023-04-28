@@ -87,7 +87,7 @@ async def get_spec_news(about):
 
 # print(get_news('ru', 'science'))
 # print(get_spec_news('Путин'))
-if os.name == 'nt':
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+#if os.name == 'nt':
+#    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     
 #print(asyncio.run(get_spec_news('Trump')))
