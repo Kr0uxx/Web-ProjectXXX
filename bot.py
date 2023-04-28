@@ -6,7 +6,7 @@ import asyncio
 import os
 import aiohttp
 
-reply_keyboard = [['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'], ['/kitties'], ['/map'], ['/img'], ['/exchange rate'], ['/help'], ['/GIT']]
+reply_keyboard = [['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'], ['/kitties'], ['/map'], ['/img'], ['/exchange_rate'], ['/help'], ['/GIT']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 reply_keyboard_news = [['/specific_news'], ['/general_news']]
@@ -21,16 +21,22 @@ markup_weather_loc = ReplyKeyboardMarkup([[btn_loc]], one_time_keyboard=True)
 
 #help - доделать
 async def help_command(update, context):
-    await update.message.reply_text("help")
+    await update.message.reply_text("/weather - выводит погоду по указанным данным\n/time - выводит врем] самых популярных мест\n"
+                                    "/phrase_of_the_day - выводит фразу дня с картинкой автора\n/news - дает на выбор топики или личный запрос, потом выводит найденные новости\n"
+                                    "/kitties - выводит милую фотографию котенка\n/exchange_rate - выводит курс валют\n/GIT - ссылка на наш гит\n"
+                                    "/dictionary - работа с Cambridge Dictionary\n/map - работа с картой\n/img - работа с изображением\n/GPT - общение с AI от OpenAI")
 
 
-#погода
+#погода - доделать
 async def weather_command(update, context):
     await update.message.reply_html(rf"Поделитесь с нами вашей локацией для поиска погоды в вашем районе!", reply_markup=markup_weather_loc)
     return 1
 
 async def weather_command_response(update, context):
-    await update.message.reply_text(update.message.text)
+    long, lang = update.message.location.latitude, update.message.location.longitude
+    func = weather_func.weather((lang, long))
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
     return ConversationHandler.END
     
     
@@ -157,11 +163,12 @@ def main():
     )
     application.add_handler(conv_handler)
     
+
     #погода
     conv_handler_weather = ConversationHandler(
         entry_points=[CommandHandler("weather", weather_command)],
         states={
-            1: [MessageHandler(filters.TEXT & ~filters.COMMAND, weather_command_response)],   
+            1: [MessageHandler(filters.LOCATION & ~filters.COMMAND, weather_command_response)],   
         },
         fallbacks=[CommandHandler('stop', stop)]
     )
