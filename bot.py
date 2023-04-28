@@ -40,7 +40,7 @@ async def general_news(update, context):
     await update.message.reply_html(rf"Выберите топик", reply_markup=markup_news_topic) 
     
 async def business(update, context):
-    await update.message.reply_text(news_func.get_news('business'))
+    await update.message.reply_text(news_func.get_news('business', 'en'))
     
 async def entertainment(update, context):
     await update.message.reply_html(rf"{news_func.get_news('entertainment')}", reply_markup=markup)

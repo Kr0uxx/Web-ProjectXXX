@@ -21,7 +21,7 @@ def get_news(category='general', country='us'):
         category = 'general'
 
     req = requests.get('https://newsapi.org/v2/top-headlines?',
-                       params={'country': country, 'category': category, 'pageSize': 21, 'apiKey': key})
+                       params={'country': 'en', 'category': category, 'pageSize': 21, 'apiKey': key})
     data = req.json()
 
     text = 'Here u r: \n\n'
