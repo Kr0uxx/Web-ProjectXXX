@@ -83,39 +83,10 @@ async def git_command(update, context):
 
 #время
 async def time_command(update, context):
-    func = time()
+    func = time_func.time()
     answer = await func
     print(answer)
     await update.message.reply_text(answer)
-
-async def get_response(url, params):
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url, params=params) as resp:
-            return await resp.json()
-
-async def time():
-    # https://timeapi.io/api/Time/current/zone?timeZone=Europe/Amsterdam
-
-    list_zones = ['Europe/London', 'Europe/Moscow', 'Europe/Berlin',
-                  'America/Los_Angeles', 'America/Toronto',
-                  'Asia/Dubai', 'Asia/Hong_Kong', 'Asia/Tokyo',
-                  'Africa/Lagos'
-                  ]
-
-    txt = 'The time of our vast planet:\n\n'
-
-    for i in list_zones:
-        req = await get_response("https://timeapi.io/api/Time/current/zone?", params={'timeZone': i})
-
-        data = req
-
-        # print(i, '---------------', data)
-
-        txt += f"{i.split('/')[1]} : {data['time']} \n"
-
-    txt += "\nHaven't found the right time? Follow the link bellow!\n\nhttps://www.timeanddate.com/worldclock/?low=c"
-
-    return txt
 
 #chat gpt  
 async def message_answer(update, context):
