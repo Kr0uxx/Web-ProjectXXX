@@ -1,7 +1,8 @@
 # возвращает самые популярные города со временем
 # также возвращает местное время
 
-
+import os
+import asyncio
 import requests
 import aiohttp
 
@@ -34,3 +35,6 @@ async def time():
     txt += "\nHaven't found the right time? Follow the link bellow!\n\nhttps://www.timeanddate.com/worldclock/?low=c"
 
     return txt
+
+if os.name == 'nt':
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())

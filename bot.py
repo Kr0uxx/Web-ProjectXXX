@@ -2,6 +2,8 @@ from telegram.ext import Application, MessageHandler, filters
 from telegram.ext import CommandHandler, ConversationHandler
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func, news_func
+import asyncio
+import os
 
 
 reply_keyboard = [['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'], ['/kitties'], ['/map'], ['/img'], ['/exchange rate'], ['/help'], ['/GIT']]
@@ -71,7 +73,7 @@ async def specific_news_response(update, context):
 
 #фраза дня
 async def quote_command(update, context):
-    await update.message.reply_text(quote_func.quote())
+    await update.message.reply_text(asyncio.run(quote_func.quote()))
        
 
 #гит
@@ -81,7 +83,7 @@ async def git_command(update, context):
 
 #время
 async def time_command(update, context):
-    await update.message.reply_text(time_func.time())
+    await update.message.reply_text(asyncio.run(time_func.time()))
     
 
 #chat gpt  
@@ -152,4 +154,6 @@ def main():
 
 
 if __name__ == '__main__':
+    if os.name == 'nt':
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     main()
