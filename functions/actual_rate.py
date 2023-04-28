@@ -22,6 +22,8 @@ for i in listt[2::]:
 def correct_currency_form(currency_name):
     if currency_name == "Турецких лир":
         return "турецкой лиры"
+    if currency_name == "Казахстанских тенге":
+        return "казахстанского тенге"
     currency_name = currency_name.split()
     if len(currency_name) == 1:
         return morph.parse(currency_name[0])[0].inflect({'sing', 'gent'}).word
@@ -40,7 +42,7 @@ def correct_currency_form(currency_name):
 # функция, возвращающая актуальный курс валюты на выбор(передается буквенное сокращение валюты)
 def get_actual_rate(input_currency):
     # те валюты, которые будут доступны пользователю:
-    # currencies_list = ["USD", "EUR", "CNY", "GBP", "JPY", "CHF", "UAH", "TRY", "AUD"]
+    # currencies_list = ["USD", "EUR", "CNY", "GBP", "JPY", "CHF", "UAH", "TRY", "AUD", "KZT"]
     rate = 0
     currency = ''
     for name in currencies_names[:-1]:
@@ -50,7 +52,7 @@ def get_actual_rate(input_currency):
     return f"Курс для 1 {correct_currency_form(currency)} составляет {rate} RUB."
 
 
-'''print(get_actual_rate('USD'))
+print(get_actual_rate('USD'))
 print(get_actual_rate('EUR'))
 print(get_actual_rate('CNY'))
 print(get_actual_rate('GBP'))
@@ -58,4 +60,5 @@ print(get_actual_rate('JPY'))
 print(get_actual_rate('CHF'))
 print(get_actual_rate('UAH'))
 print(get_actual_rate('TRY'))
-print(get_actual_rate('AUD'))'''
+print(get_actual_rate('AUD'))
+print(get_actual_rate('KZT'))
