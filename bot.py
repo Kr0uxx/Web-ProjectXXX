@@ -4,7 +4,7 @@ from telegram import ReplyKeyboardMarkup, KeyboardButton
 from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func, news_func
 import asyncio
 import os
-
+import aiohttp
 
 reply_keyboard = [['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'], ['/kitties'], ['/map'], ['/img'], ['/exchange rate'], ['/help'], ['/GIT']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
@@ -83,8 +83,38 @@ async def git_command(update, context):
 
 #время
 async def time_command(update, context):
-    await update.message.reply_text(time_func.main())
-    
+    await update.message.reply_text(asyncio.run(time()))
+
+async def get_response(url, params):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, params=params) as resp:
+            return await resp.json()
+
+async def time():
+    if os.name == 'nt':
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    # https://timeapi.io/api/Time/current/zone?timeZone=Europe/Amsterdam
+
+    list_zones = ['Europe/London', 'Europe/Moscow', 'Europe/Berlin',
+                  'America/Los_Angeles', 'America/Toronto',
+                  'Asia/Dubai', 'Asia/Hong_Kong', 'Asia/Tokyo',
+                  'Africa/Lagos'
+                  ]
+
+    txt = 'The time of our vast planet:\n\n'
+
+    for i in list_zones:
+        req = await get_response("https://timeapi.io/api/Time/current/zone?", params={'timeZone': i})
+
+        data = req
+
+        # print(i, '---------------', data)
+
+        txt += f"{i.split('/')[1]} : {data['time']} \n"
+
+    txt += "\nHaven't found the right time? Follow the link bellow!\n\nhttps://www.timeanddate.com/worldclock/?low=c"
+
+    return txt
 
 #chat gpt  
 async def message_answer(update, context):

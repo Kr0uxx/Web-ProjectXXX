@@ -2,7 +2,7 @@ import openai
 
 
 # Предоставляем ключ API 
-openai.api_key = "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"
+openai.api_key = "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"
 
 
 def ask(prompt, a): # def которая отвечает за получение ответа , чтобы задать вопрос ask('вопрос')
