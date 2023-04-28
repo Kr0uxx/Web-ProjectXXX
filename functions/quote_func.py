@@ -24,7 +24,7 @@ async def quote():
     text += txt
 
     if img_url == '0':
-        return text, 'error'
+        return text, 'Image was not found :('
 
     return text, img_url
 

@@ -49,7 +49,7 @@ async def weather(coords):
     dictt['visibility'] = str(int(data['visibility']) / 1000)
     dictt['humidity'] = data['main']['humidity']
 
-    dictt['png'] = moji(data['weather'][0]['main'])
+    dictt['png'] = await moji(data['weather'][0]['main'])
 
     txt = f"Oh, here u r:\n\n {dictt['png']}\n\n {dictt['weather'].capitalize()} \n\n Temperature: {dictt['temperature']} C \n Wind: {dictt['wind']} \n Visibility: {dictt['visibility']} km \n Humidity: {dictt['humidity']} %\n"
 
