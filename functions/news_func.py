@@ -4,14 +4,23 @@
 # country = ['ch', 'ru', 'fr', 'de', 'us', 'en']
 
 import requests
+import os
+import asyncio
+import aiohttp
+
 
 key = 'a7aa77aa97884b9780c4f55b57811f18'
 
 categories_list = ['business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology']
 country_list = ['ch', 'ru', 'fr', 'de', 'us', 'en']
 
-
-def get_news(category='general', country='us'):
+async def get_response(url, params):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, params=params) as resp:
+            return await resp.json()
+        
+        
+async def get_news(category='general', country='us'):
     global key, categories_list, country_list
 
     if country not in country_list:
@@ -20,9 +29,8 @@ def get_news(category='general', country='us'):
     if category not in categories_list:
         category = 'general'
 
-    req = requests.get('https://newsapi.org/v2/top-headlines?',
-                       params={'country': 'us', 'category': category, 'pageSize': 21, 'apiKey': key})
-    data = req.json()
+    req = await get_response('https://newsapi.org/v2/top-headlines?', params={'country': country, 'category': category, 'pageSize': 21, 'apiKey': key})
+    data = req
 
     text = 'Here u r: \n\n'
 
@@ -42,21 +50,18 @@ def get_news(category='general', country='us'):
 
     except Exception as e:
         if text == 'Here u r: \n\n':
-            return f'{e}'
-            #return 'Oops, smth went wrong... :('
-
+            return 'Oops, smth went wrong... :('
         return text
 
 
-def get_spec_news(about):
+async def get_spec_news(about):
     global key
 
     try:
         text = 'Here u r: \n\n'
 
-        req = requests.get('https://newsapi.org/v2/top-headlines?',
-                           params={'q': about, 'apiKey': key})
-        data = req.json()
+        req = await get_response('https://newsapi.org/v2/top-headlines?', params={'q': about, 'apiKey': key})
+        data = req
 
         if not data:
             raise Exception
@@ -82,3 +87,7 @@ def get_spec_news(about):
 
 # print(get_news('ru', 'science'))
 # print(get_spec_news('Путин'))
+if os.name == 'nt':
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    
+#print(asyncio.run(get_spec_news('Trump')))

@@ -42,32 +42,32 @@ async def general_news(update, context):
     await update.message.reply_html(rf"Выберите топик", reply_markup=markup_news_topic) 
     
 async def business(update, context):
-    await update.message.reply_text(news_func.get_news('business', 'en'))
+    await update.message.reply_html(rf"{asyncio.run(news_func.get_news('business', 'us'))}", reply_markup=markup)
     
 async def entertainment(update, context):
-    await update.message.reply_html(rf"{news_func.get_news('entertainment')}", reply_markup=markup)
+    await update.message.reply_html(rf"{asyncio.run(news_func.get_news('entertainment', 'us'))}", reply_markup=markup)
     
 async def general(update, context):
-    await update.message.reply_html(rf"{news_func.get_news('general')}", reply_markup=markup)
+    await update.message.reply_html(rf"{asyncio.run(news_func.get_news('general', 'us'))}", reply_markup=markup)
     
 async def health(update, context):
-    await update.message.reply_html(rf"{news_func.get_news('health')}", reply_markup=markup)
+    await update.message.reply_html(rf"{asyncio.run(news_func.get_news('health', 'us'))}", reply_markup=markup)
     
 async def science(update, context):
-    await update.message.reply_html(rf"{news_func.get_news('science')}", reply_markup=markup)
+    await update.message.reply_html(rf"{asyncio.run(news_func.get_news('science', 'us'))}", reply_markup=markup)
     
 async def sports(update, context):
-    await update.message.reply_html(rf"{news_func.get_news('sports')}", reply_markup=markup)
+    await update.message.reply_html(rf"{asyncio.run(news_func.get_news('sports', 'us'))}", reply_markup=markup)
     
 async def technology(update, context):
-    await update.message.reply_html(rf"{news_func.get_news('technology')}", reply_markup=markup)
+    await update.message.reply_html(rf"{asyncio.run(news_func.get_news('technology', 'us'))}", reply_markup=markup)
 
 async def specific_news(update, context):
     await update.message.reply_text("Введите интересующий Вас топик")
     return 1
 
 async def specific_news_response(update, context):
-    await update.message.reply_html(news_func.get_spec_news(update.message.text), reply_markup=markup)
+    await update.message.reply_html(asyncio.run(news_func.get_spec_news(update.message.text)), reply_markup=markup)
     return ConversationHandler.END
   
 
