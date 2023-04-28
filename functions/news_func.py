@@ -21,7 +21,7 @@ def get_news(category='general', country='us'):
         category = 'general'
 
     req = requests.get('https://newsapi.org/v2/top-headlines?',
-                       params={'country': 'en', 'category': category, 'pageSize': 21, 'apiKey': key})
+                       params={'country': 'us', 'category': category, 'pageSize': 21, 'apiKey': key})
     data = req.json()
 
     text = 'Here u r: \n\n'
@@ -40,9 +40,10 @@ def get_news(category='general', country='us'):
 
         return text
 
-    except Exception:
+    except Exception as e:
         if text == 'Here u r: \n\n':
-            return 'Oops, smth went wrong... :('
+            return f'{e}'
+            #return 'Oops, smth went wrong... :('
 
         return text
 
