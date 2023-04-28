@@ -11,7 +11,7 @@ categories_list = ['business', 'entertainment', 'general', 'health', 'science', 
 country_list = ['ch', 'ru', 'fr', 'de', 'us', 'en']
 
 
-def get_news(country='us', category='general'):
+def get_news(category='general', country='us'):
     global key, categories_list, country_list
 
     if country not in country_list:
