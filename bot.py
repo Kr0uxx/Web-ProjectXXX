@@ -83,7 +83,10 @@ async def git_command(update, context):
 
 #время
 async def time_command(update, context):
-    await update.message.reply_text(asyncio.run(time()))
+    func = time()
+    answer = await func
+    print(answer)
+    await update.message.reply_text(answer)
 
 async def get_response(url, params):
     async with aiohttp.ClientSession() as session:
@@ -111,8 +114,8 @@ async def time():
         txt += f"{i.split('/')[1]} : {data['time']} \n"
 
     txt += "\nHaven't found the right time? Follow the link bellow!\n\nhttps://www.timeanddate.com/worldclock/?low=c"
-
-    return txt
+txt
+    return 
 
 #chat gpt  
 async def message_answer(update, context):
