@@ -3,9 +3,15 @@
 
 
 import requests
+import aiohttp
 
 
-def time():
+async def get_response(url, params):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, params=params) as resp:
+            return await resp.json()
+
+async def time():
     # https://timeapi.io/api/Time/current/zone?timeZone=Europe/Amsterdam
 
     list_zones = ['Europe/London', 'Europe/Moscow', 'Europe/Berlin',
@@ -17,10 +23,9 @@ def time():
     txt = 'The time of our vast planet:\n\n'
 
     for i in list_zones:
-        req = requests.get("https://timeapi.io/api/Time/current/zone?",
-                           params={'timeZone': i})
+        req = await get_response("https://timeapi.io/api/Time/current/zone?", params={'timeZone': i})
 
-        data = req.json()
+        data = req
 
         # print(i, '---------------', data)
 

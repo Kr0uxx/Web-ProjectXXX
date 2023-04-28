@@ -1,12 +1,17 @@
 import wikipedia
 import requests
 import json
-
+import aiohttp
 
 # https://en.wikipedia.org/w/api.php?action=help&modules=query
 
+async def get_response(url, params):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, params=params) as resp:
+            return await resp.json()
+
 # возвращает ссылку на изображение из википедии
-def get_wiki_image(search_term):
+async def get_wiki_image(search_term):
     try:
         result = wikipedia.search(search_term, results=1)
 
@@ -14,9 +19,7 @@ def get_wiki_image(search_term):
         wkpage = wikipedia.WikipediaPage(title=result[0])
         title = wkpage.title
 
-        req = requests.get("http://en.wikipedia.org/w/api.php?",
-                           params={'action': 'query', 'prop': 'pageimages', 'format': 'json', 'piprop': 'original',
-                                   'titles': title})
+        req = await get_response("http://en.wikipedia.org/w/api.php?", params={'action': 'query', 'prop': 'pageimages', 'format': 'json', 'piprop': 'original', 'titles': title})
 
         data = json.loads(req.text)
 

@@ -4,6 +4,8 @@
 # country = ['ch', 'ru', 'fr', 'de', 'us', 'en']
 
 import requests
+import aiohttp
+
 
 key = 'a7aa77aa97884b9780c4f55b57811f18'
 
@@ -11,7 +13,13 @@ categories_list = ['business', 'entertainment', 'general', 'health', 'science', 
 country_list = ['ch', 'ru', 'fr', 'de', 'us', 'en']
 
 
-def get_news(country='us', category='general'):
+async def get_response(url, params):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, params=params) as resp:
+            return await resp.json()
+
+
+async def get_news(country='us', category='general'):
     global key, categories_list, country_list
 
     if country not in country_list:
@@ -20,9 +28,8 @@ def get_news(country='us', category='general'):
     if category not in categories_list:
         category = 'general'
 
-    req = requests.get('https://newsapi.org/v2/top-headlines?',
-                       params={'country': country, 'category': category, 'pageSize': 21, 'apiKey': key})
-    data = req.json()
+    req = await get_response('https://newsapi.org/v2/top-headlines?', params={'country': country, 'category': category, 'pageSize': 21, 'apiKey': key})
+    data = req
 
     text = 'Here u r: \n\n'
 
@@ -47,15 +54,15 @@ def get_news(country='us', category='general'):
         return text
 
 
-def get_spec_news(about):
+async def get_spec_news(about):
     global key
 
     try:
         text = 'Here u r: \n\n'
 
-        req = requests.get('https://newsapi.org/v2/top-headlines?',
+        req = await get_response('https://newsapi.org/v2/top-headlines?',
                            params={'q': about, 'apiKey': key})
-        data = req.json()
+        data = req
 
         if not data:
             raise Exception

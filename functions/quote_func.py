@@ -1,11 +1,18 @@
 import requests
 from .wiki_photo_func import get_wiki_image
 from .translating_func import translator_qu
+import aiohttp
 
 
-def quote():
-    req = requests.get('https://favqs.com/api/qotd')
-    data = req.json()
+async def get_response(url, params):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, params=params) as resp:
+            return await resp.json()
+        
+        
+async def quote():
+    req = await get_response('https://favqs.com/api/qotd', {})
+    data = req
 
     author = data["quote"]["author"]
     txt = data['quote']['body']
