@@ -6,7 +6,7 @@ import asyncio
 import os
 import aiohttp
 
-reply_keyboard = [['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'], ['/kitties'], ['/map'], ['/img'], ['/exchange_rate'], ['/help'], ['/GIT']]
+reply_keyboard = [['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'], ['/kitties'], ['/map'], ['/img'], ['/exchange_rate'], ['/help'], ['/GIT'], ['/GPT']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 reply_keyboard_news = [['/specific_news'], ['/general_news']]
@@ -19,15 +19,36 @@ btn_loc = KeyboardButton('Отправить геопозицию', request_loca
 markup_weather_loc = ReplyKeyboardMarkup([[btn_loc]], one_time_keyboard=True)
 
 
+#функции затычки
+async def map_command(update, context):
+    await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
+    
+async def dictionary_command(update, context):
+    await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
+    
+async def kitties_command(update, context):
+    await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
+    
+async def img_command(update, context):
+    await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
+    
+async def exchange_rate_command(update, context):
+    await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
+
+async def chat_gpt_command(update, context):
+    await update.message.reply_html(rf"Временно не работает из за ошибок в OpenAI", reply_markup=markup)
+
+##########################################
+
 #help - доделать
 async def help_command(update, context):
-    await update.message.reply_text("/weather - выводит погоду по указанным данным\n/time - выводит врем] самых популярных мест\n"
+    await update.message.reply_text("/weather - выводит погоду по указанным данным\n/time - выводит время самых популярных мест\n"
                                     "/phrase_of_the_day - выводит фразу дня с картинкой автора\n/news - дает на выбор топики или личный запрос, потом выводит найденные новости\n"
                                     "/kitties - выводит милую фотографию котенка\n/exchange_rate - выводит курс валют\n/GIT - ссылка на наш гит\n"
                                     "/dictionary - работа с Cambridge Dictionary\n/map - работа с картой\n/img - работа с изображением\n/GPT - общение с AI от OpenAI")
 
 
-#погода - доделать
+#погода
 async def weather_command(update, context):
     await update.message.reply_html(rf"Поделитесь с нами вашей локацией для поиска погоды в вашем районе!", reply_markup=markup_weather_loc)
     return 1
@@ -135,6 +156,15 @@ async def stop(update, context):
 
 def main():
     application = Application.builder().token('6118068525:AAGGfYJ46p8Qe0sYLKC9v8KSsBH7cqybjf4').build()
+    
+    #затычки
+    application.add_handler(CommandHandler("map", map_command))
+    application.add_handler(CommandHandler("dictionary", dictionary_command))
+    application.add_handler(CommandHandler("kitties", kitties_command))
+    application.add_handler(CommandHandler("img", img_command))
+    application.add_handler(CommandHandler("exchange_rate", exchange_rate_command))
+    application.add_handler(CommandHandler("GPT", chat_gpt_command))
+    
     
     #легкие команды
     application.add_handler(CommandHandler("start", start_command))
