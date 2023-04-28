@@ -114,8 +114,8 @@ async def time():
         txt += f"{i.split('/')[1]} : {data['time']} \n"
 
     txt += "\nHaven't found the right time? Follow the link bellow!\n\nhttps://www.timeanddate.com/worldclock/?low=c"
-txt
-    return 
+
+    return txt
 
 #chat gpt  
 async def message_answer(update, context):
