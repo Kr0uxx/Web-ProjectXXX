@@ -91,8 +91,6 @@ async def get_response(url, params):
             return await resp.json()
 
 async def time():
-    if os.name == 'nt':
-        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     # https://timeapi.io/api/Time/current/zone?timeZone=Europe/Amsterdam
 
     list_zones = ['Europe/London', 'Europe/Moscow', 'Europe/Berlin',
@@ -136,7 +134,7 @@ async def stop(update, context):
 
 
 def main():
-    application = Application.builder().token('6118068525:AAF6TU-SIYuy5lUViZgxpLOUhYIzkNDo6q8').build()
+    application = Application.builder().token('6118068525:AAGGfYJ46p8Qe0sYLKC9v8KSsBH7cqybjf4').build()
 
     text_handler = MessageHandler(filters.TEXT & ~filters.COMMAND, message_answer)
     
