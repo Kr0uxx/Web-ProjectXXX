@@ -158,6 +158,8 @@ def main():
     application = Application.builder().token('6118068525:AAGGfYJ46p8Qe0sYLKC9v8KSsBH7cqybjf4').build()
     
     #затычки
+    
+    # + еще пару функций есть и нужно сделать бд
     application.add_handler(CommandHandler("map", map_command))
     application.add_handler(CommandHandler("dictionary", dictionary_command))
     application.add_handler(CommandHandler("kitties", kitties_command))
