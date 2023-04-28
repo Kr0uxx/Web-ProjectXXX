@@ -14,7 +14,7 @@ def get_address_from_coords(coords):
     }
 
     try:
-        r = requests.get(url="https://geocode-maps.yandex.ru/1.x/", params=parametres)
+        r = requests.get(url="https://geocode-maps.yandex.ru/1.x/", params=parametrs)
         json_data = r.json()
         address_str = json_data["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["metaDataProperty"][
             "GeocoderMetaData"]["AddressDetails"]["Country"]["AddressLine"]
