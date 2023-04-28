@@ -83,6 +83,8 @@ async def git_command(update, context):
 
 #время
 async def time_command(update, context):
+    if os.name == 'nt':
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     await update.message.reply_text(asyncio.run(time_func.time()))
     
 

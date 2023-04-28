@@ -13,6 +13,8 @@ async def get_response(url, params):
             return await resp.json()
 
 async def time():
+    if os.name == 'nt':
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     # https://timeapi.io/api/Time/current/zone?timeZone=Europe/Amsterdam
 
     list_zones = ['Europe/London', 'Europe/Moscow', 'Europe/Berlin',
