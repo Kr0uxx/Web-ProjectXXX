@@ -1,10 +1,18 @@
 # ищет погоду в месте запроса
 import requests
+import asyncio
+import aiohttp
 
 app_id = '9679c05520936f7d691139a917576317'
 
 
-def moji(txt):
+async def get_response(url, params):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, params=params) as resp:
+            return await resp.json()
+        
+        
+async def moji(txt):
     dict_m = {
         'Thunderstorm': '🌩',
         'Drizzle': '🌦',
@@ -22,13 +30,12 @@ def moji(txt):
         return '🌫'
 
 
-def weather(coords):
-    req = requests.get("https://api.openweathermap.org/data/2.5/weather?",
-                       params={'q': coords, 'units': 'metric', 'lang': 'en', 'APPID': app_id})
+async def weather(coords):
+    req = await get_response("https://api.openweathermap.org/data/2.5/weather?", params={'q': coords, 'units': 'metric', 'lang': 'en', 'APPID': app_id})
 
     # 'lang': 'ru' для ru версии
 
-    data = req.json()
+    data = req
 
     dictt = {}
 
@@ -47,6 +54,8 @@ def weather(coords):
     txt = f"Oh, here u r:\n\n {dictt['png']}\n\n {dictt['weather'].capitalize()} \n\n Temperature: {dictt['temperature']} C \n Wind: {dictt['wind']} \n Visibility: {dictt['visibility']} km \n Humidity: {dictt['humidity']} %\n"
 
     return txt
+
+
 
 # EXAMPLE --- print(weather('Ural'))
 
