@@ -9,7 +9,7 @@ import asyncio
 import aiohttp
 
 
-key = 'a7aa77aa97884b9780c4f55b57811f18'
+key = 'ee08b2ab12084bfa9bba25faacd4e831'
 
 categories_list = ['business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology']
 country_list = ['ch', 'ru', 'fr', 'de', 'us', 'en']
@@ -20,22 +20,16 @@ async def get_response(url, params):
             return await resp.json()
         
         
-async def get_news(category='general', country='us'):
+async def get_news(category, country):
     global key, categories_list, country_list
-
-    if country not in country_list:
-        country = 'us'
-
-    if category not in categories_list:
-        category = 'general'
 
     req = await get_response('https://newsapi.org/v2/top-headlines?', params={'country': country, 'category': category, 'pageSize': 21, 'apiKey': key})
     data = req
-
+    print(data)
     text = 'Here u r: \n\n'
 
     try:
-        for i in range(0, 21):
+        for i in range(0, 5):
             title = data['articles'][i]['title']
             desc = data['articles'][i]['description']
             s_url = data['articles'][i]['url']
@@ -66,7 +60,7 @@ async def get_spec_news(about):
         if not data:
             raise Exception
 
-        for i in range(0, 21):
+        for i in range(0, 5):
             title = data['articles'][i]['title']
             desc = data['articles'][i]['description']
             s_url = data['articles'][i]['url']

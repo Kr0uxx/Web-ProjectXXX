@@ -19,7 +19,7 @@ btn_loc = KeyboardButton('Отправить геопозицию', request_loca
 markup_weather_loc = ReplyKeyboardMarkup([[btn_loc]], one_time_keyboard=True)
 
 
-#доделать
+#help - доделать
 async def help_command(update, context):
     await update.message.reply_text("help")
 
@@ -42,32 +42,48 @@ async def general_news(update, context):
     await update.message.reply_html(rf"Выберите топик", reply_markup=markup_news_topic) 
     
 async def business(update, context):
-    await update.message.reply_html(rf"{asyncio.run(news_func.get_news('business', 'us'))}", reply_markup=markup)
+    func = news_func.get_news('business', 'us')
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
     
 async def entertainment(update, context):
-    await update.message.reply_html(rf"{asyncio.run(news_func.get_news('entertainment', 'us'))}", reply_markup=markup)
+    func = news_func.get_news('entertainment', 'us')
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
     
 async def general(update, context):
-    await update.message.reply_html(rf"{asyncio.run(news_func.get_news('general', 'us'))}", reply_markup=markup)
+    func = news_func.get_news('general', 'us')
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
     
 async def health(update, context):
-    await update.message.reply_html(rf"{asyncio.run(news_func.get_news('health', 'us'))}", reply_markup=markup)
+    func = news_func.get_news('health', 'us')
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
     
 async def science(update, context):
-    await update.message.reply_html(rf"{asyncio.run(news_func.get_news('science', 'us'))}", reply_markup=markup)
+    func = news_func.get_news('science', 'us')
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
     
 async def sports(update, context):
-    await update.message.reply_html(rf"{asyncio.run(news_func.get_news('sports', 'us'))}", reply_markup=markup)
+    func = news_func.get_news('sports', 'us')
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
     
 async def technology(update, context):
-    await update.message.reply_html(rf"{asyncio.run(news_func.get_news('technology', 'us'))}", reply_markup=markup)
+    func = news_func.get_news('technology', 'us')
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
 async def specific_news(update, context):
     await update.message.reply_text("Введите интересующий Вас топик")
     return 1
 
 async def specific_news_response(update, context):
-    await update.message.reply_html(asyncio.run(news_func.get_spec_news(update.message.text)), reply_markup=markup)
+    func = news_func.get_spec_news(update.message.text)
+    answer = await func
+    await update.message.reply_html(answer, reply_markup=markup)
     return ConversationHandler.END
   
 
@@ -92,7 +108,7 @@ async def time_command(update, context):
     await update.message.reply_text(answer)
 
 
-#chat gpt  
+#chat gpt - доделать 
 async def message_answer(update, context):
     txt = update.message.text
     answer = gpt_func.ask(txt, 0)
@@ -113,11 +129,8 @@ async def stop(update, context):
 
 def main():
     application = Application.builder().token('6118068525:AAGGfYJ46p8Qe0sYLKC9v8KSsBH7cqybjf4').build()
-
-    text_handler = MessageHandler(filters.TEXT & ~filters.COMMAND, message_answer)
     
     #легкие команды
-    application.add_handler(text_handler)
     application.add_handler(CommandHandler("start", start_command))
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(CommandHandler("GIT", git_command))
