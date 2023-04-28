@@ -39,5 +39,5 @@ async def time():
     return txt
 
 
-if os.name == 'nt':
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+def main():
+    return asyncio.run(time())

@@ -83,9 +83,7 @@ async def git_command(update, context):
 
 #время
 async def time_command(update, context):
-    func = time_func.time()
-    answer = await func
-    await update.message.reply_text(answer)
+    await update.message.reply_text(time_func.main())
     
 
 #chat gpt  
