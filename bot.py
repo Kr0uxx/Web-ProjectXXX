@@ -73,7 +73,10 @@ async def specific_news_response(update, context):
 
 #фраза дня
 async def quote_command(update, context):
-    await update.message.reply_text(asyncio.run(quote_func.quote()))
+    func = quote_func.quote()
+    answer = await func
+    await update.message.reply_text(f'{answer[0]}')
+    await context.bot.send_message(update.message.chat_id, text=answer[1])
        
 
 #гит
@@ -87,6 +90,7 @@ async def time_command(update, context):
     answer = await func
     #print(answer)
     await update.message.reply_text(answer)
+
 
 #chat gpt  
 async def message_answer(update, context):
