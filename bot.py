@@ -60,10 +60,11 @@ async def crypto_rate_command(update, context):
 # help - доделать
 async def help_command(update, context):
     await update.message.reply_text(
-        "/weather - выводит погоду по указанным данным\n/time - выводит время самых популярных мест\n"
-        "/phrase_of_the_day - выводит фразу дня с картинкой автора\n/news - дает на выбор топики или личный запрос, потом выводит найденные новости\n"
+        "/weather - выводит погоду по указанным данным\n\n/time - выводит время самых популярных мест\n\n"
+        "/phrase_of_the_day - выводит фразу дня с картинкой автора\n\n/news - дает на выбор топики или личный запрос, потом выводит найденные новости\n\n"
         "/kitties - выводит милую фотографию котенка\n/exchange_rate - выводит курс валют\n/GIT - ссылка на наш гит\n"
-        "/dictionary - работа с Cambridge Dictionary\n/map - работа с картой\n/img - работа с изображением\n/GPT - общение с AI от OpenAI")
+        "/dictionary - работа с Cambridge Dictionary\n\n/map - работа с картой\n\n/img - работа с изображением\n\n/GPT - общение с AI от OpenAI\n\n"
+        "/voice_yt - по ссылке из ютуб достает звук видео\n\n/crypto_rate - анализируем рынок крипты\n\n/voice_to_txt - из сообщения со звуком достает звук, преобразует в текст потом")
 
 
 # погода
