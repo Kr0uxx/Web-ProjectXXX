@@ -1,8 +1,6 @@
 import openai 
 from requests.exceptions import ReadTimeout
 from openai.error import RateLimitError, InvalidRequestError
-import telebot
-from telebot import types
 from datetime import datetime
 
 
