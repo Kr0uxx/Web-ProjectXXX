@@ -7,7 +7,7 @@ import os
 import aiohttp
 
 reply_keyboard = [['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'], ['/kitties'], ['/map'],
-                  ['/img'], ['/exchange_rate'], ['/help'], ['/GIT'], ['/GPT']]
+                  ['/img'], ['/exchange_rate'], ['/help'], ['/GIT'], ['/GPT'], ['/voice_yt'], ['/crypto_rate'], ['/voice_to_txt']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 reply_keyboard_news = [['/specific_news'], ['/general_news']]
@@ -22,6 +22,12 @@ markup_weather_loc = ReplyKeyboardMarkup([[btn_loc]], one_time_keyboard=True)
 
 
 # функции затычки
+async def voice_to_txt_command(update, context):
+    await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
+
+async def voice_yt_command(update, context):
+    await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
+
 async def map_command(update, context):
     await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
 
@@ -44,6 +50,9 @@ async def exchange_rate_command(update, context):
 
 async def chat_gpt_command(update, context):
     await update.message.reply_html(rf"Временно не работает из за ошибок в OpenAI", reply_markup=markup)
+
+async def crypto_rate_command(update, context):
+    await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
 
 
 ##########################################
@@ -188,6 +197,9 @@ def main():
     application.add_handler(CommandHandler("img", img_command))
     application.add_handler(CommandHandler("exchange_rate", exchange_rate_command))
     application.add_handler(CommandHandler("GPT", chat_gpt_command))
+    application.add_handler(CommandHandler("voice_yt", voice_yt_command))
+    application.add_handler(CommandHandler("crypto_rate", crypto_rate_command))
+    application.add_handler(CommandHandler("voice_to_txt", voice_to_txt_command))
 
     # легкие команды
     application.add_handler(CommandHandler("start", start_command))
