@@ -1,12 +1,12 @@
 from telegram.ext import Application, MessageHandler, filters
 from telegram.ext import CommandHandler, ConversationHandler
 from telegram import ReplyKeyboardMarkup, KeyboardButton
-from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func, news_func
+from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func, news_func, kitties_func, dogs_func
 import asyncio
 import os
 import aiohttp
 
-reply_keyboard = [['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'], ['/kitties'], ['/map'],
+reply_keyboard = [['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'], ['/kitties'], ['/dogs'], ['/map'],
                   ['/img'], ['/exchange_rate'], ['/help'], ['/GIT'], ['/GPT'], ['/voice_yt'], ['/crypto_rate'], ['/voice_to_txt']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
@@ -36,10 +36,6 @@ async def dictionary_command(update, context):
     await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
 
 
-async def kitties_command(update, context):
-    await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
-
-
 async def img_command(update, context):
     await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
 
@@ -62,9 +58,9 @@ async def help_command(update, context):
     await update.message.reply_text(
         "/weather - выводит погоду по указанным данным\n\n/time - выводит время самых популярных мест\n\n"
         "/phrase_of_the_day - выводит фразу дня с картинкой автора\n\n/news - дает на выбор топики или личный запрос, потом выводит найденные новости\n\n"
-        "/kitties - выводит милую фотографию котенка\n/exchange_rate - выводит курс валют\n/GIT - ссылка на наш гит\n"
+        "/kitties - выводит милую фотографию котенка\n\n/exchange_rate - выводит курс валют\n\n/GIT - ссылка на наш гит\n\n"
         "/dictionary - работа с Cambridge Dictionary\n\n/map - работа с картой\n\n/img - работа с изображением\n\n/GPT - общение с AI от OpenAI\n\n"
-        "/voice_yt - по ссылке из ютуб достает звук видео\n\n/crypto_rate - анализируем рынок крипты\n\n/voice_to_txt - из сообщения со звуком достает звук, преобразует в текст потом")
+        "/voice_yt - по ссылке из ютуб достает звук видео\n\n/crypto_rate - анализируем рынок крипты\n\n/voice_to_txt - из сообщения со звуком достает звук, преобразует в текст потом\n\n/dogs - покажем вам милых собачек")
 
 
 # погода
@@ -186,6 +182,18 @@ async def stop(update, context):
     return ConversationHandler.END
 
 
+#cats
+async def kitties_command(update, context):
+    func = kitties_func.kitties()
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+#dogs
+async def dogs_command(update, context):
+    func = dogs_func.dogs()
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
 def main():
     application = Application.builder().token('6118068525:AAGGfYJ46p8Qe0sYLKC9v8KSsBH7cqybjf4').build()
 
@@ -194,7 +202,6 @@ def main():
     # + еще пару функций есть и нужно сделать бд
     application.add_handler(CommandHandler("map", map_command))
     application.add_handler(CommandHandler("dictionary", dictionary_command))
-    application.add_handler(CommandHandler("kitties", kitties_command))
     application.add_handler(CommandHandler("img", img_command))
     application.add_handler(CommandHandler("exchange_rate", exchange_rate_command))
     application.add_handler(CommandHandler("GPT", chat_gpt_command))
@@ -208,6 +215,8 @@ def main():
     application.add_handler(CommandHandler("GIT", git_command))
     application.add_handler(CommandHandler("time", time_command))
     application.add_handler(CommandHandler("phrase_of_the_day", quote_command))
+    application.add_handler(CommandHandler("kitties", kitties_command))
+    application.add_handler(CommandHandler("dogs", dogs_command))
 
     # новости
     application.add_handler(CommandHandler("news", news_command))
