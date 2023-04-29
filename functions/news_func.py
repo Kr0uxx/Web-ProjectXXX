@@ -25,7 +25,7 @@ async def get_news(category, country):
 
     req = await get_response('https://newsapi.org/v2/top-headlines?', params={'country': country, 'category': category, 'pageSize': 21, 'apiKey': key})
     data = req
-    print(data)
+    #print(data)
     text = 'Here u r: \n\n'
 
     try:
