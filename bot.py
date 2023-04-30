@@ -33,8 +33,7 @@ reply_keyboard_exch = [['/USD'], ['/EUR'], ['/CNY'], ['/GBP'], ['/JPY'], ['/CHF'
                        ['/KZT']]
 markup_exch = ReplyKeyboardMarkup(reply_keyboard_exch, one_time_keyboard=True)
 
-reply_keyboard_lang = [['/BTC'], ['/ETH'], ['/BNB'], ['/LTC'], ['SOL'], ['/DOGE'], ['/ADA'], ['/DOT'], ['/XRP'],
-                       ['LINA']]
+reply_keyboard_lang = [['/RU'], ['/UK'], ['/US'], ['/FR'], ['DUTCH'], ['/ITA'], ['/SPAN'], ['/DK']]
 markup_lang = ReplyKeyboardMarkup(reply_keyboard_lang, one_time_keyboard=True)
 
 
@@ -355,7 +354,7 @@ async def downloader(update, context):
 
 async def voice_to_txt_command_2(update, context):
     await update.message.reply_html(rf"Выбери язык, который в файле ( если не знаете, то выберите DK )", reply_markup=markup_lang)
-
+    return ConversationHandler.END
 
 
 def main():
