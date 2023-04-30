@@ -26,7 +26,8 @@ markup_weather_loc = ReplyKeyboardMarkup([[btn_loc]], one_time_keyboard=True)
 reply_keyboard_bit = [['/BTC'], ['/ETH'], ['/BNB'], ['/LTC'], ['SOL'], ['/DOGE'], ['/ADA'], ['/DOT'], ['/XRP']]
 markup_bit = ReplyKeyboardMarkup(reply_keyboard_bit, one_time_keyboard=True)
 
-reply_keyboard_exch = [['/USD'], ['/EUR'], ['/CNY'], ['/GBP'], ['JPY'], ['/CHF'], ['/UAH'], ['/TRY'], ['/AUD'], ['/KZT']]
+reply_keyboard_exch = [['/USD'], ['/EUR'], ['/CNY'], ['/GBP'], ['/JPY'], ['/CHF'], ['/UAH'], ['/TRY'], ['/AUD'],
+                       ['/KZT']]
 markup_exch = ReplyKeyboardMarkup(reply_keyboard_exch, one_time_keyboard=True)
 
 
@@ -48,10 +49,6 @@ async def dictionary_command(update, context):
 
 
 async def img_command(update, context):
-    await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
-
-
-async def exchange_rate_command(update, context):
     await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
 
 
@@ -262,12 +259,68 @@ async def crypto_rate_xrp_command(update, context):
     answer = func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
-#курс
-async def exchange_rate(update, context):
-    await update.message.reply_html(rf"Выберите то, что интересно", reply_markup=markup_exch)
+
+# курс
+async def exchange_rate_command(update, context):
+    await update.message.reply_html(rf"Выберите курс, который вам интересен", reply_markup=markup_exch)
+
 
 async def exchange_rate_usd_command(update, context):
     func = actual_rate.get_actual_rate('USD')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def exchange_rate_eur_command(update, context):
+    func = actual_rate.get_actual_rate('EUR')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def exchange_rate_cny_command(update, context):
+    func = actual_rate.get_actual_rate('CNY')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def exchange_rate_gbp_command(update, context):
+    func = actual_rate.get_actual_rate('GBP')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def exchange_rate_jpy_command(update, context):
+    func = actual_rate.get_actual_rate('JPY')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def exchange_rate_chf_command(update, context):
+    func = actual_rate.get_actual_rate('CHF')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def exchange_rate_uah_command(update, context):
+    func = actual_rate.get_actual_rate('UAH')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def exchange_rate_try_command(update, context):
+    func = actual_rate.get_actual_rate('TRY')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def exchange_rate_aud_command(update, context):
+    func = actual_rate.get_actual_rate('AUD')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def exchange_rate_kzt_command(update, context):
+    func = actual_rate.get_actual_rate('KZT')
     answer = func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
@@ -280,7 +333,7 @@ def main():
     # + еще пару функций есть и нужно сделать бд
     application.add_handler(CommandHandler("map", map_command))
     application.add_handler(CommandHandler("dictionary", dictionary_command))
-    application.add_handler(CommandHandler("img", img_command))
+    application.add_handler(CommandHandler("black_to_white", img_command))
     application.add_handler(CommandHandler("exchange_rate", exchange_rate_command))
     application.add_handler(CommandHandler("GPT", chat_gpt_command))
     application.add_handler(CommandHandler("voice_yt", voice_yt_command))
@@ -312,6 +365,15 @@ def main():
     application.add_handler(CommandHandler("exchange_rate", exchange_rate_command))
 
     application.add_handler(CommandHandler("USD", exchange_rate_usd_command))
+    application.add_handler(CommandHandler("EUR", exchange_rate_eur_command))
+    application.add_handler(CommandHandler("CNY", exchange_rate_cny_command))
+    application.add_handler(CommandHandler("GBP", exchange_rate_gbp_command))
+    application.add_handler(CommandHandler("JPY", exchange_rate_jpy_command))
+    application.add_handler(CommandHandler("CHF", exchange_rate_chf_command))
+    application.add_handler(CommandHandler("UAH", exchange_rate_uah_command))
+    application.add_handler(CommandHandler("TRY", exchange_rate_try_command))
+    application.add_handler(CommandHandler("AUD", exchange_rate_aud_command))
+    application.add_handler(CommandHandler("KZT", exchange_rate_kzt_command))
 
     # новости
     application.add_handler(CommandHandler("news", news_command))
