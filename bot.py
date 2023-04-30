@@ -26,6 +26,9 @@ markup_weather_loc = ReplyKeyboardMarkup([[btn_loc]], one_time_keyboard=True)
 reply_keyboard_bit = [['/BTC'], ['/ETH'], ['/BNB'], ['/LTC'], ['SOL'], ['/DOGE'], ['/ADA'], ['/DOT'], ['/XRP']]
 markup_bit = ReplyKeyboardMarkup(reply_keyboard_bit, one_time_keyboard=True)
 
+reply_keyboard_exch = [['/USD'], ['/EUR'], ['/CNY'], ['/GBP'], ['JPY'], ['/CHF'], ['/UAH'], ['/TRY'], ['/AUD'], ['/KZT']]
+markup_exch = ReplyKeyboardMarkup(reply_keyboard_exch, one_time_keyboard=True)
+
 
 # функции затычки
 async def voice_to_txt_command(update, context):
@@ -259,6 +262,15 @@ async def crypto_rate_xrp_command(update, context):
     answer = func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
+#курс
+async def exchange_rate(update, context):
+    await update.message.reply_html(rf"Выберите то, что интересно", reply_markup=markup_exch)
+
+async def exchange_rate_usd_command(update, context):
+    func = actual_rate.get_actual_rate('USD')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
 
 def main():
     application = Application.builder().token('6118068525:AAGGfYJ46p8Qe0sYLKC9v8KSsBH7cqybjf4').build()
@@ -295,6 +307,11 @@ def main():
     application.add_handler(CommandHandler("ADA", crypto_rate_ada_command))
     application.add_handler(CommandHandler("DOT", crypto_rate_dot_command))
     application.add_handler(CommandHandler("XRP", crypto_rate_xrp_command))
+
+    # курс обычный
+    application.add_handler(CommandHandler("exchange_rate", exchange_rate_command))
+
+    application.add_handler(CommandHandler("USD", exchange_rate_usd_command))
 
     # новости
     application.add_handler(CommandHandler("news", news_command))
