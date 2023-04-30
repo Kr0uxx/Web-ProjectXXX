@@ -67,7 +67,7 @@ async def help_command(update, context):
         "/weather - выводит погоду по указанным данным\n\n/time - выводит время самых популярных мест\n\n"
         "/phrase_of_the_day - выводит фразу дня с картинкой автора\n\n/news - дает на выбор топики или личный запрос, потом выводит найденные новости\n\n"
         "/kitties - выводит милую фотографию котенка\n\n/exchange_rate - выводит курс валют\n\n/GIT - ссылка на наш гит\n\n"
-        "/dictionary - работа с Cambridge Dictionary\n\n/map - работа с картой\n\n/img - работа с изображением\n\n/GPT - общение с AI от OpenAI\n\n"
+        "/dictionary - работа с Cambridge Dictionary\n\n/map - работа с картой\n\n/black_and_white - работа с изображением\n\n/GPT - общение с AI от OpenAI\n\n"
         "/voice_yt - по ссылке из ютуб достает звук видео\n\n/crypto_rate - анализируем рынок крипты\n\n/voice_to_txt - из сообщения со звуком достает звук, преобразует в текст потом\n\n/dogs - покажем вам милых собачек")
 
 
@@ -398,7 +398,7 @@ def main():
     application.add_handler(CommandHandler("map", map_command))
     application.add_handler(CommandHandler("dictionary", dictionary_command))
     application.add_handler(CommandHandler("black_and_white", black_and_white_command))
-
+    # + функция отправки на почту сообщений, api с рецептом, + bd сделать
 
     # легкие команды
     application.add_handler(CommandHandler("start", start_command))
