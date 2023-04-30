@@ -2,7 +2,7 @@ from telegram.ext import Application, MessageHandler, filters
 from telegram.ext import CommandHandler, ConversationHandler
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func, news_func, kitties_func, \
-    dogs_func, actual_crypto_rate, actual_rate
+    dogs_func, actual_crypto_rate, actual_rate, voice_to_txt_func
 import asyncio
 import os
 import aiohttp
@@ -356,20 +356,43 @@ async def voice_to_txt_command_2(update, context):
     await update.message.reply_html(rf"Выбери язык, который в файле ( если не знаете, то выберите DK )", reply_markup=markup_lang)
     return ConversationHandler.END
 
+async def voice_dk(update, context):
+    await update.message.reply_html(rf"{voice_to_txt_func.voice_main()}", reply_markup=markup)
 
+async def voice_ru(update, context):
+    await update.message.reply_html(rf"{voice_to_txt_func.voice_lang('Russian')}", reply_markup=markup)
+
+async def voice_uk(update, context):
+    await update.message.reply_html(rf"{voice_to_txt_func.voice_lang('UK English')}", reply_markup=markup)
+
+async def voice_us(update, context):
+    await update.message.reply_html(rf"{voice_to_txt_func.voice_lang('US English')}", reply_markup=markup)
+
+async def voice_fr(update, context):
+    await update.message.reply_html(rf"{voice_to_txt_func.voice_lang('French')}", reply_markup=markup)
+
+async def voice_dut(update, context):
+    await update.message.reply_html(rf"{voice_to_txt_func.voice_lang('Dutch')}", reply_markup=markup)
+
+async def voice_ital(update, context):
+    await update.message.reply_html(rf"{voice_to_txt_func.voice_lang('Italian')}", reply_markup=markup)
+
+async def voice_sp(update, context):
+    await update.message.reply_html(rf"{voice_to_txt_func.voice_lang('Spanish')}", reply_markup=markup)
+
+
+
+
+# основа основ основских
 def main():
     application = Application.builder().token('6118068525:AAGGfYJ46p8Qe0sYLKC9v8KSsBH7cqybjf4').build()
 
     # затычки
-
     # + еще пару функций есть и нужно сделать бд
     application.add_handler(CommandHandler("map", map_command))
     application.add_handler(CommandHandler("dictionary", dictionary_command))
     application.add_handler(CommandHandler("black_to_white", img_command))
-    application.add_handler(CommandHandler("exchange_rate", exchange_rate_command))
-    application.add_handler(CommandHandler("GPT", chat_gpt_command))
-    application.add_handler(CommandHandler("voice_yt", voice_yt_command))
-    application.add_handler(CommandHandler("voice_to_txt", voice_to_txt_command))
+
 
     # легкие команды
     application.add_handler(CommandHandler("start", start_command))
@@ -379,10 +402,13 @@ def main():
     application.add_handler(CommandHandler("phrase_of_the_day", quote_command))
     application.add_handler(CommandHandler("kitties", kitties_command))
     application.add_handler(CommandHandler("dogs", dogs_command))
+    application.add_handler(CommandHandler("GPT", chat_gpt_command))
+    application.add_handler(CommandHandler("voice_yt", voice_yt_command))
 
 
     # Экономика
     application.add_handler(CommandHandler("economics", economics_command_response))
+
 
     # крипта
     application.add_handler(CommandHandler("crypto_rate", crypto_rate_command))
@@ -398,6 +424,7 @@ def main():
     application.add_handler(CommandHandler("XRP", crypto_rate_xrp_command))
     application.add_handler(CommandHandler("LINA", crypto_rate_lina_command))
 
+
     # курс обычный
     application.add_handler(CommandHandler("exchange_rate", exchange_rate_command))
 
@@ -411,6 +438,7 @@ def main():
     application.add_handler(CommandHandler("TRY", exchange_rate_try_command))
     application.add_handler(CommandHandler("AUD", exchange_rate_aud_command))
     application.add_handler(CommandHandler("KZT", exchange_rate_kzt_command))
+
 
     # новости
     application.add_handler(CommandHandler("news", news_command))
@@ -431,6 +459,7 @@ def main():
     )
     application.add_handler(conv_handler)
 
+
     # погода
     conv_handler_weather = ConversationHandler(
         entry_points=[CommandHandler("weather", weather_command)],
@@ -440,6 +469,7 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_weather)
+
 
     # файл со звуком wav в текст
     conv_handler_wav = ConversationHandler(
@@ -454,8 +484,18 @@ def main():
 
         fallbacks=[CommandHandler('stop', stop)]
     )
-
     application.add_handler(conv_handler_wav)
+
+    application.add_handler(CommandHandler("DK", voice_dk))
+    application.add_handler(CommandHandler("RU", voice_ru))
+    application.add_handler(CommandHandler("UK", voice_uk))
+    application.add_handler(CommandHandler("US", voice_us))
+    application.add_handler(CommandHandler("FR", voice_fr))
+    application.add_handler(CommandHandler("DUTCH", voice_dut))
+    application.add_handler(CommandHandler("ITA", voice_ital))
+    application.add_handler(CommandHandler("SPAN", voice_sp))
+
+
 
     application.run_polling()
 

@@ -47,4 +47,8 @@ def voice_main():
 
     return 'error'
 
-#print(voice_main())
+
+def voice_lang(lang):
+    languages = ['Russian', 'UK English', 'US English', 'French', 'Dutch', 'Italian', 'Spanish']
+
+    return voice(lang)
