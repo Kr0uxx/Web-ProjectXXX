@@ -8,7 +8,7 @@ import os
 import aiohttp
 
 reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'],
-                  ['/animals'],
+                  ['/kitties'], ['/dogs'],
                   ['/map'], ['/img'], ['/economics'], ['/GPT'], ['/voice_yt'], ['/voice_to_txt']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
@@ -36,8 +36,7 @@ markup_exch = ReplyKeyboardMarkup(reply_keyboard_exch, one_time_keyboard=True)
 reply_keyboard_animals = [['/kitties'], ['/dogs']]
 markup_animals = ReplyKeyboardMarkup(reply_keyboard_animals, one_time_keyboard=True)
 
-reply_keyboard_lang = [['/BTC'], ['/ETH'], ['/BNB'], ['/LTC'], ['SOL'], ['/DOGE'], ['/ADA'], ['/DOT'], ['/XRP'],
-                       ['LINA']]
+reply_keyboard_lang = [['/RU'], ['/UK'], ['/US'], ['/FR'], ['DUTCH'], ['/ITA'], ['/SPAN'], ['/DK']]
 markup_lang = ReplyKeyboardMarkup(reply_keyboard_lang, one_time_keyboard=True)
 
 
@@ -58,7 +57,6 @@ async def img_command(update, context):
 # GPT - доделать
 async def chat_gpt_command(update, context):
     await update.message.reply_html(rf"{gpt_func.ask('Кто такой путин?', 0)}", reply_markup=markup)
-
 
 ###########################################
 
@@ -346,29 +344,25 @@ async def exchange_rate_kzt_command(update, context):
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
 
-# перевод звука из ютуб
+#перевод звука из ютуб
 async def voice_yt_command(update, context):
-    await update.message.reply_html(
-        rf"Функция работала на момент 21 апреля, потом снова полетела из за обновления ютуб."
-        "Не наша вина, но 'pytube' улетел уже в какой раз. Для просмотра самой функции можно в папке"
-        "functions найти yt_convert_func.py", reply_markup=markup)
-
+    await update.message.reply_html(rf"Функция работала на момент 21 апреля, потом снова полетела из за обновления ютуб."
+                                    "Не наша вина, но 'pytube' улетел уже в какой раз. Для просмотра самой функции можно в папке"
+                                    "functions найти yt_convert_func.py", reply_markup=markup)
 
 # из wav в текст
 async def voice_to_txt_command(update, context):
     await update.message.reply_text(rf"Отправь мне файл в формате WAV")
     return 1
 
-
 async def downloader(update, context):
     file = await context.bot.get_file(update.message.document)
     await file.download_to_drive('f_m.wav')
     return 2
 
-
 async def voice_to_txt_command_2(update, context):
-    await update.message.reply_html(rf"Выбери язык, который в файле ( если не знаете, то выберите DK )",
-                                    reply_markup=markup_lang)
+    await update.message.reply_html(rf"Выбери язык, который в файле ( если не знаете, то выберите DK )", reply_markup=markup_lang)
+
 
 
 def main():
@@ -397,6 +391,7 @@ def main():
 
     application.add_handler(CommandHandler("kitties", kitties_command))
     application.add_handler(CommandHandler("dogs", dogs_command))
+
 
     # Экономика
     application.add_handler(CommandHandler("economics", economics_command_response))
@@ -463,9 +458,9 @@ def main():
         # Точка входа в диалог.
         # В данном случае — команда /start. Она задаёт первый вопрос.
         entry_points=[CommandHandler('voice_to_txt', voice_to_txt_command)],
-
+        
         states={
-            1: [MessageHandler(filters.Document.WAV, downloader)],
+            1: [MessageHandler(filters.Document.WAV, downloader)],   
             2: [MessageHandler(filters.TEXT & ~filters.COMMAND, voice_to_txt_command_2)]
         },
 
