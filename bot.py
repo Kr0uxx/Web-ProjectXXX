@@ -357,13 +357,9 @@ async def voice_to_txt_command(update, context):
 
 async def downloader(update, context):
     file = await context.bot.get_file(update.message.document)
-    print('ACHIEVED')
     await file.download_to_drive('files/main.wav')
-    print('DOWNLOADED')
-    return 2
-
-async def voice_to_txt_command_2(update, context):
     await update.message.reply_html(rf"Выбери язык, который в файле ( если не знаете, то выберите DK )", reply_markup=markup_lang)
+    return ConversationHandler.END
 
 
 async def voice_dk(update, context):
@@ -491,8 +487,7 @@ def main():
         entry_points=[CommandHandler('voice_to_txt', voice_to_txt_command)],
         
         states={
-            1: [MessageHandler(filters.Document.WAV, downloader)],   
-            2: [MessageHandler(filters.TEXT & ~filters.COMMAND, voice_to_txt_command_2)]
+            1: [MessageHandler(filters.Document.WAV, downloader)]
         },
 
         fallbacks=[CommandHandler('stop', stop)]
