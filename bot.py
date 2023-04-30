@@ -30,16 +30,12 @@ reply_keyboard_exch = [['/USD'], ['/EUR'], ['/CNY'], ['/GBP'], ['/JPY'], ['/CHF'
                        ['/KZT']]
 markup_exch = ReplyKeyboardMarkup(reply_keyboard_exch, one_time_keyboard=True)
 
+reply_keyboard_lang = [['/BTC'], ['/ETH'], ['/BNB'], ['/LTC'], ['SOL'], ['/DOGE'], ['/ADA'], ['/DOT'], ['/XRP']]
+markup_lang = ReplyKeyboardMarkup(reply_keyboard_lang, one_time_keyboard=True)
 
+
+###########################################
 # функции затычки
-async def voice_to_txt_command(update, context):
-    await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
-
-
-async def voice_yt_command(update, context):
-    await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
-
-
 async def map_command(update, context):
     await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
 
@@ -52,11 +48,12 @@ async def img_command(update, context):
     await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
 
 
+# GPT - доделать
 async def chat_gpt_command(update, context):
-    await update.message.reply_html(rf"Временно не работает из за ошибок в OpenAI", reply_markup=markup)
+    await update.message.reply_html(rf"{gpt_func.ask('Кто такой путин?', 0)}", reply_markup=markup)
 
+###########################################
 
-##########################################
 
 # help - доделать
 async def help_command(update, context):
@@ -325,6 +322,27 @@ async def exchange_rate_kzt_command(update, context):
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
 
+#перевод звука из ютуб
+async def voice_yt_command(update, context):
+    await update.message.reply_html(rf"Функция работала на момент 21 апреля, потом снова полетела из за обновления ютуб."
+                                    "Не наша вина, но 'pytube' улетел уже в какой раз. Для просмотра самой функции можно в папке"
+                                    "functions найти yt_convert_func.py", reply_markup=markup)
+
+# из wav в текст
+async def voice_to_txt_command(update, context):
+    await update.message.reply_text(rf"Отправь мне файл в формате WAV")
+    return 1
+
+async def downloader(update, context):
+    file = await context.bot.get_file(update.message.document)
+    await file.download_to_drive('f_m.wav')
+    return 2
+
+async def voice_to_txt_command_2(update, context):
+    await update.message.reply_html(rf"Выбери язык, который в файле ( если не знаете, то выберите DK )", reply_markup=markup_lang)
+
+
+
 def main():
     application = Application.builder().token('6118068525:AAGGfYJ46p8Qe0sYLKC9v8KSsBH7cqybjf4').build()
 
@@ -403,6 +421,22 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_weather)
+
+    # файл со звуком wav в текст
+    conv_handler_wav = ConversationHandler(
+        # Точка входа в диалог.
+        # В данном случае — команда /start. Она задаёт первый вопрос.
+        entry_points=[CommandHandler('voice_to_txt', voice_to_txt_command)],
+        
+        states={
+            1: [MessageHandler(filters.Document.WAV, downloader)],   
+            2: [MessageHandler(filters.TEXT & ~filters.COMMAND, voice_to_txt_command_2)]
+        },
+
+        fallbacks=[CommandHandler('stop', stop)]
+    )
+
+    application.add_handler(conv_handler_wav)
 
     application.run_polling()
 

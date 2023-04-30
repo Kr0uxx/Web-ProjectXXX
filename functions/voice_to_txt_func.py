@@ -19,13 +19,14 @@ def voice(lang):
                      'Spanish': 'es-ES'}
 
         voice = sr.Recognizer()
-        with sr.AudioFile('files/wav_file.wav') as source:
+        with sr.AudioFile('files/f_m.wav') as source:
             audio_text = voice.listen(source)
             text = voice.recognize_google(audio_text, language=lang_dict[lang])
 
             return text
 
-    except Exception:
+    except Exception as e:
+        #print(e)
         return 'error'
 
 
@@ -46,4 +47,4 @@ def voice_main():
 
     return 'error'
 
-# print(voice_main())
+#print(voice_main())
