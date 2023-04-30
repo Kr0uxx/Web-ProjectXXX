@@ -36,7 +36,7 @@ markup_exch = ReplyKeyboardMarkup(reply_keyboard_exch, one_time_keyboard=True)
 reply_keyboard_animals = [['/kitties'], ['/dogs']]
 markup_animals = ReplyKeyboardMarkup(reply_keyboard_animals, one_time_keyboard=True)
 
-reply_keyboard_lang = [['/RU'], ['/UK'], ['/US'], ['/FR'], ['DUTCH'], ['/ITA'], ['/SPAN'], ['/DK']]
+reply_keyboard_lang = [['/RU'], ['/UK'], ['/US'], ['/FR'], ['/DUTCH'], ['/ITA'], ['/SPAN'], ['/DK']]
 markup_lang = ReplyKeyboardMarkup(reply_keyboard_lang, one_time_keyboard=True)
 
 
