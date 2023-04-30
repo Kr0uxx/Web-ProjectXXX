@@ -7,7 +7,7 @@ soup = BeautifulSoup(r.text, "html.parser")
 listt = soup.find('tbody').text[2::].split('    ')
 
 # вся криптовалюта, доступная пользователю, если добавлять крипту в бота, то также добавить в этот список:
-currencies_list = ["BTC", "ETH", "BNB", "LTC", "SOL", "DOGE", "ADA", "DOT", "XRP", "LUNA"]
+currencies_list = ["BTC", "ETH", "BNB", "LTC", "SOL", "DOGE", "ADA", "DOT", "XRP", "LINA"]
 currencies_names = []
 
 # создание списка с курсами нужных валют
@@ -28,14 +28,3 @@ def get_actual_crypto_rate(input_currency):
             rate = name[-1]
     return f'Курс для 1 {currency} составляет {rate} $'
 
-
-print(get_actual_crypto_rate('BTC'))
-print(get_actual_crypto_rate('ETH'))
-print(get_actual_crypto_rate('BNB'))
-print(get_actual_crypto_rate('LTC'))
-print(get_actual_crypto_rate('SOL'))
-print(get_actual_crypto_rate('DOGE'))
-print(get_actual_crypto_rate('ADA'))
-print(get_actual_crypto_rate('DOT'))
-print(get_actual_crypto_rate('XRP'))
-print(get_actual_crypto_rate('LUNA'))

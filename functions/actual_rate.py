@@ -51,14 +51,3 @@ def get_actual_rate(input_currency):
             rate = float(name[3].replace(',', '.')) / float(name[1].replace(',', '.'))
     return f"Курс для 1 {correct_currency_form(currency)} составляет {rate} RUB."
 
-
-print(get_actual_rate('USD'))
-print(get_actual_rate('EUR'))
-print(get_actual_rate('CNY'))
-print(get_actual_rate('GBP'))
-print(get_actual_rate('JPY'))
-print(get_actual_rate('CHF'))
-print(get_actual_rate('UAH'))
-print(get_actual_rate('TRY'))
-print(get_actual_rate('AUD'))
-print(get_actual_rate('KZT'))

@@ -1,13 +1,16 @@
 from telegram.ext import Application, MessageHandler, filters
 from telegram.ext import CommandHandler, ConversationHandler
 from telegram import ReplyKeyboardMarkup, KeyboardButton
-from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func, news_func, kitties_func, dogs_func
+from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func, news_func, kitties_func, \
+    dogs_func, actual_crypto_rate, actual_rate
 import asyncio
 import os
 import aiohttp
 
-reply_keyboard = [['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'], ['/kitties'], ['/dogs'], ['/map'],
-                  ['/img'], ['/exchange_rate'], ['/help'], ['/GIT'], ['/GPT'], ['/voice_yt'], ['/crypto_rate'], ['/voice_to_txt']]
+reply_keyboard = [['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'], ['/kitties'], ['/dogs'],
+                  ['/map'],
+                  ['/img'], ['/exchange_rate'], ['/help'], ['/GIT'], ['/GPT'], ['/voice_yt'], ['/crypto_rate'],
+                  ['/voice_to_txt']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 reply_keyboard_news = [['/specific_news'], ['/general_news']]
@@ -20,13 +23,18 @@ markup_news_topic = ReplyKeyboardMarkup(reply_keyboard_news_topic, one_time_keyb
 btn_loc = KeyboardButton('Отправить геопозицию', request_location=True)
 markup_weather_loc = ReplyKeyboardMarkup([[btn_loc]], one_time_keyboard=True)
 
+reply_keyboard_bit = [['/BTC'], ['/ETH'], ['/BNB'], ['/LTC'], ['SOL'], ['/DOGE'], ['/ADA'], ['/DOT'], ['/XRP']]
+markup_bit = ReplyKeyboardMarkup(reply_keyboard_bit, one_time_keyboard=True)
+
 
 # функции затычки
 async def voice_to_txt_command(update, context):
     await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
 
+
 async def voice_yt_command(update, context):
     await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
+
 
 async def map_command(update, context):
     await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
@@ -46,9 +54,6 @@ async def exchange_rate_command(update, context):
 
 async def chat_gpt_command(update, context):
     await update.message.reply_html(rf"Временно не работает из за ошибок в OpenAI", reply_markup=markup)
-
-async def crypto_rate_command(update, context):
-    await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
 
 
 ##########################################
@@ -182,23 +187,84 @@ async def stop(update, context):
     return ConversationHandler.END
 
 
-#cats
+# cats
 async def kitties_command(update, context):
     func = kitties_func.kitties()
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
-#dogs
+
+# dogs
 async def dogs_command(update, context):
     func = dogs_func.dogs()
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
+
+# крипта
+async def crypto_rate_command(update, context):
+    await update.message.reply_html(rf"Выберите то, что хотите посмотреть", reply_markup=markup_bit)
+
+
+async def crypto_rate_btc_command(update, context):
+    func = actual_crypto_rate.get_actual_crypto_rate('BTC')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def crypto_rate_eth_command(update, context):
+    func = actual_crypto_rate.get_actual_crypto_rate('ETH')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def crypto_rate_bnb_command(update, context):
+    func = actual_crypto_rate.get_actual_crypto_rate('BNB')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def crypto_rate_ltc_command(update, context):
+    func = actual_crypto_rate.get_actual_crypto_rate('LTC')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def crypto_rate_sol_command(update, context):
+    func = actual_crypto_rate.get_actual_crypto_rate('SOL')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def crypto_rate_doge_command(update, context):
+    func = actual_crypto_rate.get_actual_crypto_rate('DOGE')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def crypto_rate_ada_command(update, context):
+    func = actual_crypto_rate.get_actual_crypto_rate('ADA')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def crypto_rate_dot_command(update, context):
+    func = actual_crypto_rate.get_actual_crypto_rate('DOT')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def crypto_rate_xrp_command(update, context):
+    func = actual_crypto_rate.get_actual_crypto_rate('XRP')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
 def main():
     application = Application.builder().token('6118068525:AAGGfYJ46p8Qe0sYLKC9v8KSsBH7cqybjf4').build()
 
     # затычки
-    
+
     # + еще пару функций есть и нужно сделать бд
     application.add_handler(CommandHandler("map", map_command))
     application.add_handler(CommandHandler("dictionary", dictionary_command))
@@ -206,7 +272,6 @@ def main():
     application.add_handler(CommandHandler("exchange_rate", exchange_rate_command))
     application.add_handler(CommandHandler("GPT", chat_gpt_command))
     application.add_handler(CommandHandler("voice_yt", voice_yt_command))
-    application.add_handler(CommandHandler("crypto_rate", crypto_rate_command))
     application.add_handler(CommandHandler("voice_to_txt", voice_to_txt_command))
 
     # легкие команды
@@ -217,6 +282,19 @@ def main():
     application.add_handler(CommandHandler("phrase_of_the_day", quote_command))
     application.add_handler(CommandHandler("kitties", kitties_command))
     application.add_handler(CommandHandler("dogs", dogs_command))
+
+    # крипта
+    application.add_handler(CommandHandler("crypto_rate", crypto_rate_command))
+
+    application.add_handler(CommandHandler("BTC", crypto_rate_btc_command))
+    application.add_handler(CommandHandler("ETH", crypto_rate_eth_command))
+    application.add_handler(CommandHandler("BNB", crypto_rate_bnb_command))
+    application.add_handler(CommandHandler("LTC", crypto_rate_ltc_command))
+    application.add_handler(CommandHandler("SOL", crypto_rate_sol_command))
+    application.add_handler(CommandHandler("DOGE", crypto_rate_doge_command))
+    application.add_handler(CommandHandler("ADA", crypto_rate_ada_command))
+    application.add_handler(CommandHandler("DOT", crypto_rate_dot_command))
+    application.add_handler(CommandHandler("XRP", crypto_rate_xrp_command))
 
     # новости
     application.add_handler(CommandHandler("news", news_command))
