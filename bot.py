@@ -408,14 +408,13 @@ def main():
     application.add_handler(CommandHandler("GIT", git_command))
     application.add_handler(CommandHandler("time", time_command))
     application.add_handler(CommandHandler("phrase_of_the_day", quote_command))
+    application.add_handler(CommandHandler("GPT", chat_gpt_command))
+    application.add_handler(CommandHandler("voice_yt", voice_yt_command))
 
     # Животные
     application.add_handler(CommandHandler("animals", animals_command_response))
-
     application.add_handler(CommandHandler("kitties", kitties_command))
     application.add_handler(CommandHandler("dogs", dogs_command))
-    application.add_handler(CommandHandler("GPT", chat_gpt_command))
-    application.add_handler(CommandHandler("voice_yt", voice_yt_command))
 
 
     # Экономика
