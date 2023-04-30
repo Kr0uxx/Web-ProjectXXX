@@ -8,7 +8,7 @@ import os
 import aiohttp
 
 reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'],
-                  ['/kitties'], ['/dogs'],
+                  ['/animals'],
                   ['/map'], ['/img'], ['/economics'], ['/GPT'], ['/voice_yt'], ['/voice_to_txt']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
@@ -32,6 +32,9 @@ markup_bit = ReplyKeyboardMarkup(reply_keyboard_bit, one_time_keyboard=True)
 reply_keyboard_exch = [['/USD'], ['/EUR'], ['/CNY'], ['/GBP'], ['/JPY'], ['/CHF'], ['/UAH'], ['/TRY'], ['/AUD'],
                        ['/KZT']]
 markup_exch = ReplyKeyboardMarkup(reply_keyboard_exch, one_time_keyboard=True)
+
+reply_keyboard_animals = [['/kitties'], ['/dogs']]
+markup_animals = ReplyKeyboardMarkup(reply_keyboard_animals, one_time_keyboard=True)
 
 reply_keyboard_lang = [['/RU'], ['/UK'], ['/US'], ['/FR'], ['DUTCH'], ['/ITA'], ['/SPAN'], ['/DK']]
 markup_lang = ReplyKeyboardMarkup(reply_keyboard_lang, one_time_keyboard=True)
@@ -84,8 +87,13 @@ async def weather_command_response(update, context):
 
 
 async def economics_command_response(update, context):
-    await update.message.reply_html(rf"Выберите топик, интересующий вас",
+    await update.message.reply_html(rf"Выберите тему, интересующую вас",
                                     reply_markup=markup_economics)
+
+
+async def animals_command_response(update, context):
+    await update.message.reply_html(rf"Выберите вид животного, картинку которого хотите увидеть",
+                                    reply_markup=markup_animals)
 
 
 # новости
@@ -354,7 +362,7 @@ async def downloader(update, context):
 
 async def voice_to_txt_command_2(update, context):
     await update.message.reply_html(rf"Выбери язык, который в файле ( если не знаете, то выберите DK )", reply_markup=markup_lang)
-    return ConversationHandler.END
+
 
 async def voice_dk(update, context):
     await update.message.reply_html(rf"{voice_to_txt_func.voice_main()}", reply_markup=markup)
@@ -400,6 +408,10 @@ def main():
     application.add_handler(CommandHandler("GIT", git_command))
     application.add_handler(CommandHandler("time", time_command))
     application.add_handler(CommandHandler("phrase_of_the_day", quote_command))
+
+    # Животные
+    application.add_handler(CommandHandler("animals", animals_command_response))
+
     application.add_handler(CommandHandler("kitties", kitties_command))
     application.add_handler(CommandHandler("dogs", dogs_command))
     application.add_handler(CommandHandler("GPT", chat_gpt_command))
