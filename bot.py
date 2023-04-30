@@ -33,7 +33,8 @@ reply_keyboard_exch = [['/USD'], ['/EUR'], ['/CNY'], ['/GBP'], ['/JPY'], ['/CHF'
                        ['/KZT']]
 markup_exch = ReplyKeyboardMarkup(reply_keyboard_exch, one_time_keyboard=True)
 
-reply_keyboard_lang = [['/BTC'], ['/ETH'], ['/BNB'], ['/LTC'], ['SOL'], ['/DOGE'], ['/ADA'], ['/DOT'], ['/XRP']]
+reply_keyboard_lang = [['/BTC'], ['/ETH'], ['/BNB'], ['/LTC'], ['SOL'], ['/DOGE'], ['/ADA'], ['/DOT'], ['/XRP'],
+                       ['LINA']]
 markup_lang = ReplyKeyboardMarkup(reply_keyboard_lang, one_time_keyboard=True)
 
 
