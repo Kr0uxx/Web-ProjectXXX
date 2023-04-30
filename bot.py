@@ -357,7 +357,9 @@ async def voice_to_txt_command(update, context):
 
 async def downloader(update, context):
     file = await context.bot.get_file(update.message.document)
-    await file.download_to_drive('main.wav')
+    print('ACHIEVED')
+    await file.download_to_drive('files/main.wav')
+    print('DOWNLOADED')
     return 2
 
 async def voice_to_txt_command_2(update, context):
@@ -489,7 +491,7 @@ def main():
         entry_points=[CommandHandler('voice_to_txt', voice_to_txt_command)],
         
         states={
-            1: [MessageHandler(filters.Document.ALL, downloader)],   
+            1: [MessageHandler(filters.Document.WAV, downloader)],   
             2: [MessageHandler(filters.TEXT & ~filters.COMMAND, voice_to_txt_command_2)]
         },
 
