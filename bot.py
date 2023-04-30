@@ -8,7 +8,7 @@ import os
 import aiohttp
 
 reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'],
-                  ['/kitties'], ['/dogs'],
+                  ['/animals'],
                   ['/map'], ['/img'], ['/economics'], ['/GPT'], ['/voice_yt'], ['/voice_to_txt']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
