@@ -9,7 +9,7 @@ import aiohttp
 
 reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'],
                   ['/animals'],
-                  ['/map'], ['/img'], ['/economics'], ['/GPT'], ['/voice_yt'], ['/voice_to_txt']]
+                  ['/map'], ['/black_and_white'], ['/economics'], ['/GPT'], ['/voice_yt'], ['/voice_to_txt']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 reply_keyboard_news = [['/specific_news'], ['/general_news']]
@@ -50,7 +50,7 @@ async def dictionary_command(update, context):
     await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
 
 
-async def img_command(update, context):
+async def black_and_white_command(update, context):
     await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
 
 
@@ -397,7 +397,7 @@ def main():
     # + еще пару функций есть и нужно сделать бд
     application.add_handler(CommandHandler("map", map_command))
     application.add_handler(CommandHandler("dictionary", dictionary_command))
-    application.add_handler(CommandHandler("black_to_white", img_command))
+    application.add_handler(CommandHandler("black_and_white", black_and_white_command))
 
 
     # легкие команды
