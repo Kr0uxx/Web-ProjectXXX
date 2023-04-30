@@ -7,10 +7,9 @@ import asyncio
 import os
 import aiohttp
 
-reply_keyboard = [['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'], ['/kitties'], ['/dogs'],
-                  ['/map'],
-                  ['/img'], ['/exchange_rate'], ['/help'], ['/GIT'], ['/GPT'], ['/voice_yt'], ['/crypto_rate'],
-                  ['/voice_to_txt']]
+reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'],
+                  ['/kitties'], ['/dogs'],
+                  ['/map'], ['/img'], ['/economics'], ['/GPT'], ['/voice_yt'], ['/voice_to_txt']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 reply_keyboard_news = [['/specific_news'], ['/general_news']]
@@ -23,7 +22,11 @@ markup_news_topic = ReplyKeyboardMarkup(reply_keyboard_news_topic, one_time_keyb
 btn_loc = KeyboardButton('Отправить геопозицию', request_location=True)
 markup_weather_loc = ReplyKeyboardMarkup([[btn_loc]], one_time_keyboard=True)
 
-reply_keyboard_bit = [['/BTC'], ['/ETH'], ['/BNB'], ['/LTC'], ['SOL'], ['/DOGE'], ['/ADA'], ['/DOT'], ['/XRP']]
+reply_keyboard_economics = [['/exchange_rate'], ['/crypto_rate']]
+markup_economics = ReplyKeyboardMarkup(reply_keyboard_economics, one_time_keyboard=True)
+
+reply_keyboard_bit = [['/BTC'], ['/ETH'], ['/BNB'], ['/LTC'], ['SOL'], ['/DOGE'], ['/ADA'], ['/DOT'], ['/XRP'],
+                      ['/LINA']]
 markup_bit = ReplyKeyboardMarkup(reply_keyboard_bit, one_time_keyboard=True)
 
 reply_keyboard_exch = [['/USD'], ['/EUR'], ['/CNY'], ['/GBP'], ['/JPY'], ['/CHF'], ['/UAH'], ['/TRY'], ['/AUD'],
@@ -81,6 +84,11 @@ async def weather_command_response(update, context):
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
     return ConversationHandler.END
+
+
+async def economics_command_response(update, context):
+    await update.message.reply_html(rf"Выберите топик, интересующий вас",
+                                    reply_markup=markup_economics)
 
 
 # новости
@@ -260,6 +268,12 @@ async def crypto_rate_xrp_command(update, context):
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
 
+async def crypto_rate_lina_command(update, context):
+    func = actual_crypto_rate.get_actual_crypto_rate('LINA')
+    answer = func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
 # курс
 async def exchange_rate_command(update, context):
     await update.message.reply_html(rf"Выберите курс, который вам интересен", reply_markup=markup_exch)
@@ -348,6 +362,10 @@ def main():
     application.add_handler(CommandHandler("kitties", kitties_command))
     application.add_handler(CommandHandler("dogs", dogs_command))
 
+
+    # Экономика
+    application.add_handler(CommandHandler("economics", economics_command_response))
+
     # крипта
     application.add_handler(CommandHandler("crypto_rate", crypto_rate_command))
 
@@ -360,6 +378,7 @@ def main():
     application.add_handler(CommandHandler("ADA", crypto_rate_ada_command))
     application.add_handler(CommandHandler("DOT", crypto_rate_dot_command))
     application.add_handler(CommandHandler("XRP", crypto_rate_xrp_command))
+    application.add_handler(CommandHandler("LINA", crypto_rate_lina_command))
 
     # курс обычный
     application.add_handler(CommandHandler("exchange_rate", exchange_rate_command))
