@@ -17,5 +17,5 @@ def send(email, text, person):
         mailsender.quit()
         return f'Сообщение на адрес {email} отправлено, но может оказаться у человека в спаме!'
     except Exception as e:
-        return f'error while mailing - {e[0]}'
+        return f'error while mailing - {e}'
 
