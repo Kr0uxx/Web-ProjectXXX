@@ -6,6 +6,11 @@ from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_
 import asyncio
 import os
 import aiohttp
+from data import db_session
+from data.user import User
+
+
+
 
 
 reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'],
@@ -172,17 +177,26 @@ async def time_command(update, context):
 
 
 ########################
-# chat gpt - доделать
+# chat gpt 
+async def gpt_command(update, context):
+    await update.message.reply_text('Задайте мне вопрос')
+    return 1
+
+
 async def message_answer(update, context):
     txt = update.message.text
     answer = gpt_func.ask(txt, 0)
-    await update.message.reply_text(answer)
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+    return ConversationHandler.END
 
 
 ########################
 # start
 async def start_command(update, context):
     user = update.effective_user
+    id = user.id
+    db_sess = db_session.create_session()
+
     await update.message.reply_html(
         rf"Здравствуй, {user.mention_html()}! Я бот с разными функциями, во мне даже есть GPT - можем пообщаться! Давай посмотрим на то, что я еще умею :D",
         reply_markup=markup)
@@ -347,11 +361,6 @@ async def exchange_rate_kzt_command(update, context):
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
 
-########################
-# GPT - доделать
-async def chat_gpt_command(update, context):
-    await update.message.reply_html(rf"Функция не работает - в последний момент возникли проблемы с ключом, решить не смогли, купить тоже - слишком бедные", reply_markup=markup)
-
 
 ########################
 #перевод звука из ютуб
@@ -418,7 +427,6 @@ def main():
     application.add_handler(CommandHandler("GIT", git_command))
     application.add_handler(CommandHandler("time", time_command))
     application.add_handler(CommandHandler("phrase_of_the_day", quote_command))
-    application.add_handler(CommandHandler("GPT", chat_gpt_command))
     application.add_handler(CommandHandler("voice_yt", voice_yt_command))
 
     # Животные
@@ -516,11 +524,22 @@ def main():
     application.add_handler(CommandHandler("SPAN", voice_sp))
 
 
+    # GPT
+    conv_handler_gpt = ConversationHandler(
+        entry_points=[CommandHandler("GPT", gpt_command)],
+        states={
+            1: [MessageHandler(filters.TEXT, message_answer)],
+        },
+        fallbacks=[CommandHandler('stop', stop)]
+    )
+    application.add_handler(conv_handler_gpt)
+
 
     application.run_polling()
 
 
 if __name__ == '__main__':
+    db_session.global_init("db/data.db")
     if os.name == 'nt':
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     main()

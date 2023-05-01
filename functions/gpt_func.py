@@ -5,7 +5,7 @@ from datetime import datetime
 
 
 # Предоставляем ключ API 
-openai.api_key = "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"
+openai.api_key = "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"
 
 
 def ask(prompt, a): # def которая отвечает за получение ответа , чтобы задать вопрос ask('вопрос')
@@ -23,3 +23,4 @@ def ask(prompt, a): # def которая отвечает за получени�
         answer = f'{answ}'
     
     return answer
+
