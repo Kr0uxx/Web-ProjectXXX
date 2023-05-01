@@ -39,7 +39,7 @@ markup_exch = ReplyKeyboardMarkup(reply_keyboard_exch, one_time_keyboard=True)
 reply_keyboard_animals = [['/kitties'], ['/dogs']]
 markup_animals = ReplyKeyboardMarkup(reply_keyboard_animals, one_time_keyboard=True)
 
-reply_keyboard_cooking = [['/random_recipe'], ['/find_recipe'], ['/find_recipe_id']]
+reply_keyboard_cooking = [['/get_random_recipe'], ['/find_recipe'], ['/find_recipe_id']]
 markup_cooking = ReplyKeyboardMarkup(reply_keyboard_cooking, one_time_keyboard=True)
 
 reply_keyboard_lang = [['/RU'], ['/UK'], ['/US'], ['/FR'], ['/DUTCH'], ['/ITA'], ['/SPAN'], ['/DK']]
@@ -94,7 +94,9 @@ async def result_command(update, context):
     id = usertg.id
     db_sess = db_session.create_session()
     person = db_sess.query(User).filter(User.tg_id == id).first()
-    await update.message.reply_html(rf"Хай, {person.name} или {person.tg_id} - как Вам удобнее. Вот ваш score - {person.count}. Вы, видимо, часто нажимали на /start! ;D", reply_markup=markup)
+    await update.message.reply_html(
+        rf"Хай, {person.name} или {person.tg_id} - как Вам удобнее. Вот ваш score - {person.count}. Вы, видимо, часто нажимали на /start! ;D",
+        reply_markup=markup)
 
 
 ########################
@@ -222,9 +224,9 @@ async def start_command(update, context):
     user = update.effective_user
     id = user.id
     db_sess = db_session.create_session()
-    
+
     person = db_sess.query(User).filter(User.tg_id == id).first()
-    
+
     if person:
         person.count += 1
         db_sess.commit()
@@ -408,16 +410,32 @@ async def exchange_rate_kzt_command(update, context):
 
 ########################
 # Кулинария, кухня, все дела
+
+async def cooking_command_response(update, context):
+    await update.message.reply_html(rf"Что конкретно вы хотите?",
+                                    reply_markup=markup_cooking)
+
+
 async def random_recipe(update, context):
-    await update.message.reply_text('''Укажите один или несколько фильтров из доступных:\n
-    veryPopular, vegetarian, vegan, veryHealthy, cheap, greek, italian, african, american, british, cajun, caribbean,
-    chinese, eastern european, european, french, german, greek, indian, irish, italian, japanese, jewish, korean,
-    latin american, mediterranean, mexican, middle eastern, nordic, southern, spanish, thai, vietnamese''')
+    await update.message.reply_text('''По желанию укажите один или несколько фильтров из доступных через запятую(если не хотите, то введите nothing):
+    \n-veryPopular\n-vegetarian\n-vegan\n-veryHealthy\n-cheap\n-greek\n-italian\n-african\n-american\n-british\n-cajun\n-caribbean\n-chinese\n-eastern european\n-european\n-french\n-german\n-greek\n-indian\n-irish\n-italian\n-japanese\n-jewish\n-korean\n-latin american\n-mediterranean\n-mexican\n-middle eastern\n-nordic\n-southern\n-spanish\n-thai\n-vietnamese''')
     return 1
 
 
 async def random_recipe_response(update, context):
     func = recipes.get_random_recipe(update.message.text)
+    answer = await func
+    await update.message.reply_html(answer, reply_markup=markup)
+    return ConversationHandler.END
+
+
+async def find_recipe(update, context):
+    await update.message.reply_text('Введите название типа блюда и количество желаемых рецептов(от 1 до 100, по умолчанию - 30) через пробел')
+    return 1
+
+async def find_recipe_response(update, context):
+    mess = update.message.text.split()
+    func = recipes.find_a_recipe(mess[0], mess[1] if len(mess) > 1 else 30)
     answer = await func
     await update.message.reply_html(answer, reply_markup=markup)
     return ConversationHandler.END
@@ -552,7 +570,7 @@ def main():
     application.add_handler(CommandHandler("KZT", exchange_rate_kzt_command))
 
     # кухня
-    application.add_handler(CommandHandler("random_recipe", random_recipe_response))
+    application.add_handler(CommandHandler("cooking", cooking_command_response))
 
     # новости
     application.add_handler(CommandHandler("news", news_command))
@@ -624,6 +642,27 @@ def main():
     )
     application.add_handler(conv_handler_email)
 
+
+    # КУХНЯ
+    # рандомный рецепт
+    conv_handler_random_recipe = ConversationHandler(
+        entry_points=[CommandHandler("get_random_recipe", random_recipe)],
+        states={
+            1: [MessageHandler(filters.TEXT, random_recipe_response)],
+        },
+        fallbacks=[CommandHandler('stop', stop)]
+    )
+    application.add_handler(conv_handler_random_recipe)
+
+    # поиск рецептов
+    conv_handler_find_recipe = ConversationHandler(
+        entry_points=[CommandHandler("find_recipe", find_recipe)],
+        states={
+            1: [MessageHandler(filters.TEXT, find_recipe_response)],
+        },
+        fallbacks=[CommandHandler('stop', stop)]
+    )
+    application.add_handler(conv_handler_find_recipe)
 
     application.run_polling()
 
