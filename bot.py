@@ -2,20 +2,16 @@ from telegram.ext import Application, MessageHandler, filters
 from telegram.ext import CommandHandler, ConversationHandler
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func, news_func, kitties_func, \
-    dogs_func, actual_crypto_rate, actual_rate, voice_to_txt_func
+    dogs_func, actual_crypto_rate, actual_rate, voice_to_txt_func, recipes
 import asyncio
 import os
 import aiohttp
 from data import db_session
 from data.user import User
 
-
-
-
-
 reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'],
-                  ['/animals'],
-                  ['/map'], ['/black_and_white'], ['/economics'], ['/GPT'], ['/voice_yt'], ['/voice_to_txt']]
+                  ['/animals'], ['/map'], ['/black_and_white'], ['/economics'], ['/GPT'], ['/random_recipe'],
+                  ['/voice_yt'], ['/voice_to_txt']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 reply_keyboard_news = [['/specific_news'], ['/general_news']]
@@ -59,6 +55,7 @@ async def dictionary_command(update, context):
 async def black_and_white_command(update, context):
     await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
 
+
 ###########################################
 
 
@@ -71,6 +68,7 @@ async def help_command(update, context):
         "/animals - дает возможность получить милого котенка или собачку\n\n/exchange_rate - выводит курс популярных валют\n\n/GIT - ссылка на наш гит\n\n"
         "/dictionary - работа с Cambridge Dictionary\n\n/map - работа с картой\n\n/black_and_white - работа с изображением\n\n/GPT - общение с AI от OpenAI\n\n"
         "/voice_yt - по ссылке из ютуб достает звук из видео\n\n/crypto_rate - из списка можете выбрать интересующую Вас крипту и получить ее курс\n\n/voice_to_txt - из wav файла достаем звук, преобразует его потом в текст")
+
 
 ########################
 # погода
@@ -164,7 +162,8 @@ async def quote_command(update, context):
 ########################
 # гит
 async def git_command(update, context):
-    await update.message.reply_text('Вот ссылка на наш гит:\n\nhttps://github.com/Kr0uxx/Web-ProjectXXX\n\nИ на наши профили:\n\nАртем - https://github.com/YL-bot\n\nМаксим - https://github.com/Kr0uxx\n\nКатя - https://github.com/katiarapter')
+    await update.message.reply_text(
+        'Вот ссылка на наш гит:\n\nhttps://github.com/Kr0uxx/Web-ProjectXXX\n\nИ на наши профили:\n\nАртем - https://github.com/YL-bot\n\nМаксим - https://github.com/Kr0uxx\n\nКатя - https://github.com/katiarapter')
 
 
 ########################
@@ -213,11 +212,14 @@ async def stop(update, context):
 async def animals_command_response(update, context):
     await update.message.reply_html(rf"Выберите вид животного, картинку которого хотите увидеть",
                                     reply_markup=markup_animals)
+
+
 # cats
 async def kitties_command(update, context):
     func = kitties_func.kitties()
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
 
 # dogs
 async def dogs_command(update, context):
@@ -231,6 +233,8 @@ async def dogs_command(update, context):
 async def economics_command_response(update, context):
     await update.message.reply_html(rf"Выберите тему, интересующую вас",
                                     reply_markup=markup_economics)
+
+
 # крипта
 
 async def crypto_rate_command(update, context):
@@ -296,7 +300,8 @@ async def crypto_rate_lina_command(update, context):
     answer = func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
-#курс
+
+# курс
 async def exchange_rate_command(update, context):
     await update.message.reply_html(rf"Выберите курс, который вам интересен", reply_markup=markup_exch)
 
@@ -361,13 +366,30 @@ async def exchange_rate_kzt_command(update, context):
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
 
+########################
+# Кулинария, кухня, все дела
+async def random_recipe(update, context):
+    await update.message.reply_text('''Укажите один или несколько фильтров из доступных:\n
+    veryPopular, vegetarian, vegan, veryHealthy, cheap, greek, italian, african, american, british, cajun, caribbean,
+    chinese, eastern european, european, french, german, greek, indian, irish, italian, japanese, jewish, korean,
+    latin american, mediterranean, mexican, middle eastern, nordic, southern, spanish, thai, vietnamese''')
+    return 1
+
+
+async def random_recipe_response(update, context):
+    func = recipes.get_random_recipe(update.message.text)
+    answer = await func
+    await update.message.reply_html(answer, reply_markup=markup)
+    return ConversationHandler.END
+
 
 ########################
-#перевод звука из ютуб
+# перевод звука из ютуб
 async def voice_yt_command(update, context):
-    await update.message.reply_html(rf"Функция работала на момент 21 апреля, потом снова полетела из за обновления ютуб."
-                                    "Не наша вина, но 'pytube' улетел уже в какой раз. Для просмотра самой функции можно в папке"
-                                    "functions найти yt_convert_func.py", reply_markup=markup)
+    await update.message.reply_html(
+        rf"Функция работала на момент 21 апреля, потом снова полетела из за обновления ютуб."
+        "Не наша вина, но 'pytube' улетел уже в какой раз. Для просмотра самой функции можно в папке"
+        "functions найти yt_convert_func.py", reply_markup=markup)
 
 
 ########################
@@ -375,6 +397,7 @@ async def voice_yt_command(update, context):
 async def voice_to_txt_command(update, context):
     await update.message.reply_text(rf"Отправь мне файл в формате WAV")
     return 1
+
 
 async def downloader(update, context):
     file = await context.bot.get_file(update.message.document)
@@ -387,27 +410,33 @@ async def downloader(update, context):
 async def voice_dk(update, context):
     await update.message.reply_html(rf"{voice_to_txt_func.voice_main()}", reply_markup=markup)
 
+
 async def voice_ru(update, context):
     await update.message.reply_html(rf"{voice_to_txt_func.voice_lang('Russian')}", reply_markup=markup)
+
 
 async def voice_uk(update, context):
     await update.message.reply_html(rf"{voice_to_txt_func.voice_lang('UK English')}", reply_markup=markup)
 
+
 async def voice_us(update, context):
     await update.message.reply_html(rf"{voice_to_txt_func.voice_lang('US English')}", reply_markup=markup)
+
 
 async def voice_fr(update, context):
     await update.message.reply_html(rf"{voice_to_txt_func.voice_lang('French')}", reply_markup=markup)
 
+
 async def voice_dut(update, context):
     await update.message.reply_html(rf"{voice_to_txt_func.voice_lang('Dutch')}", reply_markup=markup)
+
 
 async def voice_ital(update, context):
     await update.message.reply_html(rf"{voice_to_txt_func.voice_lang('Italian')}", reply_markup=markup)
 
+
 async def voice_sp(update, context):
     await update.message.reply_html(rf"{voice_to_txt_func.voice_lang('Spanish')}", reply_markup=markup)
-
 
 
 ########################
@@ -435,10 +464,8 @@ def main():
     application.add_handler(CommandHandler("kitties", kitties_command))
     application.add_handler(CommandHandler("dogs", dogs_command))
 
-
     # Экономика
     application.add_handler(CommandHandler("economics", economics_command_response))
-
 
     # крипта
     application.add_handler(CommandHandler("crypto_rate", crypto_rate_command))
@@ -454,7 +481,6 @@ def main():
     application.add_handler(CommandHandler("XRP", crypto_rate_xrp_command))
     application.add_handler(CommandHandler("LINA", crypto_rate_lina_command))
 
-
     # курс обычный
     application.add_handler(CommandHandler("exchange_rate", exchange_rate_command))
 
@@ -469,6 +495,8 @@ def main():
     application.add_handler(CommandHandler("AUD", exchange_rate_aud_command))
     application.add_handler(CommandHandler("KZT", exchange_rate_kzt_command))
 
+    # кухня
+    application.add_handler(CommandHandler("random_recipe", random_recipe_response))
 
     # новости
     application.add_handler(CommandHandler("news", news_command))
@@ -489,7 +517,6 @@ def main():
     )
     application.add_handler(conv_handler)
 
-
     # погода
     conv_handler_weather = ConversationHandler(
         entry_points=[CommandHandler("weather", weather_command)],
@@ -500,13 +527,12 @@ def main():
     )
     application.add_handler(conv_handler_weather)
 
-
     # файл со звуком wav в текст
     conv_handler_wav = ConversationHandler(
         # Точка входа в диалог.
         # В данном случае — команда /start. Она задаёт первый вопрос.
         entry_points=[CommandHandler('voice_to_txt', voice_to_txt_command)],
-        
+
         states={
             1: [MessageHandler(filters.Document.WAV, downloader)]
         },
@@ -524,7 +550,6 @@ def main():
     application.add_handler(CommandHandler("ITA", voice_ital))
     application.add_handler(CommandHandler("SPAN", voice_sp))
 
-
     # GPT
     conv_handler_gpt = ConversationHandler(
         entry_points=[CommandHandler("GPT", gpt_command)],
@@ -534,7 +559,6 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_gpt)
-
 
     application.run_polling()
 

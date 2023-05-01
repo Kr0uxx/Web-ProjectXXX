@@ -34,16 +34,15 @@ async def get_response(url, params):
 
 
 # запрашивает у пользователя строку тегов
-def get_random_recipe(tags=''):
+async def get_random_recipe(tags=''):
     # теги
     # veryPopular, vegetarian, vegan, veryHealthy, cheap, greek, italian, african, american, british, cajun, caribbean,
     # chinese, eastern european, european, french, german, greek, indian, irish, italian, japanese, jewish, korean,
     # latin american, mediterranean, mexican, middle eastern, nordic, southern, spanish, thai, vietnamese
     global key
-    req = requests.get('https://api.spoonacular.com/recipes/random',
-                       params={'limitLicense': True, 'tags': tags, 'apiKey': key})
-    data = req.json()
-    print(data)
+    req = await get_response('https://api.spoonacular.com/recipes/random',
+                             params={'tags': tags, 'apiKey': key})
+    data = req
     text = f'Here is a random recipe for u: \n'
     for recipe in data['recipes']:
         title = recipe['title']
@@ -79,4 +78,73 @@ def get_random_recipe(tags=''):
     return text
 
 
-print(get_random_recipe('cajun'))
+async def find_a_recipe(query, number=30, cuisine='', typee=''):
+    global key
+    req = await get_response('https://api.spoonacular.com/recipes/complexSearch',
+                             params={'query': query, 'cuisine': cuisine, 'type': typee, 'number': number,
+                                     'apiKey': key})
+    data = req
+    count = 0
+    recipes_count = len(data['results'])
+    answer = f'Here {"are" if recipes_count > 1 else "is"} {recipes_count} ' \
+             f'{"recipes" if recipes_count > 1 else "recipe"} for "pasta":\n'
+    for recipe in data['results']:
+        count += 1
+        answer += f'{count}){recipe["title"]}, id - {recipe["id"]}\n'
+    return answer
+
+
+async def get_recipe_inf(recipe_id):
+    global key
+    req = await get_response(f'https://api.spoonacular.com/recipes/{recipe_id}/information',
+                             params={'id': recipe_id, 'apiKey': key})
+    recipe = req
+    answer = ''
+    title = recipe['title']
+    img = recipe['image']
+    price = round(recipe['pricePerServing'] / 100, 2)  # цена за 1 порцию
+    time = recipe['readyInMinutes']  # время приготовления
+    servings = recipe['servings']  # количество порций
+    ingredients = recipe['extendedIngredients']
+    answer += f'{title}\n' \
+              f'{img}\n' \
+              f'time: {time} min\n' \
+              f'price per serving: {price}$\n' \
+              f'servings: {servings}\n' \
+              f'amount price: {round(price * servings, 2)}$\n' \
+              f'ingredients:\n'
+    for ingredient in ingredients:
+        measures = ingredient['measures']['metric']
+        answer += f'   •{ingredient["name"]} ({measures["amount"]} {measures["unitShort"]})\n'
+
+    instruction = recipe['instructions']
+    answer += '\nInstruction:\n'
+    if instruction_parser(instruction)[1] == 0:
+        answer += f'  {instruction_parser(instruction)[0]}\n'
+    else:
+        instruction = instruction_parser(instruction)[0]
+        for step in instruction:
+            answer += f'  {instruction.index(step) + 1}){step}\n'
+
+    return answer
+
+
+# print(get_random_recipe('cajun'))
+# print(asyncio.run(find_a_recipe('pasta', 1)))
+print(asyncio.run(get_recipe_inf(654959)))
+
+# types:
+'''main course
+side dish
+dessert
+appetizer
+salad
+bread
+breakfast
+soup
+beverage
+sauce
+marinade
+fingerfood
+snack
+drink'''
