@@ -7,7 +7,7 @@ import aiohttp
 async def get_response(url, params):
     async with aiohttp.ClientSession() as session:
         async with session.get(url, params=params) as resp:
-            return await resp.json()
+            return await resp
 
 # предлагаем отправить именно координаты через запятую сначала долготу, потом ширину
 async def traffic(coords):
