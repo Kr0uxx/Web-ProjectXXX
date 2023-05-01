@@ -64,6 +64,20 @@ async def black_and_white_command(update, context):
 
 
 ########################
+# map
+async def map_command(update, context):
+    await update.message.reply_html(rf"Поделитесь с нами вашей геолокацией для работы с картой!", reply_markup=markup_weather_loc)
+    return 1
+
+async def map_command_response(update, context):
+    long, lang = update.message.location.latitude, update.message.location.longitude
+    func = weather_func.weather((long, lang))
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+    return ConversationHandler.END
+
+
+########################
 # help
 async def help_command(update, context):
     await update.message.reply_text(
@@ -109,7 +123,7 @@ async def weather_command(update, context):
 
 async def weather_command_response(update, context):
     long, lang = update.message.location.latitude, update.message.location.longitude
-    func = weather_func.weather((lang, long))
+    func = weather_func.weather((long, lang))
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
     return ConversationHandler.END
