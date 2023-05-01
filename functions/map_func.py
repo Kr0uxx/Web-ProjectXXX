@@ -1,6 +1,10 @@
 import requests
 import aiohttp
+import os
+import asyncio
 
+if os.name == 'nt':
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 async def get_response(url, params):
     async with aiohttp.ClientSession() as session:
