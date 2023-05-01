@@ -9,18 +9,22 @@ openai.api_key = "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"
 
 
 def ask(prompt, a): # def которая отвечает за получение ответа , чтобы задать вопрос ask('вопрос')
-    completion = openai.Completion.create(engine="text-davinci-003", 
-                                          prompt=prompt, 
-                                          temperature=0.5, 
-                                          max_tokens=1000)
+    try:
+        completion = openai.Completion.create(engine="text-davinci-003", prompt=prompt, temperature=0.5, max_tokens=1000)
     
-    if a == 1:
-        answ = completion.choices[0]['text']
-        answer = f'Ответ на вопрос\n\n{prompt} :\n\n{answ}'
+        if a == 1:
+            answ = completion.choices[0]['text']
+            answer = f'Ответ на вопрос\n\n{prompt} :\n\n{answ}'
         
-    elif a == 0:
-        answ = completion.choices[0]['text']
-        answer = f'{answ}'
+        elif a == 0:
+            answ = completion.choices[0]['text']
+            answer = f'{answ}'
     
-    return answer
+        return answer
+    except Exception as e:
+        #print(e)
+        return 'Функция временно закрыта из за проблем с Open Ai и их чертовым ключом'
 
+
+
+#print(ask('Кто такой Путин', 0))
