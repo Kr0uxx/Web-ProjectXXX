@@ -1,7 +1,6 @@
 import requests
 import os
 import sys
-from map_func import *
 import aiohttp
 import asyncio
 
