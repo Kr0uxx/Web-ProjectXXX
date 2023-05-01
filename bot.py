@@ -10,7 +10,7 @@ from data import db_session
 from data.user import User
 
 reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'],
-                  ['/animals'], ['/map'], ['/black_and_white'], ['/economics'], ['/GPT'], ['/random_recipe'],
+                  ['/animals'], ['/map'], ['/black_and_white'], ['/economics'], ['/GPT'], ['/cooking'],
                   ['/voice_yt'], ['/voice_to_txt']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
@@ -38,6 +38,9 @@ markup_exch = ReplyKeyboardMarkup(reply_keyboard_exch, one_time_keyboard=True)
 reply_keyboard_animals = [['/kitties'], ['/dogs']]
 markup_animals = ReplyKeyboardMarkup(reply_keyboard_animals, one_time_keyboard=True)
 
+reply_keyboard_cooking = [['/random_recipe'], ['/find_recipe'], ['/find_recipe_id']]
+markup_cooking = ReplyKeyboardMarkup(reply_keyboard_cooking, one_time_keyboard=True)
+
 reply_keyboard_lang = [['/RU'], ['/UK'], ['/US'], ['/FR'], ['/DUTCH'], ['/ITA'], ['/SPAN'], ['/DK']]
 markup_lang = ReplyKeyboardMarkup(reply_keyboard_lang, one_time_keyboard=True)
 
@@ -63,11 +66,22 @@ async def black_and_white_command(update, context):
 # help - доделать
 async def help_command(update, context):
     await update.message.reply_text(
-        "/weather - выводит погоду по вашему отправленному местоположению\n\n/time - выводит время самых популярных мест\n\n/economics - дает возможность посмотреть курс и рынок крипты"
-        "/phrase_of_the_day - выводит фразу дня с картинкой автора ( иногда картинка не находится по причине ее отсутсвия в википедии )\n\n/news - можете выбрать special news и ввести то, что хотите найти, или выбрать general news и выбрать из предоставленных топиков\n\n"
-        "/animals - дает возможность получить милого котенка или собачку\n\n/exchange_rate - выводит курс популярных валют\n\n/GIT - ссылка на наш гит\n\n"
-        "/dictionary - работа с Cambridge Dictionary\n\n/map - работа с картой\n\n/black_and_white - работа с изображением\n\n/GPT - общение с AI от OpenAI\n\n"
-        "/voice_yt - по ссылке из ютуб достает звук из видео\n\n/crypto_rate - из списка можете выбрать интересующую Вас крипту и получить ее курс\n\n/voice_to_txt - из wav файла достаем звук, преобразует его потом в текст")
+        "/weather - выводит погоду по вашему отправленному местоположению"
+        "\n\n/time - выводит время самых популярных мест"
+        "\n\n/economics - дает возможность посмотреть курсы крипты и валют"
+        "\n\n/phrase_of_the_day - выводит фразу дня с картинкой автора ( иногда картинка не находится по причине ее отсутсвия в википедии )"
+        "\n\n/news - можете выбрать special news и ввести то, что хотите найти, или выбрать general news и выбрать из предоставленных топиков"
+        "\n\n/animals - дает возможность получить милого котенка или собачку"
+        "\n\n/exchange_rate - выводит курс популярных валют"
+        "\n\n/GIT - ссылка на наш гит"
+        "\n\n/dictionary - работа с Cambridge Dictionary"
+        "\n\n/map - работа с картой"
+        "\n\n/black_and_white - работа с изображением"
+        "\n\n/GPT - общение с AI от OpenAI"
+        "\n\n/voice_yt - по ссылке из ютуб достает звук из видео"
+        "\n\n/crypto_rate - из списка можете выбрать интересующую Вас крипту и получить ее курс"
+        "\n\n/voice_to_txt - из wav файла достаем звук, преобразуем его потом в текст"
+        "\n\n/cooking - с этим вы станете настоящим шеф-поваром, можно запросить рандомный рецепт, найти рецепт по виду блюда, а потом инструкцию к его приготовлению")
 
 
 ########################
