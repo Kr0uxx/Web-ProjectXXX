@@ -51,5 +51,10 @@ data - это папка с orm-моделью и самой DB
 
 Презентация:
 
-( пока пусто )
+![image_2023-05-01_15-54-48](https://user-images.githubusercontent.com/102421671/235456860-59dc6dea-f9bf-42dc-a0a8-044d26a4772e.png)
+![image_2023-05-01_15-55-09](https://user-images.githubusercontent.com/102421671/235456870-bfb0069b-d8ec-45b7-910b-ee547e262f45.png)
+![image_2023-05-01_15-55-36](https://user-images.githubusercontent.com/102421671/235456872-87482289-c0df-495c-8e59-7b449b1dc924.png)
+![image_2023-05-01_15-56-27](https://user-images.githubusercontent.com/102421671/235456876-3cdc25d5-b94e-444d-8a4e-c348a2808b78.png)
+![image_2023-05-01_15-56-41](https://user-images.githubusercontent.com/102421671/235456878-6b9f1098-4ba3-4c10-888b-25cba6be0d14.png)
+
 
