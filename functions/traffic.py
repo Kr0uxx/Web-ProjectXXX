@@ -18,7 +18,8 @@ async def traffic(coords):
     # address = text(coords)
     # запрос с получением картинки с пробками
     map_request = f"https://static-maps.yandex.ru/1.x/?ll={coords}&spn=0.01,0.01&l=map,trf"
-    print(map_request)
+    return map_request
+
     response = await get_response(map_request, {})
     
     

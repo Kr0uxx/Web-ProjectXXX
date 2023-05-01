@@ -23,11 +23,10 @@ async def get_address_from_coords(coords):
 
     try:
         r = await get_response("https://geocode-maps.yandex.ru/1.x/", parametrs)
+        print(r)
         json_data = r
-        address_str = json_data["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["metaDataProperty"][
-            "GeocoderMetaData"]["AddressDetails"]["Country"]["AddressLine"]
+        address_str = json_data["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["metaDataProperty"]["GeocoderMetaData"]["AddressDetails"]["Country"]["AddressLine"]
         return address_str
 
     except Exception as e:
-        print(e)
         return "error in processing data - try again later"
