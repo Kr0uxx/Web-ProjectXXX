@@ -35,10 +35,6 @@ async def get_response(url, params):
 
 # запрашивает у пользователя строку тегов
 async def get_random_recipe(tags=''):
-    # теги
-    # veryPopular, vegetarian, vegan, veryHealthy, cheap, greek, italian, african, american, british, cajun, caribbean,
-    # chinese, eastern european, european, french, german, greek, indian, irish, italian, japanese, jewish, korean,
-    # latin american, mediterranean, mexican, middle eastern, nordic, southern, spanish, thai, vietnamese
     global key
     if tags == 'nothing':
         tags = ''
@@ -85,16 +81,16 @@ async def get_random_recipe(tags=''):
     return text
 
 
-async def find_a_recipe(query, number=30, cuisine='', typee=''):
+async def find_a_recipe(query, number):
     global key
     req = await get_response('https://api.spoonacular.com/recipes/complexSearch',
-                             params={'query': query, 'cuisine': cuisine, 'type': typee, 'number': number,
+                             params={'query': query, 'number': number,
                                      'apiKey': key})
     data = req
     count = 0
     recipes_count = len(data['results'])
     answer = f'Here {"are" if recipes_count > 1 else "is"} {recipes_count} ' \
-             f'{"recipes" if recipes_count > 1 else "recipe"} for "pasta":\n'
+             f'{"recipes" if recipes_count > 1 else "recipe"} with "{query}":\n'
     for recipe in data['results']:
         count += 1
         answer += f'{count}){recipe["title"]}, id - {recipe["id"]}\n'
@@ -137,21 +133,6 @@ async def get_recipe_inf(recipe_id):
 
 
 # print(get_random_recipe('cajun'))
-# print(asyncio.run(find_a_recipe('pasta', 1)))
+# print(asyncio.run(find_a_recipe('pasta', 0)))
 # print(asyncio.run(get_recipe_inf(654959)))
 
-# types:
-'''main course
-side dish
-dessert
-appetizer
-salad
-bread
-breakfast
-soup
-beverage
-sauce
-marinade
-fingerfood
-snack
-drink'''

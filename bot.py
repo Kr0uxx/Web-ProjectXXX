@@ -92,7 +92,9 @@ async def result_command(update, context):
     id = usertg.id
     db_sess = db_session.create_session()
     person = db_sess.query(User).filter(User.tg_id == id).first()
-    await update.message.reply_html(rf"Хай, {person.name} или {person.tg_id} - как Вам удобнее. Вот ваш score - {person.count}. Вы, видимо, часто нажимали на /start! ;D", reply_markup=markup)
+    await update.message.reply_html(
+        rf"Хай, {person.name} или {person.tg_id} - как Вам удобнее. Вот ваш score - {person.count}. Вы, видимо, часто нажимали на /start! ;D",
+        reply_markup=markup)
 
 
 ########################
@@ -220,9 +222,9 @@ async def start_command(update, context):
     user = update.effective_user
     id = user.id
     db_sess = db_session.create_session()
-    
+
     person = db_sess.query(User).filter(User.tg_id == id).first()
-    
+
     if person:
         person.count += 1
         db_sess.commit()
@@ -425,6 +427,18 @@ async def random_recipe_response(update, context):
     return ConversationHandler.END
 
 
+async def find_recipe(update, context):
+    await update.message.reply_text('Введите название типа блюда и количество желаемых рецептов(от 1 до 100, по умолчанию - 30) через пробел')
+    return 1
+
+async def find_recipe_response(update, context):
+    mess = update.message.text.split()
+    func = recipes.find_a_recipe(mess[0], mess[1] if len(mess) > 1 else 30)
+    answer = await func
+    await update.message.reply_html(answer, reply_markup=markup)
+    return ConversationHandler.END
+
+
 ########################
 # перевод звука из ютуб
 async def voice_yt_command(update, context):
@@ -603,6 +617,7 @@ def main():
     )
     application.add_handler(conv_handler_gpt)
 
+    # КУХНЯ
     # рандомный рецепт
     conv_handler_random_recipe = ConversationHandler(
         entry_points=[CommandHandler("get_random_recipe", random_recipe)],
@@ -612,6 +627,16 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_random_recipe)
+
+    # поиск рецептов
+    conv_handler_find_recipe = ConversationHandler(
+        entry_points=[CommandHandler("find_recipe", find_recipe)],
+        states={
+            1: [MessageHandler(filters.TEXT, find_recipe_response)],
+        },
+        fallbacks=[CommandHandler('stop', stop)]
+    )
+    application.add_handler(conv_handler_find_recipe)
 
     application.run_polling()
 
