@@ -172,11 +172,17 @@ async def time_command(update, context):
 
 
 ########################
-# chat gpt - доделать
+# chat gpt 
+async def gpt_command(update, context):
+    await update.message.reply_text('Задайте мне вопрос')
+    return 1
+
+
 async def message_answer(update, context):
     txt = update.message.text
     answer = gpt_func.ask(txt, 0)
-    await update.message.reply_text(answer)
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+    return ConversationHandler.END
 
 
 ########################
@@ -347,11 +353,6 @@ async def exchange_rate_kzt_command(update, context):
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
 
-########################
-# GPT - доделать
-async def chat_gpt_command(update, context):
-    await update.message.reply_html(rf"Функция не работает - в последний момент возникли проблемы с ключом, решить не смогли, купить тоже - слишком бедные", reply_markup=markup)
-
 
 ########################
 #перевод звука из ютуб
@@ -418,7 +419,6 @@ def main():
     application.add_handler(CommandHandler("GIT", git_command))
     application.add_handler(CommandHandler("time", time_command))
     application.add_handler(CommandHandler("phrase_of_the_day", quote_command))
-    application.add_handler(CommandHandler("GPT", chat_gpt_command))
     application.add_handler(CommandHandler("voice_yt", voice_yt_command))
 
     # Животные
@@ -515,6 +515,16 @@ def main():
     application.add_handler(CommandHandler("ITA", voice_ital))
     application.add_handler(CommandHandler("SPAN", voice_sp))
 
+
+    # GPT
+    conv_handler_gpt = ConversationHandler(
+        entry_points=[CommandHandler("GPT", gpt_command)],
+        states={
+            1: [MessageHandler(filters.TEXT, message_answer)],
+        },
+        fallbacks=[CommandHandler('stop', stop)]
+    )
+    application.add_handler(conv_handler_gpt)
 
 
     application.run_polling()
