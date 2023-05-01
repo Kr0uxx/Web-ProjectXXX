@@ -40,40 +40,47 @@ async def get_random_recipe(tags=''):
     # chinese, eastern european, european, french, german, greek, indian, irish, italian, japanese, jewish, korean,
     # latin american, mediterranean, mexican, middle eastern, nordic, southern, spanish, thai, vietnamese
     global key
+    if tags == 'nothing':
+        tags = ''
+    text = 'Oh, there are no recipes for these tags'
+
     req = await get_response('https://api.spoonacular.com/recipes/random',
                              params={'tags': tags, 'apiKey': key})
     data = req
-    text = f'Here is a random recipe for u: \n'
-    for recipe in data['recipes']:
-        title = recipe['title']
-        img = recipe['image']
-        price = round(recipe['pricePerServing'] / 100, 2)  # цена за 1 порцию
-        time = recipe['readyInMinutes']  # время приготовления
-        servings = recipe['servings']  # количество порций
-        ingredients = recipe['extendedIngredients']
-        text += f'{title}\n' \
-                f'{img}\n' \
-                f'time: {time} min\n' \
-                f'price per serving: {price}$\n' \
-                f'servings: {servings}\n' \
-                f'amount price: {round(price * servings, 2)}$\n' \
-                f'ingredients:\n'
+    try:
+        for recipe in data['recipes']:
+            text = f'Here is a random recipe for u: \n'
+            title = recipe['title']
+            img = recipe['image']
+            price = round(recipe['pricePerServing'] / 100, 2)  # цена за 1 порцию
+            time = recipe['readyInMinutes']  # время приготовления
+            servings = recipe['servings']  # количество порций
+            ingredients = recipe['extendedIngredients']
+            text = f'{title}\n' \
+                   f'{img}\n' \
+                   f'time: {time} min\n' \
+                   f'price per serving: {price}$\n' \
+                   f'servings: {servings}\n' \
+                   f'amount price: {round(price * servings, 2)}$\n' \
+                   f'ingredients:\n'
 
-        # Добавление ингредиентов
-        for ingredient in ingredients:
-            measures = ingredient['measures']['metric']
-            text += f'   •{ingredient["name"]} ({measures["amount"]} {measures["unitShort"]})\n'
+            # Добавление ингредиентов
+            for ingredient in ingredients:
+                measures = ingredient['measures']['metric']
+                text += f'   •{ingredient["name"]} ({measures["amount"]} {measures["unitShort"]})\n'
 
-        instruction = recipe['instructions']
-        text += '\nInstruction:\n'
-        if instruction_parser(instruction)[1] == 0:
-            text += f'  {instruction_parser(instruction)[0]}\n'
-        else:
-            instruction = instruction_parser(instruction)[0]
-            for step in instruction:
-                text += f'  {instruction.index(step) + 1}){step}\n'
+            instruction = recipe['instructions']
+            text += '\nInstruction:\n'
+            if instruction_parser(instruction)[1] == 0:
+                text += f'  {instruction_parser(instruction)[0]}\n'
+            else:
+                instruction = instruction_parser(instruction)[0]
+                for step in instruction:
+                    text += f'  {instruction.index(step) + 1}){step}\n'
 
-        text += '\n'
+            text += '\n'
+    except:
+        text += ''
 
     return text
 
@@ -131,7 +138,7 @@ async def get_recipe_inf(recipe_id):
 
 # print(get_random_recipe('cajun'))
 # print(asyncio.run(find_a_recipe('pasta', 1)))
-print(asyncio.run(get_recipe_inf(654959)))
+# print(asyncio.run(get_recipe_inf(654959)))
 
 # types:
 '''main course
