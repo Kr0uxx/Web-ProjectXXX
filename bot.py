@@ -72,13 +72,15 @@ async def map_command(update, context):
 async def map_command_response(update, context):
     long, lang = update.message.location.longitude, update.message.location.latitude
     
-    func0 = traffic.traffic(f'{long},{lang}')
-    answer0 = await func0
-    await context.bot.send_message(update.message.chat_id, text=answer0)
+
     
     func = map_func.get_address_from_coords((long, lang))
     answer = await func
     await update.message.reply_html(rf"Ваш адрес: {answer}", reply_markup=markup)
+    
+    func0 = traffic.traffic(f'{long},{lang}')
+    answer0 = await func0
+    await context.bot.send_message(update.message.chat_id, text=answer0)
     return ConversationHandler.END
 
 
