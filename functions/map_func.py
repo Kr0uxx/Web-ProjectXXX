@@ -24,5 +24,6 @@ async def get_address_from_coords(coords):
             "GeocoderMetaData"]["AddressDetails"]["Country"]["AddressLine"]
         return address_str
 
-    except Exception:
+    except Exception as e:
+        print(e)
         return "error in processing data - try again later"
