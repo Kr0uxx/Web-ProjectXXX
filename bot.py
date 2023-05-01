@@ -47,10 +47,6 @@ markup_lang = ReplyKeyboardMarkup(reply_keyboard_lang, one_time_keyboard=True)
 
 
 ###########################################
-# функции затычки
-async def map_command(update, context):
-    await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
-
 
 async def dictionary_command(update, context):
     await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
