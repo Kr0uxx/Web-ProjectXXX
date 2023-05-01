@@ -13,7 +13,7 @@ def send(email, text, person):
         mail_body = f'Вам сообщение от {person} - {text}'
         msg = MIMEText(mail_body, 'plain', 'utf-8')
         msg['Subject'] = Header(mail_subject, 'utf-8')
-        mailsender.sendmail('VerkTeam@yandex.ru', email, msg.as_string())
+        mailsender.sendmail('GlObG1@yandex.ru', email, msg.as_string())
         mailsender.quit()
         return f'Сообщение на адрес {email} отправлено, но может оказаться у человека в спаме!'
     except Exception as e:
