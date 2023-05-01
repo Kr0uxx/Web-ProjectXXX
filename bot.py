@@ -504,11 +504,11 @@ async def email_command(update, context):
     return 1
 
 async def email_2_command(update, context):
-    text = update.message.text
-    email, txt = text.split(';')
     user = update.effective_user
-    print(email, text, user.name)
-    await update.message.reply_html(rf"{email_sending.send(email, txt, user.name)}", reply_markup=markup)
+    answ = update.message.text.split(';')
+    #print(answ)
+    
+    await update.message.reply_html(rf"{email_sending.send(answ[0], answ[1], str(user.name))}", reply_markup=markup)
     return ConversationHandler.END
 
 

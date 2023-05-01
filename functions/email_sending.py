@@ -8,7 +8,7 @@ def send(email, text, person):
     mailsender.starttls()
     mailsender.login('VerkTeam@yandex.ru', 'Verk2023')
     mail_subject = f'Notification from {person}'
-    mail_body = 'Вам сообщение от', person, '-', text
+    mail_body = f'Вам сообщение от {person} - {text}'
     msg = MIMEText(mail_body, 'plain', 'utf-8')
     msg['Subject'] = Header(mail_subject, 'utf-8')
     mailsender.sendmail('VerkTeam@yandex.ru', email, msg.as_string())
