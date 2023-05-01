@@ -177,7 +177,7 @@ async def time_command(update, context):
 
 
 ########################
-# chat gpt 
+# chat gpt
 async def gpt_command(update, context):
     await update.message.reply_text('Задайте мне вопрос')
     return 1
@@ -296,7 +296,7 @@ async def crypto_rate_lina_command(update, context):
     answer = func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
-#курс 
+#курс
 async def exchange_rate_command(update, context):
     await update.message.reply_html(rf"Выберите курс, который вам интересен", reply_markup=markup_exch)
 
@@ -379,7 +379,8 @@ async def voice_to_txt_command(update, context):
 async def downloader(update, context):
     file = await context.bot.get_file(update.message.document)
     await file.download_to_drive('files/main.wav')
-    await update.message.reply_html(rf"Выбери язык, который в файле ( если не знаете, то выберите DK )", reply_markup=markup_lang)
+    await update.message.reply_html(rf"Выбери язык, который в файле ( если не знаете, то выберите DK )",
+                                    reply_markup=markup_lang)
     return ConversationHandler.END
 
 
