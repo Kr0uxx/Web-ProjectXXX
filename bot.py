@@ -9,6 +9,7 @@ import aiohttp
 from data import db_session
 from data.user import User
 
+
 reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'],
                   ['/animals'], ['/map'], ['/black_and_white'], ['/economics'], ['/GPT'], ['/cooking'],
                   ['/voice_yt'], ['/voice_to_txt'], ['/RESULT'], ['/email']]
@@ -521,10 +522,11 @@ async def email_command(update, context):
 async def email_2_command(update, context):
     user = update.effective_user
     answ = update.message.text.split(';')
-    # print(answ)
-
+    print(answ)
+    
     await update.message.reply_html(rf"{email_sending.send(answ[0], answ[1], str(user.name))}", reply_markup=markup)
     return ConversationHandler.END
+
 
 
 ########################
@@ -646,7 +648,7 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_gpt)
-
+    
     # email
     conv_handler_email = ConversationHandler(
         entry_points=[CommandHandler("email", email_command)],
@@ -656,6 +658,7 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_email)
+
 
     # КУХНЯ
     # рандомный рецепт
