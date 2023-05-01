@@ -16,6 +16,7 @@ def send(email, text, person):
         mailsender.sendmail('VerkTeam@yandex.ru', email, msg.as_string())
         mailsender.quit()
         return f'Сообщение на адрес {email} отправлено, но может оказаться у человека в спаме!'
-    except Exception:
-        return f'error while mailing - check provided data'
+    except Exception as e:
+        return f'{e}'
+        #return f'error while mailing - check provided data'
 
