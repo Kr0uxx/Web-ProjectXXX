@@ -70,7 +70,7 @@ async def map_command(update, context):
     return 1
 
 async def map_command_response(update, context):
-    long, lang = update.message.location.latitude, update.message.location.longitude
+    long, lang = update.message.location.longitude, update.message.location.latitude
     func = weather_func.weather((long, lang))
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)

@@ -31,7 +31,7 @@ async def moji(txt):
 
 
 async def weather(coords):
-    req = await get_response("https://api.openweathermap.org/data/2.5/weather?", params={'lat': coords[0], 'lon': coords[1], 'units': 'metric', 'lang': 'en', 'APPID': app_id})
+    req = await get_response("https://api.openweathermap.org/data/2.5/weather?", params={'lat': coords[1], 'lon': coords[0], 'units': 'metric', 'lang': 'en', 'APPID': app_id})
 
     # 'lang': 'ru' для ru версии
 
