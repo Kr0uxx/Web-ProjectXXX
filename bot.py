@@ -55,9 +55,6 @@ async def black_and_white_command(update, context):
     await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
 
 
-# GPT - доделать
-async def chat_gpt_command(update, context):
-    await update.message.reply_html(rf"{gpt_func.ask('Кто такой путин?', 0)}", reply_markup=markup)
 
 ###########################################
 
@@ -344,6 +341,10 @@ async def exchange_rate_kzt_command(update, context):
     answer = func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
+
+# GPT - доделать
+async def chat_gpt_command(update, context):
+    await update.message.reply_html(rf"Функция не работает - в последний момент возникли проблемы с ключом, решить не смогли, купить тоже - слишком бедные", reply_markup=markup)
 
 #перевод звука из ютуб
 async def voice_yt_command(update, context):
