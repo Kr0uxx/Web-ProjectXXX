@@ -88,8 +88,8 @@ async def help_command(update, context):
 ########################
 # RESULT
 async def result_command(update, context):
-    user = update.effective_user
-    id = user.id
+    usertg = update.effective_user
+    id = usertg.id
     db_sess = db_session.create_session()
     person = db_sess.query(User).filter(User.tg_id == id).first()
     await update.message.reply_html(rf"Хай, {person.name} или {person.tg_id} - как Вам удобнее. Вот ваш score - {person.count}. Вы, видимо, часто нажимали на /start! ;D", reply_markup=markup)
@@ -227,11 +227,11 @@ async def start_command(update, context):
         person.count += 1
         db_sess.commit()
     else:
-        user = User()
-        user.tg_id = id
-        user.name = user.mention_html()
-        user.count = 1
-        db_sess.add(user)
+        usera = User()
+        usera.tg_id = id
+        usera.name = user.mention_html()
+        usera.count = 1
+        db_sess.add(usera)
         db_sess.commit()
 
     await update.message.reply_html(
