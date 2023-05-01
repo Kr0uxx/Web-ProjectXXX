@@ -194,7 +194,7 @@ async def message_answer(update, context):
 # start
 async def start_command(update, context):
     user = update.effective_user
-
+    id = user.id
     db_sess = db_session.create_session()
 
     await update.message.reply_html(
