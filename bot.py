@@ -209,9 +209,22 @@ async def start_command(update, context):
     user = update.effective_user
     id = user.id
     db_sess = db_session.create_session()
+    
+    person = db_sess.query(User).filter(User.tg_id == id).first()
+    
+    if person:
+        person.count += 1
+        db_sess.commit()
+    else:
+        user = User()
+        user.tg_id = id
+        user.name = user.mention_html()
+        user.count = 1
+        db_sess.add(user)
+        db_sess.commit()
 
     await update.message.reply_html(
-        rf"Здравствуй, {user.mention_html()}! Я бот с разными функциями, во мне даже есть GPT - можем пообщаться! Давай посмотрим на то, что я еще умею :D",
+        rf"Здравствуй, {user.mention_html()}! Я бот с разными функциями, во мне даже есть GPT - можем пообщаться! Давай посмотрим на то, что я еще умею :D - для этого можете вызвать /help",
         reply_markup=markup)
 
 
