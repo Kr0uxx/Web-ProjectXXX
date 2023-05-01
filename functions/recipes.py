@@ -110,12 +110,11 @@ async def get_recipe_inf(recipe_id):
     servings = recipe['servings']  # количество порций
     ingredients = recipe['extendedIngredients']
     answer = f'{title}\n' \
-             f'id: {recipe["id"]}\n', \
-        f'time: {time} min\n' \
-        f'price per serving: {price}$\n' \
-        f'servings: {servings}\n' \
-        f'amount price: {round(price * servings, 2)}$\n' \
-        f'ingredients:\n'
+             f'time: {time} min\n' \
+             f'price per serving: {price}$\n' \
+             f'servings: {servings}\n' \
+             f'amount price: {round(price * servings, 2)}$\n' \
+             f'ingredients:\n'
     for ingredient in ingredients:
         measures = ingredient['measures']['metric']
         answer += f'   •{ingredient["name"]} ({measures["amount"]} {measures["unitShort"]})\n'
