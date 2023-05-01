@@ -2,16 +2,17 @@ from telegram.ext import Application, MessageHandler, filters
 from telegram.ext import CommandHandler, ConversationHandler
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func, news_func, kitties_func, \
-    dogs_func, actual_crypto_rate, actual_rate, voice_to_txt_func, recipes
+    dogs_func, actual_crypto_rate, actual_rate, voice_to_txt_func, recipes, email_sending
 import asyncio
 import os
 import aiohttp
 from data import db_session
 from data.user import User
 
+
 reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'],
                   ['/animals'], ['/map'], ['/black_and_white'], ['/economics'], ['/GPT'], ['/cooking'],
-                  ['/voice_yt'], ['/voice_to_txt'], ['/RESULT']]
+                  ['/voice_yt'], ['/voice_to_txt'], ['/RESULT'], ['/email']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 reply_keyboard_news = [['/specific_news'], ['/general_news']]
@@ -63,7 +64,7 @@ async def black_and_white_command(update, context):
 
 
 ########################
-# help - доделать
+# help
 async def help_command(update, context):
     await update.message.reply_text(
         "/weather - выводит погоду по вашему отправленному местоположению"
@@ -82,7 +83,8 @@ async def help_command(update, context):
         "\n\n/crypto_rate - из списка можете выбрать интересующую Вас крипту и получить ее курс"
         "\n\n/voice_to_txt - из wav файла достаем звук, преобразуем его потом в текст"
         "\n\n/cooking - с этим вы станете настоящим шеф-поваром, можно запросить рандомный рецепт, найти рецепт по виду блюда, а потом инструкцию к его приготовлению"
-        "\n\n/RESULT - давайте посмотрим на кол-во ваших вызовов кнопки start")
+        "\n\n/RESULT - давайте посмотрим на кол-во ваших вызовов кнопки start"
+        "\n\n/email - позволяет отправить сообщение любому человеку по почте прямо из бота")
 
 
 ########################
@@ -478,6 +480,21 @@ async def voice_sp(update, context):
 
 
 ########################
+# отправка по почте
+async def email_command(update, context):
+    await update.message.reply_text(rf"Отправь мне почту человека и текст письма через точку с запятой (email; text)")
+    return 1
+
+async def email_2_command(update, context):
+    text = update.message.text
+    email, txt = text.split(';')
+    person = update.effective_user.mention_html()
+    await update.message.reply_html(rf"{email_sending.send(email.strip(), txt, person)}", reply_markup=markup)
+    return ConversationHandler.END
+
+
+
+########################
 # основа основ основских
 def main():
     application = Application.builder().token('6118068525:AAGGfYJ46p8Qe0sYLKC9v8KSsBH7cqybjf4').build()
@@ -568,8 +585,6 @@ def main():
 
     # файл со звуком wav в текст
     conv_handler_wav = ConversationHandler(
-        # Точка входа в диалог.
-        # В данном случае — команда /start. Она задаёт первый вопрос.
         entry_points=[CommandHandler('voice_to_txt', voice_to_txt_command)],
 
         states={
@@ -598,6 +613,17 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_gpt)
+    
+    # email
+    conv_handler_email = ConversationHandler(
+        entry_points=[CommandHandler("email", email_command)],
+        states={
+            1: [MessageHandler(filters.TEXT, email_2_command)],
+        },
+        fallbacks=[CommandHandler('stop', stop)]
+    )
+    application.add_handler(conv_handler_email)
+
 
     application.run_polling()
 
