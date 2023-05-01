@@ -523,6 +523,7 @@ async def email_2_command(update, context):
     text = update.message.text
     email, txt = text.split(';')
     person = update.effective_user.mention_html()
+    print(email, txt, person)
     await update.message.reply_html(rf"{email_sending.send(email, txt, person)}", reply_markup=markup)
     return ConversationHandler.END
 
