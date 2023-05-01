@@ -7,6 +7,7 @@ import asyncio
 import os
 import aiohttp
 
+
 reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'],
                   ['/animals'],
                   ['/map'], ['/black_and_white'], ['/economics'], ['/GPT'], ['/voice_yt'], ['/voice_to_txt']]
