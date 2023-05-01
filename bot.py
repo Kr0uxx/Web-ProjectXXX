@@ -6,6 +6,11 @@ from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_
 import asyncio
 import os
 import aiohttp
+from data import db_session
+from data.user import User
+
+
+
 
 
 reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'],
@@ -189,6 +194,9 @@ async def message_answer(update, context):
 # start
 async def start_command(update, context):
     user = update.effective_user
+
+    db_sess = db_session.create_session()
+
     await update.message.reply_html(
         rf"Здравствуй, {user.mention_html()}! Я бот с разными функциями, во мне даже есть GPT - можем пообщаться! Давай посмотрим на то, что я еще умею :D",
         reply_markup=markup)
@@ -531,6 +539,7 @@ def main():
 
 
 if __name__ == '__main__':
+    db_session.global_init("db/data.db")
     if os.name == 'nt':
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     main()
