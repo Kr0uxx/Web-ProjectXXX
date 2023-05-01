@@ -449,8 +449,7 @@ async def recipe_inf(update, context):
 
 
 async def recipe_inf_response(update, context):
-    mess = update.message.text.split()
-    func = recipes.find_a_recipe(mess[0], mess[1] if len(mess) > 1 else 30)
+    func = recipes.get_recipe_inf(update.message.text)
     answer = await func
     await update.message.reply_html(answer, reply_markup=markup)
     return ConversationHandler.END
@@ -522,8 +521,8 @@ async def email_command(update, context):
 async def email_2_command(update, context):
     user = update.effective_user
     answ = update.message.text.split(';')
-    #print(answ)
-    
+    # print(answ)
+
     await update.message.reply_html(rf"{email_sending.send(answ[0], answ[1], str(user.name))}", reply_markup=markup)
     return ConversationHandler.END
 
@@ -678,6 +677,16 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_find_recipe)
+
+    # поиск рецепта по ID
+    conv_handler_find_id = ConversationHandler(
+        entry_points=[CommandHandler("find_recipe_id", recipe_inf)],
+        states={
+            1: [MessageHandler(filters.TEXT, recipe_inf_response)],
+        },
+        fallbacks=[CommandHandler('stop', stop)]
+    )
+    application.add_handler(conv_handler_find_id)
 
     application.run_polling()
 

@@ -52,13 +52,13 @@ async def get_random_recipe(tags=''):
             time = recipe['readyInMinutes']  # время приготовления
             servings = recipe['servings']  # количество порций
             ingredients = recipe['extendedIngredients']
-            text = f'{title}\n' \
-                   f'id: {recipe["id"]}\n', \
-                f'time: {time} min\n' \
-                f'price per serving: {price}$\n' \
-                f'servings: {servings}\n' \
-                f'amount price: {round(price * servings, 2)}$\n' \
-                f'ingredients:\n'
+            text = f'{title}\n\n' \
+                   f'id: {recipe["id"]}\n' \
+                   f'time: {time} min\n' \
+                   f'price per serving: {price}$\n' \
+                   f'servings: {servings}\n' \
+                   f'amount price: {round(price * servings, 2)}$\n' \
+                   f'ingredients:\n'
 
             # Добавление ингредиентов
             for ingredient in ingredients:
@@ -109,7 +109,7 @@ async def get_recipe_inf(recipe_id):
     time = recipe['readyInMinutes']  # время приготовления
     servings = recipe['servings']  # количество порций
     ingredients = recipe['extendedIngredients']
-    answer = f'{title}\n' \
+    answer = f'{title}\n\n' \
              f'time: {time} min\n' \
              f'price per serving: {price}$\n' \
              f'servings: {servings}\n' \
