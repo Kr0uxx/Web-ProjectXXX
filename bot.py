@@ -76,7 +76,7 @@ async def map_command_response(update, context):
     answer0 = await func0
     await context.bot.send_message(update.message.chat_id, text=answer0)
 
-    func = map_func.get_address_from_coords((long, lang))
+    func = map_func.get_address_from_coords(f'{long},{lang}')
     answer = await func
     await update.message.reply_html(rf"Ваш адрес: {answer}", reply_markup=markup)
 
