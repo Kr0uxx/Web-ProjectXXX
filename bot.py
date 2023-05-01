@@ -54,21 +54,20 @@ async def dictionary_command(update, context):
 async def black_and_white_command(update, context):
     await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
 
-
-
 ###########################################
 
 
+########################
 # help - доделать
 async def help_command(update, context):
     await update.message.reply_text(
-        "/weather - выводит погоду по вашему отправленному местоположению\n\n/time - выводит время самых популярных мест\n\n"
+        "/weather - выводит погоду по вашему отправленному местоположению\n\n/time - выводит время самых популярных мест\n\n/economics - дает возможность посмотреть курс и рынок крипты"
         "/phrase_of_the_day - выводит фразу дня с картинкой автора ( иногда картинка не находится по причине ее отсутсвия в википедии )\n\n/news - можете выбрать special news и ввести то, что хотите найти, или выбрать general news и выбрать из предоставленных топиков\n\n"
         "/animals - дает возможность получить милого котенка или собачку\n\n/exchange_rate - выводит курс популярных валют\n\n/GIT - ссылка на наш гит\n\n"
         "/dictionary - работа с Cambridge Dictionary\n\n/map - работа с картой\n\n/black_and_white - работа с изображением\n\n/GPT - общение с AI от OpenAI\n\n"
         "/voice_yt - по ссылке из ютуб достает звук из видео\n\n/crypto_rate - из списка можете выбрать интересующую Вас крипту и получить ее курс\n\n/voice_to_txt - из wav файла достаем звук, преобразует его потом в текст")
 
-
+########################
 # погода
 async def weather_command(update, context):
     await update.message.reply_html(rf"Поделитесь с нами вашей локацией для поиска погоды в вашем районе!",
@@ -84,16 +83,7 @@ async def weather_command_response(update, context):
     return ConversationHandler.END
 
 
-async def economics_command_response(update, context):
-    await update.message.reply_html(rf"Выберите тему, интересующую вас",
-                                    reply_markup=markup_economics)
-
-
-async def animals_command_response(update, context):
-    await update.message.reply_html(rf"Выберите вид животного, картинку которого хотите увидеть",
-                                    reply_markup=markup_animals)
-
-
+########################
 # новости
 async def news_command(update, context):
     await update.message.reply_html(rf"Какие новости вас интересуют?", reply_markup=markup_news)
@@ -157,6 +147,7 @@ async def specific_news_response(update, context):
     return ConversationHandler.END
 
 
+########################
 # фраза дня
 async def quote_command(update, context):
     func = quote_func.quote()
@@ -165,11 +156,13 @@ async def quote_command(update, context):
     await context.bot.send_message(update.message.chat_id, text=answer[1])
 
 
+########################
 # гит
 async def git_command(update, context):
-    await update.message.reply_text('Вот ссылка на наш гит:\n\nhttps://github.com/Kr0uxx/Web-ProjectXXX')
+    await update.message.reply_text('Вот ссылка на наш гит:\n\nhttps://github.com/Kr0uxx/Web-ProjectXXX\n\nИ на наши профили:\n\nАртем - https://github.com/YL-bot\n\nМаксим - https://github.com/Kr0uxx\n\nКатя - https://github.com/katiarapter')
 
 
+########################
 # время
 async def time_command(update, context):
     func = time_func.time()
@@ -178,6 +171,7 @@ async def time_command(update, context):
     await update.message.reply_text(answer)
 
 
+########################
 # chat gpt - доделать
 async def message_answer(update, context):
     txt = update.message.text
@@ -185,6 +179,7 @@ async def message_answer(update, context):
     await update.message.reply_text(answer)
 
 
+########################
 # start
 async def start_command(update, context):
     user = update.effective_user
@@ -193,17 +188,22 @@ async def start_command(update, context):
         reply_markup=markup)
 
 
+########################
 # stop
 async def stop(update, context):
     return ConversationHandler.END
 
 
+#########################
+# animals
+async def animals_command_response(update, context):
+    await update.message.reply_html(rf"Выберите вид животного, картинку которого хотите увидеть",
+                                    reply_markup=markup_animals)
 # cats
 async def kitties_command(update, context):
     func = kitties_func.kitties()
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
-
 
 # dogs
 async def dogs_command(update, context):
@@ -212,7 +212,13 @@ async def dogs_command(update, context):
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
 
+########################
+# крипта и курс
+async def economics_command_response(update, context):
+    await update.message.reply_html(rf"Выберите тему, интересующую вас",
+                                    reply_markup=markup_economics)
 # крипта
+
 async def crypto_rate_command(update, context):
     await update.message.reply_html(rf"Выберите то, что хотите посмотреть", reply_markup=markup_bit)
 
@@ -276,8 +282,7 @@ async def crypto_rate_lina_command(update, context):
     answer = func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
-
-# курс
+#курс 
 async def exchange_rate_command(update, context):
     await update.message.reply_html(rf"Выберите курс, который вам интересен", reply_markup=markup_exch)
 
@@ -342,16 +347,21 @@ async def exchange_rate_kzt_command(update, context):
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
 
+########################
 # GPT - доделать
 async def chat_gpt_command(update, context):
     await update.message.reply_html(rf"Функция не работает - в последний момент возникли проблемы с ключом, решить не смогли, купить тоже - слишком бедные", reply_markup=markup)
 
+
+########################
 #перевод звука из ютуб
 async def voice_yt_command(update, context):
     await update.message.reply_html(rf"Функция работала на момент 21 апреля, потом снова полетела из за обновления ютуб."
                                     "Не наша вина, но 'pytube' улетел уже в какой раз. Для просмотра самой функции можно в папке"
                                     "functions найти yt_convert_func.py", reply_markup=markup)
 
+
+########################
 # из wav в текст
 async def voice_to_txt_command(update, context):
     await update.message.reply_text(rf"Отправь мне файл в формате WAV")
@@ -390,7 +400,7 @@ async def voice_sp(update, context):
 
 
 
-
+########################
 # основа основ основских
 def main():
     application = Application.builder().token('6118068525:AAGGfYJ46p8Qe0sYLKC9v8KSsBH7cqybjf4').build()
