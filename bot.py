@@ -11,7 +11,7 @@ from data.user import User
 
 reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'],
                   ['/animals'], ['/map'], ['/black_and_white'], ['/economics'], ['/GPT'], ['/cooking'],
-                  ['/voice_yt'], ['/voice_to_txt']]
+                  ['/voice_yt'], ['/voice_to_txt'], ['/RESULT']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 reply_keyboard_news = [['/specific_news'], ['/general_news']]
@@ -81,7 +81,18 @@ async def help_command(update, context):
         "\n\n/voice_yt - по ссылке из ютуб достает звук из видео"
         "\n\n/crypto_rate - из списка можете выбрать интересующую Вас крипту и получить ее курс"
         "\n\n/voice_to_txt - из wav файла достаем звук, преобразуем его потом в текст"
-        "\n\n/cooking - с этим вы станете настоящим шеф-поваром, можно запросить рандомный рецепт, найти рецепт по виду блюда, а потом инструкцию к его приготовлению")
+        "\n\n/cooking - с этим вы станете настоящим шеф-поваром, можно запросить рандомный рецепт, найти рецепт по виду блюда, а потом инструкцию к его приготовлению"
+        "\n\n/RESULT - давайте посмотрим на кол-во ваших вызовов кнопки start")
+
+
+########################
+# RESULT
+async def result_command(update, context):
+    user = update.effective_user
+    id = user.id
+    db_sess = db_session.create_session()
+    person = db_sess.query(User).filter(User.tg_id == id).first()
+    await update.message.reply_html(rf"Хай, {person.name} или {person.tg_id} - как Вам удобнее. Вот ваш score - {person.count}. Вы, видимо, часто нажимали на /start! ;D", reply_markup=markup)
 
 
 ########################
@@ -209,9 +220,22 @@ async def start_command(update, context):
     user = update.effective_user
     id = user.id
     db_sess = db_session.create_session()
+    
+    person = db_sess.query(User).filter(User.tg_id == id).first()
+    
+    if person:
+        person.count += 1
+        db_sess.commit()
+    else:
+        user = User()
+        user.tg_id = id
+        user.name = user.mention_html()
+        user.count = 1
+        db_sess.add(user)
+        db_sess.commit()
 
     await update.message.reply_html(
-        rf"Здравствуй, {user.mention_html()}! Я бот с разными функциями, во мне даже есть GPT - можем пообщаться! Давай посмотрим на то, что я еще умею :D",
+        rf"Здравствуй, {user.mention_html()}! Я бот с разными функциями, во мне даже есть GPT - можем пообщаться! Давай посмотрим на то, что я еще умею :D - для этого можете вызвать /help",
         reply_markup=markup)
 
 
@@ -476,6 +500,7 @@ def main():
     application.add_handler(CommandHandler("time", time_command))
     application.add_handler(CommandHandler("phrase_of_the_day", quote_command))
     application.add_handler(CommandHandler("voice_yt", voice_yt_command))
+    application.add_handler(CommandHandler("RESULT", result_command))
 
     # Животные
     application.add_handler(CommandHandler("animals", animals_command_response))
