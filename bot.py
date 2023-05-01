@@ -2,7 +2,7 @@ from telegram.ext import Application, MessageHandler, filters
 from telegram.ext import CommandHandler, ConversationHandler
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func, news_func, kitties_func, \
-    dogs_func, actual_crypto_rate, actual_rate, voice_to_txt_func, recipes, email_sending
+    dogs_func, actual_crypto_rate, actual_rate, voice_to_txt_func, recipes, email_sending, map_func, traffic
 import asyncio
 import os
 import aiohttp
@@ -71,9 +71,14 @@ async def map_command(update, context):
 
 async def map_command_response(update, context):
     long, lang = update.message.location.longitude, update.message.location.latitude
-    func = weather_func.weather((long, lang))
+    
+    func0 = traffic.traffic(f'{long},{lang}')
+    answer0 = await func0
+    await context.bot.send_message(update.message.chat_id, text=answer0)
+    
+    func = map_func.get_address_from_coords((long, lang))
     answer = await func
-    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+    await update.message.reply_html(rf"Ваш адрес: {answer}", reply_markup=markup)
     return ConversationHandler.END
 
 
@@ -537,9 +542,10 @@ async def email_2_command(update, context):
     user = update.effective_user
     answ = update.message.text.split(';')
     try:
-        await update.message.reply_html(rf"{email_sending.send(answ[0], answ[1], str(user.name))}", reply_markup=markup)
+        await update.message.reply_html(rf"временно функция отключена", reply_markup=markup)
+        
+        #await update.message.reply_html(rf"{email_sending.send(answ[0], answ[1], str(user.name))}", reply_markup=markup)
     except Exception as e:
-        #await update.message.reply_html(rf"{e}", reply_markup=markup)
         await update.message.reply_html(rf"error, check message again - it must consist from email; text", reply_markup=markup)
     return ConversationHandler.END
 
@@ -551,11 +557,8 @@ def main():
     application = Application.builder().token('6118068525:AAGGfYJ46p8Qe0sYLKC9v8KSsBH7cqybjf4').build()
 
     # затычки
-    # + еще пару функций есть и нужно сделать бд
-    application.add_handler(CommandHandler("map", map_command))
     application.add_handler(CommandHandler("dictionary", dictionary_command))
     application.add_handler(CommandHandler("black_and_white", black_and_white_command))
-    # + функция отправки на почту сообщений, api с рецептом, + bd сделать
 
     # легкие команды
     application.add_handler(CommandHandler("start", start_command))
@@ -706,6 +709,17 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_find_id)
+    
+    # map
+    conv_handler_map = ConversationHandler(
+        entry_points=[CommandHandler("map", map_command)],
+        states={
+            1: [MessageHandler(filters.LOCATION & ~filters.COMMAND, map_command_response)],
+        },
+        fallbacks=[CommandHandler('stop', stop)]
+    )
+    application.add_handler(conv_handler_map)
+
 
     application.run_polling()
 
