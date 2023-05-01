@@ -9,7 +9,6 @@ import aiohttp
 from data import db_session
 from data.user import User
 
-
 reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'],
                   ['/animals'], ['/map'], ['/black_and_white'], ['/economics'], ['/GPT'], ['/cooking'],
                   ['/voice_yt'], ['/voice_to_txt'], ['/RESULT'], ['/email']]
@@ -430,10 +429,26 @@ async def random_recipe_response(update, context):
 
 
 async def find_recipe(update, context):
-    await update.message.reply_text('Введите название типа блюда и количество желаемых рецептов(от 1 до 100, по умолчанию - 30) через пробел')
+    await update.message.reply_text(
+        'Введите название типа блюда и количество желаемых рецептов(от 1 до 100, по умолчанию - 30) через пробел')
     return 1
 
+
 async def find_recipe_response(update, context):
+    mess = update.message.text.split()
+    func = recipes.find_a_recipe(mess[0], mess[1] if len(mess) > 1 else 30)
+    answer = await func
+    await update.message.reply_html(answer, reply_markup=markup)
+    return ConversationHandler.END
+
+
+async def recipe_inf(update, context):
+    await update.message.reply_text(
+        'Введите ID рецепта, чтобы найти его рецепт')
+    return 1
+
+
+async def recipe_inf_response(update, context):
     mess = update.message.text.split()
     func = recipes.find_a_recipe(mess[0], mess[1] if len(mess) > 1 else 30)
     answer = await func
@@ -503,13 +518,13 @@ async def email_command(update, context):
     await update.message.reply_text(rf"Отправь мне почту человека и текст письма через точку с запятой (email; text)")
     return 1
 
+
 async def email_2_command(update, context):
     text = update.message.text
     email, txt = text.split(';')
     person = update.effective_user.mention_html()
     await update.message.reply_html(rf"{email_sending.send(email.strip(), txt, person)}", reply_markup=markup)
     return ConversationHandler.END
-
 
 
 ########################
@@ -631,7 +646,7 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_gpt)
-    
+
     # email
     conv_handler_email = ConversationHandler(
         entry_points=[CommandHandler("email", email_command)],
@@ -641,7 +656,6 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_email)
-
 
     # КУХНЯ
     # рандомный рецепт

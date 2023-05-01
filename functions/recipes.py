@@ -53,12 +53,12 @@ async def get_random_recipe(tags=''):
             servings = recipe['servings']  # количество порций
             ingredients = recipe['extendedIngredients']
             text = f'{title}\n' \
-                   f'{img}\n' \
-                   f'time: {time} min\n' \
-                   f'price per serving: {price}$\n' \
-                   f'servings: {servings}\n' \
-                   f'amount price: {round(price * servings, 2)}$\n' \
-                   f'ingredients:\n'
+                   f'id: {recipe["id"]}\n', \
+                f'time: {time} min\n' \
+                f'price per serving: {price}$\n' \
+                f'servings: {servings}\n' \
+                f'amount price: {round(price * servings, 2)}$\n' \
+                f'ingredients:\n'
 
             # Добавление ингредиентов
             for ingredient in ingredients:
@@ -74,7 +74,7 @@ async def get_random_recipe(tags=''):
                 for step in instruction:
                     text += f'  {instruction.index(step) + 1}){step}\n'
 
-            text += '\n'
+            text += f'\n{img}'
     except:
         text += ''
 
@@ -109,13 +109,13 @@ async def get_recipe_inf(recipe_id):
     time = recipe['readyInMinutes']  # время приготовления
     servings = recipe['servings']  # количество порций
     ingredients = recipe['extendedIngredients']
-    answer += f'{title}\n' \
-              f'{img}\n' \
-              f'time: {time} min\n' \
-              f'price per serving: {price}$\n' \
-              f'servings: {servings}\n' \
-              f'amount price: {round(price * servings, 2)}$\n' \
-              f'ingredients:\n'
+    answer = f'{title}\n' \
+             f'id: {recipe["id"]}\n', \
+        f'time: {time} min\n' \
+        f'price per serving: {price}$\n' \
+        f'servings: {servings}\n' \
+        f'amount price: {round(price * servings, 2)}$\n' \
+        f'ingredients:\n'
     for ingredient in ingredients:
         measures = ingredient['measures']['metric']
         answer += f'   •{ingredient["name"]} ({measures["amount"]} {measures["unitShort"]})\n'
@@ -129,10 +129,10 @@ async def get_recipe_inf(recipe_id):
         for step in instruction:
             answer += f'  {instruction.index(step) + 1}){step}\n'
 
-    return answer
+    answer += f'\n{img}'
 
+    return answer
 
 # print(get_random_recipe('cajun'))
 # print(asyncio.run(find_a_recipe('pasta', 0)))
 # print(asyncio.run(get_recipe_inf(654959)))
-
