@@ -116,7 +116,7 @@ async def help_command(update, context):
         "\n\n/GIT - ссылка на наш гит"
         "\n\n/cambridge_dictionary - работа с Cambridge Dictionary"
         "\n\n/map - работа с картой"
-        "\n\n/black_and_white - работа с изображением"
+        "\n\n/black_and_white - работа с изображением(возвращает картинку в черно-белоф формате)"
         "\n\n/GPT - общение с AI от OpenAI"
         "\n\n/voice_yt - по ссылке из ютуб достает звук из видео"
         "\n\n/crypto_rate - из списка можете выбрать интересующую Вас крипту и получить ее курс"
