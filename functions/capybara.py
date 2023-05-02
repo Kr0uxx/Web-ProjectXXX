@@ -5,6 +5,7 @@ import aiohttp
 import asyncio
 import os
 
+
 async def get_response(url, params):
     async with aiohttp.ClientSession() as session:
         async with session.get(url, params=params) as resp:

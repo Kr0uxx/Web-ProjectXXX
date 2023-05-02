@@ -3,16 +3,16 @@ from telegram.ext import CommandHandler, ConversationHandler
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func, news_func, kitties_func, \
     dogs_func, capybara, actual_crypto_rate, actual_rate, voice_to_txt_func, recipes, email_sending, map_func, traffic, \
-    black_white_filter
+    black_white_filter, cambridge_dictionary_func
 import asyncio
 import os
 import aiohttp
 from data import db_session
 from data.user import User
 
-reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'],
-                  ['/animals'], ['/map'], ['/black_and_white'], ['/economics'], ['/GPT'], ['/cooking'],
-                  ['/voice_yt'], ['/voice_to_txt'], ['/RESULT'], ['/email']]
+reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'],
+                  ['/cambridge_dictionary'], ['/animals'], ['/map'], ['/black_and_white'], ['/economics'], ['/GPT'],
+                  ['/cooking'], ['/voice_yt'], ['/voice_to_txt'], ['/RESULT'], ['/email']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 reply_keyboard_news = [['/specific_news'], ['/general_news']]
@@ -50,9 +50,6 @@ markup_lang = ReplyKeyboardMarkup(reply_keyboard_lang, one_time_keyboard=True)
 
 
 ###########################################
-
-async def dictionary_command(update, context):
-    await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
 
 
 async def black_and_white_command(update, context):
@@ -515,6 +512,47 @@ async def recipe_inf_response(update, context):
     return ConversationHandler.END
 
 
+#######################
+# Cambridge dictionary
+async def dictionary_command(update, context):
+    await update.message.reply_text(rf'''Please, enter with a space a language(choose from available) and a word: 
+-dutch
+-french
+-german
+-indonesian
+-italian
+-japanese
+-norwegian
+-polish
+-portuguese
+-spanish
+-arabic
+-catalan
+-chinese (simplified)
+-chinese (traditional)
+-czech
+-danish
+-hindi
+-korean
+-malay
+-russian
+-thai
+-turkish
+-ukrainian
+-vietnamese
+''')
+    return 1
+
+
+async def dictionary_command_response(update, context):
+    mess = update.message.text.split()
+    print(mess)
+    func = cambridge_dictionary_func.get_translate(mess[0], mess[1])
+    answer = await func
+    await update.message.reply_html(answer, reply_markup=markup)
+    return ConversationHandler.END
+
+
 ########################
 # перевод звука из ютуб
 async def voice_yt_command(update, context):
@@ -597,7 +635,6 @@ def main():
     application = Application.builder().token('6118068525:AAGGfYJ46p8Qe0sYLKC9v8KSsBH7cqybjf4').build()
 
     # затычки
-    application.add_handler(CommandHandler("dictionary", dictionary_command))
 
     # легкие команды
     application.add_handler(CommandHandler("start", start_command))
@@ -772,6 +809,18 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_black_and_white)
+
+    # cambridge dictionary
+    conv_handler_dictionary = ConversationHandler(
+        entry_points=[CommandHandler('cambridge_dictionary', dictionary_command)],
+
+        states={
+            1: [MessageHandler(filters.TEXT, dictionary_command_response)]
+        },
+
+        fallbacks=[CommandHandler('stop', stop)]
+    )
+    application.add_handler(conv_handler_dictionary)
 
     application.run_polling()
 

@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
+levels_list = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
 headers = {
     'Connection': 'keep-alive',
     'Cache-Control': 'max-age=0',
@@ -20,6 +21,8 @@ def get_url(language, word):
     response = requests.get(url, headers=headers)
     soup = BeautifulSoup(response.text, "html.parser")
 
+    # тут if else, потому что при поиске несуществующего слова, ошибки не выкидывает, а перекидывает на главную страницу
+
     if soup.find('h1').text == '404. Page not found.':
         return 'Неверно введен язык, пожалуйста, введите его заново'
 
@@ -29,27 +32,53 @@ def get_url(language, word):
     return soup
 
 
+def make_html(string):
+    answer = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>\n"""
+    answer += f'{string}\n'
+    answer += """</body>
+</html>"""
+    return BeautifulSoup(answer, "html.parser")
+
+
 # функция, которая выдает определения и перевод слова на нужном языке и части речи
-def get_translate(language, word, pos):
+def get_translate(language, word):
     soup = get_url(language, word)
-    lever = False
+    text = word
+    try:
+        for i in soup.find_all('div', class_='pr entry-body__el'):
+            arr_full = (list(filter(lambda x: x != '' and x != ' ' and x != '       '
+                                              and x != 'Your browser doesn\'t support HTML5 audio',
+                                    i)))
+            current_pos = make_html(arr_full)
 
-    for i in soup.find_all('div', class_='pr entry-body__el'):
-        i = (list(filter(lambda x: x != '' and x != ' ' and x != '       '
-                                   and x != 'Your browser doesn\'t support HTML5 audio',
-                         i.text[len(word)::].split('\n'))))
-        print(i)
-        count = 0
-        if pos in i[0][:i[0].find(' ')]:
-            lever = True
-            for j in i[1::]:
-                if pos in j:
-                    count += 1
-            print(count)
-    if lever:
-        return ''
-    else:
-        return 'Для этого слова такой части речи не существует'
+            pos = current_pos.find('span', class_='pos dpos').text  # определение части речи
+
+            # добавление всех значений
+            all_meanings = []
+            for j in current_pos.find_all('div', class_='ddef_h'):
+                all_meanings.append(j.text.strip())
+
+            # добавление всех переводов
+            all_translations = []
+            for j in current_pos.find_all('span', class_='trans dtrans dtrans-se'):
+                all_translations.append(j.text.strip())
+
+            # добавление в ответ
+            text += f'\n    {pos}\n'
+            for j in range(len(all_meanings)):
+                text += f'{j+1})\n' \
+                        f'Значение: {all_meanings[j]}\n' \
+                        f'Перевод: {all_translations[j]}\n\n'
+        return text
+    except:
+        return soup
 
 
-print(get_translate('russian', 'present', 'verb'))
+# print(get_translate('russian', 'run'))
+
