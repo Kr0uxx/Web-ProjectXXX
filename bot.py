@@ -61,7 +61,7 @@ async def black_and_white_command(update, context):
 ########################
 # black and white
 async def black_and_white_command(update, context):
-    await update.message.reply_text(rf"Отправьте мне картинку и удивитесь результату")
+    await update.message.reply_text(f"Отправьте мне картинку и удивитесь результату")
     return 1
 
 async def downloader_img(update, context):
@@ -72,6 +72,7 @@ async def downloader_img(update, context):
     if answer != 'error':
         await context.bot.sendDocument(update.message.chat_id, document=open(answer, 'rb'))
         await update.message.reply_html(rf"Вот!", reply_markup=markup)
+        os.remove(answer)
     else:
         await update.message.reply_html(rf"Внимательнее посмотрите какой файл Вы отправляете", reply_markup=markup)
 
@@ -753,7 +754,7 @@ def main():
 
 
 if __name__ == '__main__':
-    db_session.global_init("db/data.db")
+    db_session.global_init("db/blogs.db")
     if os.name == 'nt':
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     main()
