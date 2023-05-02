@@ -2,7 +2,7 @@ from telegram.ext import Application, MessageHandler, filters
 from telegram.ext import CommandHandler, ConversationHandler
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func, news_func, kitties_func, \
-    dogs_func, actual_crypto_rate, actual_rate, voice_to_txt_func, recipes, email_sending, map_func, traffic
+    dogs_func, actual_crypto_rate, actual_rate, voice_to_txt_func, recipes, email_sending, map_func, traffic, black_white_filter
 import asyncio
 import os
 import aiohttp
@@ -57,6 +57,25 @@ async def black_and_white_command(update, context):
 
 
 ###########################################
+
+########################
+# black and white
+async def black_and_white_command(update, context):
+    await update.message.reply_text(rf"Отправьте мне картинку и удивитесь результату")
+    return 1
+
+async def downloader_img(update, context):
+    file = await context.bot.get_file(update.message.document)
+    await file.download_to_drive('files/image.img')
+    
+    answer = black_white_filter.black_white()
+    if answer != 'error':
+        await context.bot.sendDocument(update.message.chat_id, document=open(answer, 'rb'))
+        await update.message.reply_html(rf"Вот!", reply_markup=markup)
+    else:
+        await update.message.reply_html(rf"Внимательнее посмотрите какой файл Вы отправляете", reply_markup=markup)
+
+    return ConversationHandler.END
 
 
 ########################
@@ -555,7 +574,6 @@ def main():
 
     # затычки
     application.add_handler(CommandHandler("dictionary", dictionary_command))
-    application.add_handler(CommandHandler("black_and_white", black_and_white_command))
 
     # легкие команды
     application.add_handler(CommandHandler("start", start_command))
@@ -716,7 +734,20 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_map)
+    
+    
+    # файл со изображение в ЧБ
+    conv_handler_black_and_white = ConversationHandler(
+        entry_points=[CommandHandler('black_and_white', black_and_white_command)],
 
+        states={
+            1: [MessageHandler(filters.Document.ALL, downloader_img)]
+        },
+
+        fallbacks=[CommandHandler('stop', stop)]
+    )
+    application.add_handler(conv_handler_black_and_white)
+    
 
     application.run_polling()
 
