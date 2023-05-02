@@ -51,13 +51,6 @@ markup_lang = ReplyKeyboardMarkup(reply_keyboard_lang, one_time_keyboard=True)
 
 ###########################################
 
-
-async def black_and_white_command(update, context):
-    await update.message.reply_html(rf"Функция временно не работает", reply_markup=markup)
-
-
-###########################################
-
 ########################
 # black and white
 async def black_and_white_command(update, context):
