@@ -61,7 +61,7 @@ async def black_and_white_command(update, context):
 ########################
 # black and white
 async def black_and_white_command(update, context):
-    await update.message.reply_text(f"Отправьте мне картинку и удивитесь результату")
+    await update.message.reply_text(f"Отправьте мне картинку(в виде файла без сжатия) и удивитесь результату")
     return 1
 
 
