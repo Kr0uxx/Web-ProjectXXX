@@ -2,13 +2,13 @@ from telegram.ext import Application, MessageHandler, filters
 from telegram.ext import CommandHandler, ConversationHandler
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func, news_func, kitties_func, \
-    dogs_func, actual_crypto_rate, actual_rate, voice_to_txt_func, recipes, email_sending, map_func, traffic, black_white_filter
+    dogs_func, capybara, actual_crypto_rate, actual_rate, voice_to_txt_func, recipes, email_sending, map_func, traffic, \
+    black_white_filter
 import asyncio
 import os
 import aiohttp
 from data import db_session
 from data.user import User
-
 
 reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'], ['/dictionary'],
                   ['/animals'], ['/map'], ['/black_and_white'], ['/economics'], ['/GPT'], ['/cooking'],
@@ -36,8 +36,11 @@ reply_keyboard_exch = [['/USD'], ['/EUR'], ['/CNY'], ['/GBP'], ['/JPY'], ['/CHF'
                        ['/KZT']]
 markup_exch = ReplyKeyboardMarkup(reply_keyboard_exch, one_time_keyboard=True)
 
-reply_keyboard_animals = [['/kitties'], ['/dogs']]
+reply_keyboard_animals = [['/kitties'], ['/dogs'], ['/capybara']]
 markup_animals = ReplyKeyboardMarkup(reply_keyboard_animals, one_time_keyboard=True)
+
+reply_keyboard_capybara = [['/capybara_random_image'], ['/capybara_random_fact']]
+markup_capybara = ReplyKeyboardMarkup(reply_keyboard_capybara, one_time_keyboard=True)
 
 reply_keyboard_cooking = [['/get_random_recipe'], ['/find_recipe'], ['/find_recipe_id']]
 markup_cooking = ReplyKeyboardMarkup(reply_keyboard_cooking, one_time_keyboard=True)
@@ -64,10 +67,11 @@ async def black_and_white_command(update, context):
     await update.message.reply_text(f"Отправьте мне картинку и удивитесь результату")
     return 1
 
+
 async def downloader_img(update, context):
     file = await context.bot.get_file(update.message.document)
     await file.download_to_drive('files/image.img')
-    
+
     answer = black_white_filter.black_white()
     if answer != 'error':
         await context.bot.sendDocument(update.message.chat_id, document=open(answer, 'rb'))
@@ -82,12 +86,14 @@ async def downloader_img(update, context):
 ########################
 # map
 async def map_command(update, context):
-    await update.message.reply_html(rf"Поделитесь с нами вашей геолокацией для работы с картой!", reply_markup=markup_weather_loc)
+    await update.message.reply_html(rf"Поделитесь с нами вашей геолокацией для работы с картой!",
+                                    reply_markup=markup_weather_loc)
     return 1
+
 
 async def map_command_response(update, context):
     long, lang = update.message.location.longitude, update.message.location.latitude
-    
+
     func0 = traffic.traffic(f'{long},{lang}')
     answer0 = await func0
     await context.bot.send_message(update.message.chat_id, text=answer0)
@@ -302,6 +308,23 @@ async def kitties_command(update, context):
 # dogs
 async def dogs_command(update, context):
     func = dogs_func.dogs()
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def capybara_command_response(update, context):
+    await update.message.reply_html(rf"Вы хотите увидеть картинку или узнать факт о капибарах?",
+                                    reply_markup=markup_capybara)
+
+
+async def capybara_img(update, context):
+    func = capybara.capybara_img()
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def capybara_fact(update, context):
+    func = capybara.capybara_fact()
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
@@ -560,12 +583,12 @@ async def email_2_command(update, context):
     answ = update.message.text.split(';')
     try:
         await update.message.reply_html(rf"временно функция отключена", reply_markup=markup)
-        
-        #await update.message.reply_html(rf"{email_sending.send(answ[0], answ[1], str(user.name))}", reply_markup=markup)
-    except Exception as e:
-        await update.message.reply_html(rf"error, check message again - it must consist from email; text", reply_markup=markup)
-    return ConversationHandler.END
 
+        # await update.message.reply_html(rf"{email_sending.send(answ[0], answ[1], str(user.name))}", reply_markup=markup)
+    except Exception as e:
+        await update.message.reply_html(rf"error, check message again - it must consist from email; text",
+                                        reply_markup=markup)
+    return ConversationHandler.END
 
 
 ########################
@@ -589,6 +612,9 @@ def main():
     application.add_handler(CommandHandler("animals", animals_command_response))
     application.add_handler(CommandHandler("kitties", kitties_command))
     application.add_handler(CommandHandler("dogs", dogs_command))
+    application.add_handler(CommandHandler("capybara", capybara_command_response))
+    application.add_handler(CommandHandler("capybara_random_image", capybara_img))
+    application.add_handler(CommandHandler("capybara_random_fact", capybara_fact))
 
     # Экономика
     application.add_handler(CommandHandler("economics", economics_command_response))
@@ -683,7 +709,7 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_gpt)
-    
+
     # email
     conv_handler_email = ConversationHandler(
         entry_points=[CommandHandler("email", email_command)],
@@ -693,7 +719,6 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_email)
-
 
     # КУХНЯ
     # рандомный рецепт
@@ -725,7 +750,7 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_find_id)
-    
+
     # map
     conv_handler_map = ConversationHandler(
         entry_points=[CommandHandler("map", map_command)],
@@ -735,8 +760,7 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_map)
-    
-    
+
     # файл со изображение в ЧБ
     conv_handler_black_and_white = ConversationHandler(
         entry_points=[CommandHandler('black_and_white', black_and_white_command)],
@@ -748,7 +772,6 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_black_and_white)
-    
 
     application.run_polling()
 
