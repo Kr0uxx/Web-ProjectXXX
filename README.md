@@ -44,9 +44,13 @@ data - это папка с orm-моделью и самой DB
 
 Кто что делал: 
 
-( пока пусто )
+Максим - actual_crypto_rate, actual_rate, black_and_white, cambridge_dictionary_func, capybara, recipes, requirements, kaneki, bot
 
+Артем - dogs_func, kitties_func, gpt_sending, news_func, quote_func, time_func, translating_func, voice_to_txt_func, weather_func, wiki_photo_func, yt_convert_func, spec-scrip, readme, bot
 
+Катя - email_sending, map_func, traffic, презентация
+
+( Максим и Артем сделали примерно одинаковый объем работы в проекте по функциям ) 
 ———————————————————————————————————
 
 Презентация:
@@ -57,3 +61,14 @@ data - это папка с orm-моделью и самой DB
 ![image_2023-05-01_15-56-41](https://user-images.githubusercontent.com/102421671/235456878-6b9f1098-4ba3-4c10-888b-25cba6be0d14.png)
 
 
+———————————————————————————————————
+
+Молитва:
+
+Боже, благослови наши души от жары и от стужи, сохрани и помилуй, оставь невредимым. Дай нам хорошие баллы, кому то они очень нужны для отличника. Не наказывай никого жестоко, оцени всех по заслугам. Аминь. 
+
+———————————————————————————————————
+
+1000 - 7:
+
+![219830777-54d813f2-7c44-4580-ba37-c5ffcbf8aaca](https://user-images.githubusercontent.com/74461517/227340019-844cbc41-c334-4563-8e17-4372abd96eb3.gif)
