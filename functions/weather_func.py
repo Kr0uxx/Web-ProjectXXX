@@ -10,8 +10,8 @@ async def get_response(url, params):
     async with aiohttp.ClientSession() as session:
         async with session.get(url, params=params) as resp:
             return await resp.json()
-        
-        
+
+
 async def moji(txt):
     dict_m = {
         'Thunderstorm': '🌩',
@@ -31,7 +31,9 @@ async def moji(txt):
 
 
 async def weather(coords):
-    req = await get_response("https://api.openweathermap.org/data/2.5/weather?", params={'lat': coords[1], 'lon': coords[0], 'units': 'metric', 'lang': 'en', 'APPID': app_id})
+    req = await get_response("https://api.openweathermap.org/data/2.5/weather?",
+                             params={'lat': coords[1], 'lon': coords[0], 'units': 'metric', 'lang': 'en',
+                                     'APPID': app_id})
 
     # 'lang': 'ru' для ru версии
 
@@ -54,11 +56,6 @@ async def weather(coords):
     txt = f"Oh, here u r:\n\n {dictt['png']}\n\n {dictt['weather'].capitalize()} \n\n Feels like: {dictt['temperature']} C \n Wind: {dictt['wind']} \n Visibility: {dictt['visibility']} km \n Humidity: {dictt['humidity']} %\n"
 
     return txt
-
-
-
-# EXAMPLE --- print(weather('Ural'))
-
 
 # https://yandex.ru/dev/weather/doc/dg/concepts/about.html
 # https://habr.com/ru/post/315264/

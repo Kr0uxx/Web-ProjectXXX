@@ -26,12 +26,8 @@ def voice(lang):
             return text
 
     except Exception as e:
-        #print(e)
         return 'error'
 
-
-# Adding french langauge option
-# text = r.recognize_google(audio_text, language = "fr-FR")
 
 def voice_main():
     languages = ['Russian', 'UK English', 'US English', 'French', 'Dutch', 'Italian', 'Spanish']

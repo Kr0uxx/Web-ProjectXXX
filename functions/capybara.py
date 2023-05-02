@@ -1,6 +1,3 @@
-'https://api.capy.lol/v1/capybara'
-'https://api.capy.lol/v1/fact'
-
 import aiohttp
 import asyncio
 import os
@@ -16,7 +13,6 @@ async def get_response(url, params):
 async def capybara_img():
     req = await get_response('https://api.capy.lol/v1/capybara?json=true', {})
     data = req
-    print(data)
     img = data['data']['url']
     return img
 
@@ -24,7 +20,6 @@ async def capybara_img():
 async def capybara_fact():
     req = await get_response('https://api.capy.lol/v1/fact', {})
     data = req
-    print(data)
     img = data['data']['fact']
     return img
 

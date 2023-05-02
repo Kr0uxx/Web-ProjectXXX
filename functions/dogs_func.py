@@ -1,5 +1,3 @@
-# func about dogs - https://dog.ceo/api/breeds/image/random
-
 import aiohttp
 import asyncio
 import os

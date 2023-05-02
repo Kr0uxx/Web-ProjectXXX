@@ -17,8 +17,6 @@ def black_white():
                 pixels[i, j] = bw, bw, bw
         im.save(f"{picture[::index]}_black_white.jpg")
 
-        # return im
-
         # возвращаем название лучше
         return f"{picture[::index]}_black_white.jpg"
 

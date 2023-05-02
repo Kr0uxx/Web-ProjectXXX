@@ -1,7 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
+import asyncio
 
-levels_list = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
+# список языков, для которых код страницы отдельный, а соответсвенно нужно парсить каждую по отдельности
+incorrect_languages = ['dutch', 'french', 'german', 'indonesian', 'norwegian', 'czech', 'danish', 'malaysian', 'thai,'
+                       'turkish', 'vietnamese', 'chinese-traditional', 'chinese-simplified']
 headers = {
     'Connection': 'keep-alive',
     'Cache-Control': 'max-age=0',
@@ -23,7 +26,7 @@ def get_url(language, word):
 
     # тут if else, потому что при поиске несуществующего слова, ошибки не выкидывает, а перекидывает на главную страницу
 
-    if soup.find('h1').text == '404. Page not found.':
+    if soup.find('h1').text == '404. Page not found.' or language in incorrect_languages:
         return 'Неверно введен язык, пожалуйста, введите его заново'
 
     elif soup.find('h1').text[:7] == 'English':
@@ -47,9 +50,9 @@ def make_html(string):
 
 
 # функция, которая выдает определения и перевод слова на нужном языке и части речи
-def get_translate(language, word):
+async def get_translate(language, word):
     soup = get_url(language, word)
-    text = word
+    text = word + '\n\n'
     try:
         for i in soup.find_all('div', class_='pr entry-body__el'):
             arr_full = (list(filter(lambda x: x != '' and x != ' ' and x != '       '
@@ -70,15 +73,15 @@ def get_translate(language, word):
                 all_translations.append(j.text.strip())
 
             # добавление в ответ
-            text += f'\n    {pos}\n'
+            text += f'{pos}\n' \
+                    f'_________________________________________________________\n'
             for j in range(len(all_meanings)):
-                text += f'{j+1})\n' \
-                        f'Значение: {all_meanings[j]}\n' \
-                        f'Перевод: {all_translations[j]}\n\n'
-        return text
+                text += f'{j + 1})\n' \
+                        f'Meaning: {all_meanings[j]}\n\n' \
+                        f'Translation: {all_translations[j]}\n\n'
+        return text, 1
     except:
-        return soup
+        return soup, 0
 
 
-# print(get_translate('russian', 'run'))
-
+# print(asyncio.run(get_translate('chinese-traditional', 'run')))

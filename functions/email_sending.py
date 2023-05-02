@@ -7,7 +7,6 @@ def send(email, text, person):
     try:
         mailsender = smtplib.SMTP('smtp.yandex.ru', 587)
         mailsender.starttls()
-        #mailsender.login('VerkTeam@yandex.ru', 'Verk2023')
         mailsender.login('GlObG1@yandex.ru', 'Sorokin109977')
         mail_subject = f'Notification from {person}'
         mail_body = f'Вам сообщение от {person} - {text}'
@@ -18,4 +17,3 @@ def send(email, text, person):
         return f'Сообщение на адрес {email} отправлено, но может оказаться у человека в спаме!'
     except Exception as e:
         return f'error while mailing - {e}'
-

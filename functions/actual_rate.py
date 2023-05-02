@@ -14,9 +14,6 @@ for i in listt[2::]:
     currencies_names.append(i.split("\n")[2::])
 
 
-# currencies_names - список со всеми актуальными курсами валют
-
-
 # функция для корректировки формы слов у названия валюты в родительный падеж, единственное число,
 # чтобы пользователю было максимально комфортно
 def correct_currency_form(currency_name):
@@ -41,8 +38,6 @@ def correct_currency_form(currency_name):
 
 # функция, возвращающая актуальный курс валюты на выбор(передается буквенное сокращение валюты)
 def get_actual_rate(input_currency):
-    # те валюты, которые будут доступны пользователю:
-    # currencies_list = ["USD", "EUR", "CNY", "GBP", "JPY", "CHF", "UAH", "TRY", "AUD", "KZT"]
     rate = 0
     currency = ''
     for name in currencies_names[:-1]:

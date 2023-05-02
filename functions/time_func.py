@@ -12,10 +12,10 @@ async def get_response(url, params):
         async with session.get(url, params=params) as resp:
             return await resp.json()
 
+
 async def time():
     if os.name == 'nt':
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    # https://timeapi.io/api/Time/current/zone?timeZone=Europe/Amsterdam
 
     list_zones = ['Europe/London', 'Europe/Moscow', 'Europe/Berlin',
                   'America/Los_Angeles', 'America/Toronto',
@@ -29,8 +29,6 @@ async def time():
         req = await get_response("https://timeapi.io/api/Time/current/zone?", params={'timeZone': i})
 
         data = req
-
-        # print(i, '---------------', data)
 
         txt += f"{i.split('/')[1]} : {data['time']} \n"
 

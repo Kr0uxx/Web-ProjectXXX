@@ -99,39 +99,42 @@ async def find_a_recipe(query, number):
 
 async def get_recipe_inf(recipe_id):
     global key
-    req = await get_response(f'https://api.spoonacular.com/recipes/{recipe_id}/information',
-                             params={'id': recipe_id, 'apiKey': key})
-    recipe = req
-    answer = ''
-    title = recipe['title']
-    img = recipe['image']
-    price = round(recipe['pricePerServing'] / 100, 2)  # цена за 1 порцию
-    time = recipe['readyInMinutes']  # время приготовления
-    servings = recipe['servings']  # количество порций
-    ingredients = recipe['extendedIngredients']
-    answer = f'{title}\n\n' \
-             f'time: {time} min\n' \
-             f'price per serving: {price}$\n' \
-             f'servings: {servings}\n' \
-             f'amount price: {round(price * servings, 2)}$\n' \
-             f'ingredients:\n'
-    for ingredient in ingredients:
-        measures = ingredient['measures']['metric']
-        answer += f'   •{ingredient["name"]} ({measures["amount"]} {measures["unitShort"]})\n'
+    try:
+        req = await get_response(f'https://api.spoonacular.com/recipes/{recipe_id}/information',
+                                 params={'id': recipe_id, 'apiKey': key})
+        recipe = req
+        answer = ''
+        title = recipe['title']
+        img = recipe['image']
+        price = round(recipe['pricePerServing'] / 100, 2)  # цена за 1 порцию
+        time = recipe['readyInMinutes']  # время приготовления
+        servings = recipe['servings']  # количество порций
+        ingredients = recipe['extendedIngredients']
+        answer = f'{title}\n\n' \
+                 f'time: {time} min\n' \
+                 f'price per serving: {price}$\n' \
+                 f'servings: {servings}\n' \
+                 f'amount price: {round(price * servings, 2)}$\n' \
+                 f'ingredients:\n'
+        for ingredient in ingredients:
+            measures = ingredient['measures']['metric']
+            answer += f'   •{ingredient["name"]} ({measures["amount"]} {measures["unitShort"]})\n'
 
-    instruction = recipe['instructions']
-    answer += '\nInstruction:\n'
-    if instruction_parser(instruction)[1] == 0:
-        answer += f'  {instruction_parser(instruction)[0]}\n'
-    else:
-        instruction = instruction_parser(instruction)[0]
-        for step in instruction:
-            answer += f'  {instruction.index(step) + 1}){step}\n'
+        instruction = recipe['instructions']
+        answer += '\nInstruction:\n'
+        if instruction_parser(instruction)[1] == 0:
+            answer += f'  {instruction_parser(instruction)[0]}\n'
+        else:
+            instruction = instruction_parser(instruction)[0]
+            for step in instruction:
+                answer += f'  {instruction.index(step) + 1}){step}\n'
 
-    answer += f'\n{img}'
+        answer += f'\n{img}'
 
-    return answer
+        return answer
+    except:
+        return 'There`s no such ID'
 
-# print(get_random_recipe('cajun'))
+# print(asyncio.run(get_random_recipe('eastern european')))
 # print(asyncio.run(find_a_recipe('pasta', 0)))
 # print(asyncio.run(get_recipe_inf(654959)))

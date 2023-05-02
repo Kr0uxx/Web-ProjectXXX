@@ -114,7 +114,7 @@ async def help_command(update, context):
         "\n\n/animals - дает возможность получить милого котенка или собачку"
         "\n\n/exchange_rate - выводит курс популярных валют"
         "\n\n/GIT - ссылка на наш гит"
-        "\n\n/dictionary - работа с Cambridge Dictionary"
+        "\n\n/cambridge_dictionary - работа с Cambridge Dictionary"
         "\n\n/map - работа с картой"
         "\n\n/black_and_white - работа с изображением"
         "\n\n/GPT - общение с AI от OpenAI"
@@ -474,12 +474,12 @@ async def cooking_command_response(update, context):
 
 async def random_recipe(update, context):
     await update.message.reply_text('''По желанию укажите один или несколько фильтров из доступных через запятую(если не хотите, то введите nothing):
-    \n-veryPopular\n-vegetarian\n-vegan\n-veryHealthy\n-cheap\n-greek\n-italian\n-african\n-american\n-british\n-cajun\n-caribbean\n-chinese\n-eastern european\n-european\n-french\n-german\n-greek\n-indian\n-irish\n-italian\n-japanese\n-jewish\n-korean\n-latin american\n-mediterranean\n-mexican\n-middle eastern\n-nordic\n-southern\n-spanish\n-thai\n-vietnamese''')
+    \n-vegetarian\n-vegan\n-greek\n-italian\n-african\n-american\n-british\n-cajun\n-caribbean\n-chinese\n-eastern european\n-european\n-french\n-german\n-greek\n-indian\n-irish\n-italian\n-japanese\n-jewish\n-korean\n-latin american\n-mediterranean\n-mexican\n-middle eastern\n-nordic\n-southern\n-spanish\n-thai\n-vietnamese''')
     return 1
 
 
 async def random_recipe_response(update, context):
-    func = recipes.get_random_recipe(update.message.text)
+    func = recipes.get_random_recipe(update.message.text.lower())
     answer = await func
     await update.message.reply_html(answer, reply_markup=markup)
     return ConversationHandler.END
@@ -515,42 +515,33 @@ async def recipe_inf_response(update, context):
 #######################
 # Cambridge dictionary
 async def dictionary_command(update, context):
-    await update.message.reply_text(rf'''Please, enter with a space a language(choose from available) and a word: 
--dutch
--french
--german
--indonesian
+    await update.message.reply_text(rf'''Please, enter with a space a language(choose from available) and a word(In English): 
 -italian
 -japanese
--norwegian
 -polish
 -portuguese
 -spanish
 -arabic
 -catalan
--chinese (simplified)
--chinese (traditional)
--czech
--danish
 -hindi
 -korean
--malay
 -russian
--thai
 -turkish
--ukrainian
--vietnamese
 ''')
     return 1
 
 
 async def dictionary_command_response(update, context):
     mess = update.message.text.split()
-    print(mess)
-    func = cambridge_dictionary_func.get_translate(mess[0], mess[1])
+    mess.append('')
+    mess.append('')
+    func = cambridge_dictionary_func.get_translate(mess[0].lower(), mess[1].lower())
     answer = await func
-    await update.message.reply_html(answer, reply_markup=markup)
-    return ConversationHandler.END
+    if answer[1] == 1:
+        await update.message.reply_html(rf'{answer[0]}', reply_markup=markup)
+        return ConversationHandler.END
+    else:
+        await update.message.reply_text(rf'{answer[0]}')
 
 
 ########################

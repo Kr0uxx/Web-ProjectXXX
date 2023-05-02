@@ -27,4 +27,3 @@ def get_actual_crypto_rate(input_currency):
             currency = currency.rstrip()
             rate = name[-1]
     return f'Курс для 1 {currency} составляет {rate} $'
-
