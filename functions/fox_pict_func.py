@@ -12,7 +12,7 @@ async def get_response(url, params):
 async def foxes():
     req = await get_response('https://randomfox.ca/floof/', {})
     data = req
-    img = data[0]['image']
+    img = data['image']
     return img
 
 
