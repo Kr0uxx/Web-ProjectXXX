@@ -1,5 +1,3 @@
-'http://www.boredapi.com/api/activity/'
-
 import asyncio
 import os
 

@@ -12,6 +12,7 @@ async def get_response(url, params):
         async with session.get(url, params=params) as resp:
             return await resp.json()
 
+
 async def get_date(data):
     try:
         month, day = data
@@ -29,7 +30,7 @@ async def get_math(data):
         req = await get_response(f'http://numbersapi.com/{number}/math?json', {})
         text = req['text']
         return text
-    
+
     except Exception:
         return 'Oooops, smth went wrong... :('
 
@@ -40,10 +41,10 @@ async def get_num(data):
         req = await get_response(f'http://numbersapi.com/{number}?json', {})
         text = req['text']
         return text
-    
+
     except Exception:
         return 'Oooops, smth went wrong... :('
 
-#print(asyncio.run(get_date(('erer', 'erer'))))
-#print(asyncio.run(get_math('erer')))
-#print(asyncio.run(get_num('fsdfds')))
+# print(asyncio.run(get_date(('erer', 'erer'))))
+# print(asyncio.run(get_math('erer')))
+# print(asyncio.run(get_num('fsdfds')))

@@ -3,21 +3,21 @@ import asyncio
 import requests
 
 
-async def get_response(url, params):
+async def get_response(link, params):
     async with aiohttp.ClientSession() as session:
-        async with session.get(url, params=params) as resp:
+        async with session.get(link, params=params) as resp:
             return await resp.json()
 
 
 async def send(email, text, person):
-    url = "https://rapidprod-sendgrid-v1.p.rapidapi.com/alerts/1"
-    response = await get_response(url,
-                                  {"type": "stats_notification", "email_to": "example@test.com", "frequency": "daily",
-                                   "content-type": "application/json",
-                                   "X-RapidAPI-Key": "3053af2a23msh51dc8d631ba6ccap1d6dc0jsn58f1c962469e",
-                                   "X-RapidAPI-Host": "rapidprod-sendgrid-v1.p.rapidapi.com"})
+    url_f = "https://rapidprod-sendgrid-v1.p.rapidapi.com/alerts/1"
+    response_f = await get_response(url_f,
+                                    {"type": "stats_notification", "email_to": "example@test.com", "frequency": "daily",
+                                     "content-type": "application/json",
+                                     "X-RapidAPI-Key": "3053af2a23msh51dc8d631ba6ccap1d6dc0jsn58f1c962469e",
+                                     "X-RapidAPI-Host": "rapidprod-sendgrid-v1.p.rapidapi.com"})
 
-    print(response)
+    print(response_f)
 
 
 url = "https://rapidprod-sendgrid-v1.p.rapidapi.com/alerts/1"

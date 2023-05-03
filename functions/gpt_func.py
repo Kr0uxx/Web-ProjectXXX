@@ -8,6 +8,7 @@ openai.api_key = "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"
 
 
 def ask(prompt, a):  # def которая отвечает за получение ответа , чтобы задать вопрос ask('вопрос')
+    answer = ''
     try:
         completion = openai.Completion.create(engine="text-davinci-003", prompt=prompt, temperature=0.5,
                                               max_tokens=1000)

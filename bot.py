@@ -91,7 +91,7 @@ async def date_number_command(update, context):
 
 
 async def date_number_command_resp(update, context):
-    func = jokes_func.jokes_chak(update.message.text.split(' '))
+    func = numbers_facts.get_date(update.message.text.split(' '))
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
     return ConversationHandler.END
@@ -224,7 +224,8 @@ async def help_command(update, context):
         "\n\n/random_action - если вам нечем заняться, запросите у бота рандомное действие"
         "\n\n/bill - будь как Билл"
         "\n\n/jokes - шутки до гроба"
-        "\n\n/numbers - интересные факты о числах и не только")
+        "\n\n/numbers - интересные факты о числах и не только"
+        "\n\n/anime - здесь вы можете найти любое аниме на свой вкус")
 
 
 ########################

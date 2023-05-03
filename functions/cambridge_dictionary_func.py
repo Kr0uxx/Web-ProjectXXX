@@ -4,7 +4,8 @@ import asyncio
 
 # список языков, для которых код страницы отдельный, а соответсвенно нужно парсить каждую по отдельности
 incorrect_languages = ['dutch', 'french', 'german', 'indonesian', 'norwegian', 'czech', 'danish', 'malaysian', 'thai,'
-                       'turkish', 'vietnamese', 'chinese-traditional', 'chinese-simplified']
+                                                                                                               'turkish',
+                       'vietnamese', 'chinese-traditional', 'chinese-simplified']
 headers = {
     'Connection': 'keep-alive',
     'Cache-Control': 'max-age=0',
@@ -82,6 +83,5 @@ async def get_translate(language, word):
         return text, 1
     except:
         return soup, 0
-
 
 # print(asyncio.run(get_translate('chinese-traditional', 'run')))
