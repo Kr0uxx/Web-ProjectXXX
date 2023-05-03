@@ -26,7 +26,7 @@ async def get_date(data):
 
 async def get_math(data):
     try:
-        number = data
+        number = int(data[0])
         req = await get_response(f'http://numbersapi.com/{number}/math?json', {})
         text = req['text']
         return text
@@ -37,7 +37,7 @@ async def get_math(data):
 
 async def get_num(data):
     try:
-        number = int(data)
+        number = int(data[0])
         req = await get_response(f'http://numbersapi.com/{number}?json', {})
         text = req['text']
         return text

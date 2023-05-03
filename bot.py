@@ -69,7 +69,7 @@ markup_numbers = ReplyKeyboardMarkup(reply_keyboard_numbers, one_time_keyboard=T
 # numbers
 
 async def numbers_command(update, context):
-    await update.message.reply_html(rf"Выберите тип то, что желаете знать о числах или датах из предложенного!",
+    await update.message.reply_html(rf"Выберите ниже то, что желаете знать о числах или датах из предложенного!",
                                     reply_markup=markup_numbers)
 
 
