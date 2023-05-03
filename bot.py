@@ -3,7 +3,7 @@ from telegram.ext import CommandHandler, ConversationHandler
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func, news_func, kitties_func, \
     dogs_func, capybara, actual_crypto_rate, actual_rate, voice_to_txt_func, recipes, email_sending, map_func, traffic, \
-    black_white_filter, cambridge_dictionary_func, bored_func
+    black_white_filter, cambridge_dictionary_func, bored_func, be_like_bill_func
 import asyncio
 import os
 import aiohttp
@@ -12,7 +12,7 @@ from data.user import User
 
 reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'],
                   ['/cambridge_dictionary'], ['/animals'], ['/map'], ['/black_and_white'], ['/economics'], ['/GPT'],
-                  ['/cooking'], ['/voice_yt'], ['/voice_to_txt'], ['/RESULT'], ['/email'], ['random_event'], ['/bill']]
+                  ['/cooking'], ['/voice_yt'], ['/voice_to_txt'], ['/RESULT'], ['/email'], ['/random_action'], ['/bill']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 reply_keyboard_news = [['/specific_news'], ['/general_news']]
@@ -41,6 +41,9 @@ markup_animals = ReplyKeyboardMarkup(reply_keyboard_animals, one_time_keyboard=T
 
 reply_keyboard_capybara = [['/capybara_random_image'], ['/capybara_random_fact']]
 markup_capybara = ReplyKeyboardMarkup(reply_keyboard_capybara, one_time_keyboard=True)
+
+reply_keyboard_bill = [['/bill_name'], ['/bill_text']]
+markup_bill = ReplyKeyboardMarkup(reply_keyboard_bill, one_time_keyboard=True)
 
 reply_keyboard_cooking = [['/get_random_recipe'], ['/find_recipe'], ['/find_recipe_id']]
 markup_cooking = ReplyKeyboardMarkup(reply_keyboard_cooking, one_time_keyboard=True)
@@ -75,9 +78,24 @@ async def downloader_img(update, context):
 
 # bill
 
+async def bill(update, context):
+    await update.message.reply_html(rf"Функция временно не работает из за ошибок с API", reply_markup=markup)
+
+
+async def bill_name(update, context):
+    func = be_like_bill_func.bill_name(update.message.text)
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def bill_text(update, context):
+    func = be_like_bill_func.bill_text(update.message.text)
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
 
 # bored_func
-async def get_random_event(update, context):
+async def get_random_action(update, context):
     func = bored_func.random_event()
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
@@ -126,7 +144,9 @@ async def help_command(update, context):
         "\n\n/voice_to_txt - из wav файла достаем звук, преобразуем его потом в текст"
         "\n\n/cooking - с этим вы станете настоящим шеф-поваром, можно запросить рандомный рецепт, найти рецепт по виду блюда, а потом инструкцию к его приготовлению"
         "\n\n/RESULT - давайте посмотрим на кол-во ваших вызовов кнопки start"
-        "\n\n/email - позволяет отправить сообщение любому человеку по почте прямо из бота")
+        "\n\n/email - позволяет отправить сообщение любому человеку по почте прямо из бота"
+        "\n\n/random_action - если вам нечем заняться, запросите у бота рандомное действие"
+        "\n\n/bill - будь как Билл")
 
 
 ########################
@@ -638,7 +658,12 @@ def main():
     application.add_handler(CommandHandler("phrase_of_the_day", quote_command))
     application.add_handler(CommandHandler("voice_yt", voice_yt_command))
     application.add_handler(CommandHandler("RESULT", result_command))
-    application.add_handler(CommandHandler("random_event", get_random_event))
+    application.add_handler(CommandHandler("random_action", get_random_action))
+
+    # bill
+    application.add_handler(CommandHandler("bill", bill))
+    application.add_handler(CommandHandler("bill_name", bill_name))
+    application.add_handler(CommandHandler("bill_text", bill_text))
 
     # Животные
     application.add_handler(CommandHandler("animals", animals_command_response))

@@ -16,6 +16,7 @@ async def bill_text(txt):
     print(data)
     return ""
 
+
 # bill and name
 async def bill_name(text):
     req = await get_response('https://belikebill.ga/billgen-API.php?', {'default': 1, 'name': text})
@@ -26,6 +27,5 @@ async def bill_name(text):
 
 if os.name == 'nt':
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    
 
-#asyncio.run(bill_text('Капибара ао'))
+# asyncio.run(bill_text('Капибара ао'))

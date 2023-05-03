@@ -36,4 +36,4 @@ headers = {
 
 response = requests.patch(url, json=payload, headers=headers)
 
-print(response.json())
+# print(response.json())
