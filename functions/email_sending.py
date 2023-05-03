@@ -1,19 +1,39 @@
-import smtplib
-from email.mime.text import MIMEText
-from email.header import Header
+import aiohttp
+import asyncio
 
+async def get_response(url, params):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, params=params) as resp:
+            return await resp.json()
+        
+async def send(email, text, person):
 
-def send(email, text, person):
-    try:
-        mailsender = smtplib.SMTP('smtp.yandex.ru', 587)
-        mailsender.starttls()
-        mailsender.login('GlObG1@yandex.ru', 'Sorokin109977')
-        mail_subject = f'Notification from {person}'
-        mail_body = f'Вам сообщение от {person} - {text}'
-        msg = MIMEText(mail_body, 'plain', 'utf-8')
-        msg['Subject'] = Header(mail_subject, 'utf-8')
-        mailsender.sendmail('GlObG1@yandex.ru', email, msg.as_string())
-        mailsender.quit()
-        return f'Сообщение на адрес {email} отправлено, но может оказаться у человека в спаме!'
-    except Exception as e:
-        return f'error while mailing - {e}'
+    url = "https://rapidprod-sendgrid-v1.p.rapidapi.com/alerts/1"
+
+    #response = await get_response(url, {'json': payload, 'headers':headers})
+    
+    response = await get_response(url, {"type": "stats_notification","email_to": "example@test.com","frequency": "daily",
+                                        "content-type": "application/json","X-RapidAPI-Key": "3053af2a23msh51dc8d631ba6ccap1d6dc0jsn58f1c962469e",
+                                        "X-RapidAPI-Host": "rapidprod-sendgrid-v1.p.rapidapi.com"})
+    
+    print(response)
+    
+    
+import requests
+
+url = "https://rapidprod-sendgrid-v1.p.rapidapi.com/alerts/1"
+
+payload = {
+	"type": "stats_notification",
+	"email_to": "artem.17sn@gmail.com",
+	"frequency": "daily"
+}
+headers = {
+	"content-type": "application/json",
+	"X-RapidAPI-Key": "3053af2a23msh51dc8d631ba6ccap1d6dc0jsn58f1c962469e",
+	"X-RapidAPI-Host": "rapidprod-sendgrid-v1.p.rapidapi.com"
+}
+
+response = requests.patch(url, json=payload, headers=headers)
+
+print(response.json())
