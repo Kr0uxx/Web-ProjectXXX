@@ -46,7 +46,7 @@ data - это папка с orm-моделью и самой DB
 
 Максим - actual_crypto_rate, actual_rate, black_and_white, cambridge_dictionary_func, capybara, recipes, requirements, kaneki, bot
 
-Артем - dogs_func, kitties_func, gpt_sending, news_func, quote_func, time_func, translating_func, voice_to_txt_func, weather_func, wiki_photo_func, yt_convert_func, spec-scrip, bill_func, mail_func, readme, bot
+Артем - dogs_func, kitties_func, gpt_sending, news_func, quote_func, time_func, translating_func, voice_to_txt_func, weather_func, wiki_photo_func, yt_convert_func, spec-scrip, bill_func, mail_func, jokes_func, readme, bot
 
 Катя - email_sending, map_func, traffic, презентация
 
