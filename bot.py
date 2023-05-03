@@ -750,8 +750,11 @@ async def voice_sp(update, context):
 ########################
 # отправка по почте
 async def email_command(update, context):
-    await update.message.reply_text(rf"Отправь мне почту человека и текст письма через точку с запятой (email; text)")
-    return 1
+    await update.message.reply_text(rf"функция временно отключена")
+    return ConversationHandler.END
+
+    #await update.message.reply_text(rf"Отправь мне почту человека и текст письма через точку с запятой (email; text)")
+    #return 1
 
 
 async def email_2_command(update, context):
