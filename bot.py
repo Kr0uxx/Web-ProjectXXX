@@ -3,7 +3,7 @@ from telegram.ext import CommandHandler, ConversationHandler
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func, news_func, kitties_func, \
     dogs_func, capybara, actual_crypto_rate, actual_rate, voice_to_txt_func, recipes, email_sending, map_func, traffic, \
-    black_white_filter, cambridge_dictionary_func, bored_func, be_like_bill_func, jokes_func
+    black_white_filter, cambridge_dictionary_func, bored_func, be_like_bill_func, jokes_func, fox_pict_func
 import asyncio
 import os
 import aiohttp
@@ -36,7 +36,7 @@ reply_keyboard_exch = [['/USD'], ['/EUR'], ['/CNY'], ['/GBP'], ['/JPY'], ['/CHF'
                        ['/KZT']]
 markup_exch = ReplyKeyboardMarkup(reply_keyboard_exch, one_time_keyboard=True)
 
-reply_keyboard_animals = [['/kitties'], ['/dogs'], ['/capybara']]
+reply_keyboard_animals = [['/kitties'], ['/dogs'], ['/capybara'], ['/fox']]
 markup_animals = ReplyKeyboardMarkup(reply_keyboard_animals, one_time_keyboard=True)
 
 reply_keyboard_capybara = [['/capybara_random_image'], ['/capybara_random_fact']]
@@ -57,7 +57,7 @@ markup_jokes = ReplyKeyboardMarkup(reply_keyboard_jokes, one_time_keyboard=True)
 ###########################################
 
 ########################
-# bill
+# jokes
 
 async def jokes_command(update, context):
     await update.message.reply_html(rf"Выберите тип шутки из предложенных!", reply_markup=markup_jokes)
@@ -349,6 +349,12 @@ async def kitties_command(update, context):
 # dogs
 async def dogs_command(update, context):
     func = dogs_func.dogs()
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+    
+# fox
+async def fox_command(update, context):
+    func = fox_pict_func.foxex()
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
@@ -693,6 +699,7 @@ def main():
     application.add_handler(CommandHandler("animals", animals_command_response))
     application.add_handler(CommandHandler("kitties", kitties_command))
     application.add_handler(CommandHandler("dogs", dogs_command))
+    application.add_handler(CommandHandler("fox", fox_command))
     application.add_handler(CommandHandler("capybara", capybara_command_response))
     application.add_handler(CommandHandler("capybara_random_image", capybara_img))
     application.add_handler(CommandHandler("capybara_random_fact", capybara_fact))

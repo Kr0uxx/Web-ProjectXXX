@@ -9,7 +9,7 @@ async def get_response(url, params):
             return await resp.json()
 
 
-async def kitties():
+async def foxes():
     req = await get_response('https://randomfox.ca/floof/', {})
     data = req
     img = data[0]['image']
