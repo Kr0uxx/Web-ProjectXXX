@@ -28,8 +28,8 @@ async def get_date(data):
 
 async def get_math(data):
     try:
-        number = data[0]
-        req = await get_response(f'http://numbersapi.com/{int(number)}/math')
+        number = data
+        req = await get_response(f'http://numbersapi.com/{number}/math')
             
         request = req
         text = str(request.text())
@@ -41,14 +41,17 @@ async def get_math(data):
 
 
 async def get_num(data):
+    number = data
+    req = await get_response(f'http://numbersapi.com/{number}')
+    request = req
+    print(request)
     try:
-        number = data[0]
-        req = await get_response(f'http://numbersapi.com/{int(number)}')
-            
-        request = req
+
         text = str(request.text())
         
         return text
     
     except Exception:
         return 'Oooops, smth went wrong... :('
+
+print(asyncio.run(get_num(7)))
