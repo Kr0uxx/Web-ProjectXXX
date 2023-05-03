@@ -24,7 +24,7 @@ async def find_anime(key_word):
             count += 1
             text += f'{count}){i["attributes"]["canonicalTitle"]}, id - {i["id"]}\n'
     else:
-        return f'Не найдено тайтлов по поиску "{key_word}"', 0
+        return f'Не найдено тайтлов по поиску "{key_word}", введите заново', 0
     return text, 1
 
 
@@ -32,16 +32,16 @@ async def find_anime_id(anime_id):
     req = await get_response(f'https://kitsu.io/api/edge/anime?filter[id]={anime_id}', {})
     data = req
     text = ''
-    find = data['data'][0]
-    title = find["attributes"]["canonicalTitle"]
-    idd = find["id"]
-    img = find["attributes"]["posterImage"]["original"]
-    start_date = find["attributes"]["startDate"].split('-')
-    end_date = find["attributes"]["endDate"].split('-')
-    age_rating = find["attributes"]["ageRating"]
-    episode_count = find["attributes"]["episodeCount"]
-    episode_length = find["attributes"]["episodeLength"]
-    if len(find) > 0:
+    if len(data['data']) > 0:
+        find = data['data'][0]
+        title = find["attributes"]["canonicalTitle"]
+        idd = find["id"]
+        img = find["attributes"]["posterImage"]["original"]
+        start_date = find["attributes"]["startDate"].split('-')
+        end_date = find["attributes"]["endDate"].split('-')
+        age_rating = find["attributes"]["ageRating"]
+        episode_count = find["attributes"]["episodeCount"]
+        episode_length = find["attributes"]["episodeLength"]
         text += f'{title}\n\n' \
                 f'id: {idd}\n' \
                 f'Дата выхода: {start_date[2]} {months[int(start_date[1]) - 1]} {start_date[0]}\n' \
@@ -59,4 +59,4 @@ if os.name == 'nt':
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 # print(asyncio.run(find_anime('jujutsu'))[0])
-# print(asyncio.run(find_anime_id(44212))[0])
+# print(asyncio.run(find_anime_id('dsfsdfsd'))[0])
