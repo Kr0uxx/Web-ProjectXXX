@@ -308,7 +308,7 @@ async def technology(update, context):
 
 
 async def specific_news(update, context):
-    await update.message.reply_text("Введите интересующий Вас топик")
+    await update.message.reply_text("Введите интересующую Вас тему ( например - Путин)")
     return 1
 
 
