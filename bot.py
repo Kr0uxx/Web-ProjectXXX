@@ -3,7 +3,7 @@ from telegram.ext import CommandHandler, ConversationHandler
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func, news_func, kitties_func, \
     dogs_func, capybara, actual_crypto_rate, actual_rate, voice_to_txt_func, recipes, email_sending, map_func, traffic, \
-    black_white_filter, cambridge_dictionary_func
+    black_white_filter, cambridge_dictionary_func, bored_func
 import asyncio
 import os
 import aiohttp
@@ -12,7 +12,7 @@ from data.user import User
 
 reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'],
                   ['/cambridge_dictionary'], ['/animals'], ['/map'], ['/black_and_white'], ['/economics'], ['/GPT'],
-                  ['/cooking'], ['/voice_yt'], ['/voice_to_txt'], ['/RESULT'], ['/email']]
+                  ['/cooking'], ['/voice_yt'], ['/voice_to_txt'], ['/RESULT'], ['/email'], ['random_event'], ['/bill']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 reply_keyboard_news = [['/specific_news'], ['/general_news']]
@@ -71,6 +71,16 @@ async def downloader_img(update, context):
         await update.message.reply_html(rf"Внимательнее посмотрите какой файл Вы отправляете", reply_markup=markup)
 
     return ConversationHandler.END
+
+
+# bill
+
+
+# bored_func
+async def get_random_event(update, context):
+    func = bored_func.random_event()
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
 
 ########################
@@ -628,6 +638,7 @@ def main():
     application.add_handler(CommandHandler("phrase_of_the_day", quote_command))
     application.add_handler(CommandHandler("voice_yt", voice_yt_command))
     application.add_handler(CommandHandler("RESULT", result_command))
+    application.add_handler(CommandHandler("random_event", get_random_event))
 
     # Животные
     application.add_handler(CommandHandler("animals", animals_command_response))
