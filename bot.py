@@ -629,8 +629,11 @@ async def random_recipe(update, context):
 async def random_recipe_response(update, context):
     func = recipes.get_random_recipe(update.message.text.lower())
     answer = await func
-    await update.message.reply_html(answer, reply_markup=markup)
-    return ConversationHandler.END
+    if answer[1] == 1:
+        await update.message.reply_html(rf"{answer[0]}", reply_markup=markup)
+        return ConversationHandler.END
+    else:
+        await update.message.reply_text(rf"{answer[0]}")
 
 
 async def find_recipe(update, context):
@@ -656,7 +659,7 @@ async def recipe_inf(update, context):
 async def recipe_inf_response(update, context):
     func = recipes.get_recipe_inf(update.message.text)
     answer = await func
-    await update.message.reply_html(answer, reply_markup=markup)
+    await update.message.reply_html(answer[0], reply_markup=markup)
     return ConversationHandler.END
 
 

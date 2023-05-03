@@ -80,8 +80,9 @@ async def get_random_recipe(tags=''):
             text += f'\n{img}'
     except:
         text += ''
+        return text, 0
 
-    return text
+    return text, 1
 
 
 async def find_a_recipe(query, number):
@@ -134,9 +135,9 @@ async def get_recipe_inf(recipe_id):
 
         answer += f'\n{img}'
 
-        return answer
+        return answer, 1
     except:
-        return 'There`s no such ID'
+        return 'There`s no such ID', 0
 
 # print(asyncio.run(get_random_recipe('irish')))
 # print(asyncio.run(find_a_recipe('pasta', 0)))
