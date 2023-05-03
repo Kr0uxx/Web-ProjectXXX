@@ -3,7 +3,7 @@ from telegram.ext import CommandHandler, ConversationHandler
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func, news_func, kitties_func, \
     dogs_func, capybara, actual_crypto_rate, actual_rate, voice_to_txt_func, recipes, email_sending, map_func, traffic, \
-    black_white_filter, cambridge_dictionary_func, bored_func, be_like_bill_func
+    black_white_filter, cambridge_dictionary_func, bored_func, be_like_bill_func, jokes_func, fox_pict_func, numbers_facts
 import asyncio
 import os
 import aiohttp
@@ -12,7 +12,7 @@ from data.user import User
 
 reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'],
                   ['/cambridge_dictionary'], ['/animals'], ['/map'], ['/black_and_white'], ['/economics'], ['/GPT'],
-                  ['/cooking'], ['/voice_yt'], ['/voice_to_txt'], ['/RESULT'], ['/email'], ['/random_action'], ['/bill']]
+                  ['/cooking'], ['/voice_yt'], ['/voice_to_txt'], ['/RESULT'], ['/email'], ['/random_action'], ['/bill'], ['/jokes'], ['/numbers']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 reply_keyboard_news = [['/specific_news'], ['/general_news']]
@@ -36,7 +36,7 @@ reply_keyboard_exch = [['/USD'], ['/EUR'], ['/CNY'], ['/GBP'], ['/JPY'], ['/CHF'
                        ['/KZT']]
 markup_exch = ReplyKeyboardMarkup(reply_keyboard_exch, one_time_keyboard=True)
 
-reply_keyboard_animals = [['/kitties'], ['/dogs'], ['/capybara']]
+reply_keyboard_animals = [['/kitties'], ['/dogs'], ['/capybara'], ['/fox']]
 markup_animals = ReplyKeyboardMarkup(reply_keyboard_animals, one_time_keyboard=True)
 
 reply_keyboard_capybara = [['/capybara_random_image'], ['/capybara_random_fact']]
@@ -51,9 +51,75 @@ markup_cooking = ReplyKeyboardMarkup(reply_keyboard_cooking, one_time_keyboard=T
 reply_keyboard_lang = [['/RU'], ['/UK'], ['/US'], ['/FR'], ['/DUTCH'], ['/ITA'], ['/SPAN'], ['/DK']]
 markup_lang = ReplyKeyboardMarkup(reply_keyboard_lang, one_time_keyboard=True)
 
+reply_keyboard_jokes = [['/geek_jokes'], ['/punch_jokes']]
+markup_jokes = ReplyKeyboardMarkup(reply_keyboard_jokes, one_time_keyboard=True)
+
+reply_keyboard_numbers = [['/just_number'], ['/math_number'], ['/date_number']]
+markup_numbers = ReplyKeyboardMarkup(reply_keyboard_numbers, one_time_keyboard=True)
 
 ###########################################
 
+########################
+# numbers
+
+async def numbers_command(update, context):
+    await update.message.reply_html(rf"Выберите тип то, что желаете знать о числах или датах из предложенного!", reply_markup=markup_numbers)
+
+
+async def just_number_command(update, context):
+    await update.message.reply_text('Введите число')
+    return 1
+    
+    
+async def just_number_command_resp(update, context):
+    func = numbers_facts.get_num([update.message.text])
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+    return ConversationHandler.END
+
+
+async def date_number_command(update, context):
+    await update.message.reply_text('Введите дату в формате - 01 23 ( где 01 - месяц, 23 - день )')
+    return 1
+   
+    
+async def date_number_command_resp(update, context):
+    func = jokes_func.jokes_chak(update.message.text.split(' '))
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+    return ConversationHandler.END
+    
+    
+async def math_number_command(update, context):
+    await update.message.reply_text('Введите число')
+    return 1
+    
+    
+async def math_number_command_resp(update, context):
+    func = numbers_facts.get_math([update.message.text])
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+    return ConversationHandler.END
+
+########################
+# jokes
+
+async def jokes_command(update, context):
+    await update.message.reply_html(rf"Выберите тип шутки из предложенных!", reply_markup=markup_jokes)
+
+
+async def geek_jokes_command(update, context):
+    func = jokes_func.jokes_chak()
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def punch_jokes_command(update, context):
+    func = jokes_func.jokes_panch()
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+    
+    
 ########################
 # black and white
 async def black_and_white_command(update, context):
@@ -75,7 +141,7 @@ async def downloader_img(update, context):
 
     return ConversationHandler.END
 
-
+########################
 # bill
 
 async def bill(update, context):
@@ -93,7 +159,7 @@ async def bill_text(update, context):
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
-
+########################
 # bored_func
 async def get_random_action(update, context):
     func = bored_func.random_event()
@@ -146,7 +212,9 @@ async def help_command(update, context):
         "\n\n/RESULT - давайте посмотрим на кол-во ваших вызовов кнопки start"
         "\n\n/email - позволяет отправить сообщение любому человеку по почте прямо из бота"
         "\n\n/random_action - если вам нечем заняться, запросите у бота рандомное действие"
-        "\n\n/bill - будь как Билл")
+        "\n\n/bill - будь как Билл"
+        "\n\n/jokes - шутки до гроба"
+        "\n\n/numbers - интересные факты о числах и не только")
 
 
 ########################
@@ -330,8 +398,14 @@ async def dogs_command(update, context):
     func = dogs_func.dogs()
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
+    
+# fox
+async def fox_command(update, context):
+    func = fox_pict_func.foxes()
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
-
+# capybara
 async def capybara_command_response(update, context):
     await update.message.reply_html(rf"Вы хотите увидеть картинку или узнать факт о капибарах?",
                                     reply_markup=markup_capybara)
@@ -648,8 +722,6 @@ async def email_2_command(update, context):
 def main():
     application = Application.builder().token('6118068525:AAGGfYJ46p8Qe0sYLKC9v8KSsBH7cqybjf4').build()
 
-    # затычки
-
     # легкие команды
     application.add_handler(CommandHandler("start", start_command))
     application.add_handler(CommandHandler("help", help_command))
@@ -660,6 +732,43 @@ def main():
     application.add_handler(CommandHandler("RESULT", result_command))
     application.add_handler(CommandHandler("random_action", get_random_action))
 
+
+    # numbers
+    application.add_handler(CommandHandler("numbers", numbers_command))
+    
+    conv_handler_math_number = ConversationHandler(
+        entry_points=[CommandHandler('math_number', math_number_command)],
+        states={
+            1: [MessageHandler(filters.TEXT, math_number_command_resp)],
+        },
+        fallbacks=[CommandHandler('stop', stop)]
+    )
+    application.add_handler(conv_handler_math_number)
+    
+    conv_handler_date_number = ConversationHandler(
+        entry_points=[CommandHandler('date_number', date_number_command)],
+        states={
+            1: [MessageHandler(filters.TEXT, date_number_command_resp)],
+        },
+        fallbacks=[CommandHandler('stop', stop)]
+    )
+    application.add_handler(conv_handler_date_number)
+    
+    conv_handler_just_number = ConversationHandler(
+        entry_points=[CommandHandler('just_number', just_number_command)],
+        states={
+            1: [MessageHandler(filters.TEXT, just_number_command_resp)],
+        },
+        fallbacks=[CommandHandler('stop', stop)]
+    )
+    application.add_handler(conv_handler_just_number)
+    
+
+    # jokes
+    application.add_handler(CommandHandler("jokes", jokes_command))
+    application.add_handler(CommandHandler("geek_jokes", geek_jokes_command))
+    application.add_handler(CommandHandler("punch_jokes", punch_jokes_command))
+    
     # bill
     application.add_handler(CommandHandler("bill", bill))
     application.add_handler(CommandHandler("bill_name", bill_name))
@@ -669,6 +778,7 @@ def main():
     application.add_handler(CommandHandler("animals", animals_command_response))
     application.add_handler(CommandHandler("kitties", kitties_command))
     application.add_handler(CommandHandler("dogs", dogs_command))
+    application.add_handler(CommandHandler("fox", fox_command))
     application.add_handler(CommandHandler("capybara", capybara_command_response))
     application.add_handler(CommandHandler("capybara_random_image", capybara_img))
     application.add_handler(CommandHandler("capybara_random_fact", capybara_fact))
