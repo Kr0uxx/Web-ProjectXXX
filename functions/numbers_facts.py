@@ -18,7 +18,7 @@ async def get_date(data):
         month, day = data
         req = await get_response(f'http://numbersapi.com/{month}/{day}/date')
         request = req
-        text += str(request.text())
+        text = str(request.text())
         
         return text
 
@@ -32,7 +32,7 @@ async def get_math(data):
         req = await get_response(f'http://numbersapi.com/{int(number)}/math')
             
         request = req
-        text += str(request.text())
+        text = str(request.text())
         
         return text
     
@@ -46,7 +46,7 @@ async def get_num(data):
         req = await get_response(f'http://numbersapi.com/{int(number)}')
             
         request = req
-        text += str(request.text())
+        text = str(request.text())
         
         return text
     

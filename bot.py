@@ -3,7 +3,8 @@ from telegram.ext import CommandHandler, ConversationHandler
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func, news_func, kitties_func, \
     dogs_func, capybara, actual_crypto_rate, actual_rate, voice_to_txt_func, recipes, email_sending, map_func, traffic, \
-    black_white_filter, cambridge_dictionary_func, bored_func, be_like_bill_func, jokes_func, fox_pict_func, numbers_facts
+    black_white_filter, cambridge_dictionary_func, bored_func, be_like_bill_func, jokes_func, fox_pict_func, \
+    numbers_facts, anime
 import asyncio
 import os
 import aiohttp
@@ -12,7 +13,8 @@ from data.user import User
 
 reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'],
                   ['/cambridge_dictionary'], ['/animals'], ['/map'], ['/black_and_white'], ['/economics'], ['/GPT'],
-                  ['/cooking'], ['/voice_yt'], ['/voice_to_txt'], ['/RESULT'], ['/email'], ['/random_action'], ['/bill'], ['/jokes'], ['/numbers']]
+                  ['/cooking'], ['/voice_yt'], ['/voice_to_txt'], ['/RESULT'], ['/email'], ['/random_action'],
+                  ['/bill'], ['/jokes'], ['/numbers'], ['/anime']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 reply_keyboard_news = [['/specific_news'], ['/general_news']]
@@ -54,8 +56,12 @@ markup_lang = ReplyKeyboardMarkup(reply_keyboard_lang, one_time_keyboard=True)
 reply_keyboard_jokes = [['/geek_jokes'], ['/punch_jokes']]
 markup_jokes = ReplyKeyboardMarkup(reply_keyboard_jokes, one_time_keyboard=True)
 
+reply_keyboard_anime = [['/find_anime'], ['/find_anime_id']]
+markup_anime = ReplyKeyboardMarkup(reply_keyboard_anime, one_time_keyboard=True)
+
 reply_keyboard_numbers = [['/just_number'], ['/math_number'], ['/date_number']]
 markup_numbers = ReplyKeyboardMarkup(reply_keyboard_numbers, one_time_keyboard=True)
+
 
 ###########################################
 
@@ -63,14 +69,15 @@ markup_numbers = ReplyKeyboardMarkup(reply_keyboard_numbers, one_time_keyboard=T
 # numbers
 
 async def numbers_command(update, context):
-    await update.message.reply_html(rf"Выберите тип то, что желаете знать о числах или датах из предложенного!", reply_markup=markup_numbers)
+    await update.message.reply_html(rf"Выберите тип то, что желаете знать о числах или датах из предложенного!",
+                                    reply_markup=markup_numbers)
 
 
 async def just_number_command(update, context):
     await update.message.reply_text('Введите число')
     return 1
-    
-    
+
+
 async def just_number_command_resp(update, context):
     func = numbers_facts.get_num([update.message.text])
     answer = await func
@@ -81,25 +88,26 @@ async def just_number_command_resp(update, context):
 async def date_number_command(update, context):
     await update.message.reply_text('Введите дату в формате - 01 23 ( где 01 - месяц, 23 - день )')
     return 1
-   
-    
+
+
 async def date_number_command_resp(update, context):
     func = jokes_func.jokes_chak(update.message.text.split(' '))
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
     return ConversationHandler.END
-    
-    
+
+
 async def math_number_command(update, context):
     await update.message.reply_text('Введите число')
     return 1
-    
-    
+
+
 async def math_number_command_resp(update, context):
     func = numbers_facts.get_math([update.message.text])
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
     return ConversationHandler.END
+
 
 ########################
 # jokes
@@ -118,8 +126,8 @@ async def punch_jokes_command(update, context):
     func = jokes_func.jokes_panch()
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
-    
-    
+
+
 ########################
 # black and white
 async def black_and_white_command(update, context):
@@ -141,6 +149,7 @@ async def downloader_img(update, context):
 
     return ConversationHandler.END
 
+
 ########################
 # bill
 
@@ -158,6 +167,7 @@ async def bill_text(update, context):
     func = be_like_bill_func.bill_text(update.message.text)
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
 
 ########################
 # bored_func
@@ -398,12 +408,14 @@ async def dogs_command(update, context):
     func = dogs_func.dogs()
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
-    
+
+
 # fox
 async def fox_command(update, context):
     func = fox_pict_func.foxes()
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
 
 # capybara
 async def capybara_command_response(update, context):
@@ -421,6 +433,44 @@ async def capybara_fact(update, context):
     func = capybara.capybara_fact()
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+########################
+# anime アニメ
+async def anime_response(update, context):
+    await update.message.reply_html(rf"find_anime - найти топ самых популярных аниме по названию; "
+                                    rf"find_anime_id - найти аниме по id",
+                                    reply_markup=markup_anime)
+
+
+async def anime_find(update, context):
+    await update.message.reply_text('Введите ключевое слово для поиска тайтлов (на английском)')
+    return 1
+
+
+async def anime_find_response(update, context):
+    func = anime.find_anime(update.message.text)
+    answer = await func
+    if answer[1] == 1:
+        await update.message.reply_html(rf"{answer[0]}", reply_markup=markup)
+        return ConversationHandler.END
+    else:
+        await update.message.reply_text(rf"{answer[0]}")
+
+
+async def anime_id(update, context):
+    await update.message.reply_text('Введите id, чтобы узнать подробную информацию о тайтле')
+    return 1
+
+
+async def anime_id_response(update, context):
+    func = anime.find_anime_id(update.message.text)
+    answer = await func
+    if answer[1] == 1:
+        await update.message.reply_html(rf"{answer[0]}", reply_markup=markup)
+        return ConversationHandler.END
+    else:
+        await update.message.reply_text(rf"{answer[0]}")
 
 
 ########################
@@ -732,10 +782,9 @@ def main():
     application.add_handler(CommandHandler("RESULT", result_command))
     application.add_handler(CommandHandler("random_action", get_random_action))
 
-
     # numbers
     application.add_handler(CommandHandler("numbers", numbers_command))
-    
+
     conv_handler_math_number = ConversationHandler(
         entry_points=[CommandHandler('math_number', math_number_command)],
         states={
@@ -744,7 +793,7 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_math_number)
-    
+
     conv_handler_date_number = ConversationHandler(
         entry_points=[CommandHandler('date_number', date_number_command)],
         states={
@@ -753,7 +802,7 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_date_number)
-    
+
     conv_handler_just_number = ConversationHandler(
         entry_points=[CommandHandler('just_number', just_number_command)],
         states={
@@ -762,13 +811,12 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_just_number)
-    
 
     # jokes
     application.add_handler(CommandHandler("jokes", jokes_command))
     application.add_handler(CommandHandler("geek_jokes", geek_jokes_command))
     application.add_handler(CommandHandler("punch_jokes", punch_jokes_command))
-    
+
     # bill
     application.add_handler(CommandHandler("bill", bill))
     application.add_handler(CommandHandler("bill_name", bill_name))
@@ -816,6 +864,9 @@ def main():
 
     # кухня
     application.add_handler(CommandHandler("cooking", cooking_command_response))
+
+    # anime
+    application.add_handler(CommandHandler("anime", anime_response))
 
     # новости
     application.add_handler(CommandHandler("news", news_command))
@@ -951,6 +1002,32 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler_dictionary)
+
+    # anime
+
+    # поиск аниме по названию
+    conv_handler_anime_find = ConversationHandler(
+        entry_points=[CommandHandler('find_anime', anime_find)],
+
+        states={
+            1: [MessageHandler(filters.TEXT, anime_find_response)]
+        },
+
+        fallbacks=[CommandHandler('stop', stop)]
+    )
+    application.add_handler(conv_handler_anime_find)
+
+    # поиск аниме по id
+    conv_handler_anime_id = ConversationHandler(
+        entry_points=[CommandHandler('find_anime_id', anime_id)],
+
+        states={
+            1: [MessageHandler(filters.TEXT, anime_id_response)]
+        },
+
+        fallbacks=[CommandHandler('stop', stop)]
+    )
+    application.add_handler(conv_handler_anime_id)
 
     application.run_polling()
 
