@@ -358,7 +358,7 @@ async def fox_command(update, context):
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
-
+# capybara
 async def capybara_command_response(update, context):
     await update.message.reply_html(rf"Вы хотите увидеть картинку или узнать факт о капибарах?",
                                     reply_markup=markup_capybara)
