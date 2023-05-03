@@ -354,7 +354,7 @@ async def dogs_command(update, context):
     
 # fox
 async def fox_command(update, context):
-    func = fox_pict_func.foxex()
+    func = fox_pict_func.foxes()
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
