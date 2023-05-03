@@ -29,5 +29,4 @@ async def jokes_panch():
 
 if os.name == 'nt':
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    
-    
+     

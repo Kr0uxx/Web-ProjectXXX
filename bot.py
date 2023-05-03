@@ -3,7 +3,7 @@ from telegram.ext import CommandHandler, ConversationHandler
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 from functions import gpt_func, time_func, quote_func, weather_func, wiki_photo_func, news_func, kitties_func, \
     dogs_func, capybara, actual_crypto_rate, actual_rate, voice_to_txt_func, recipes, email_sending, map_func, traffic, \
-    black_white_filter, cambridge_dictionary_func, bored_func, be_like_bill_func
+    black_white_filter, cambridge_dictionary_func, bored_func, be_like_bill_func, jokes_func
 import asyncio
 import os
 import aiohttp
@@ -12,7 +12,7 @@ from data.user import User
 
 reply_keyboard = [['/help'], ['/GIT'], ['/weather'], ['/time'], ['/phrase_of_the_day'], ['/news'],
                   ['/cambridge_dictionary'], ['/animals'], ['/map'], ['/black_and_white'], ['/economics'], ['/GPT'],
-                  ['/cooking'], ['/voice_yt'], ['/voice_to_txt'], ['/RESULT'], ['/email'], ['/random_action'], ['/bill']]
+                  ['/cooking'], ['/voice_yt'], ['/voice_to_txt'], ['/RESULT'], ['/email'], ['/random_action'], ['/bill'], ['/jokes']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 reply_keyboard_news = [['/specific_news'], ['/general_news']]
@@ -51,9 +51,30 @@ markup_cooking = ReplyKeyboardMarkup(reply_keyboard_cooking, one_time_keyboard=T
 reply_keyboard_lang = [['/RU'], ['/UK'], ['/US'], ['/FR'], ['/DUTCH'], ['/ITA'], ['/SPAN'], ['/DK']]
 markup_lang = ReplyKeyboardMarkup(reply_keyboard_lang, one_time_keyboard=True)
 
+reply_keyboard_jokes = [['/geek_jokes'], ['/punch_jokes']]
+markup_jokes = ReplyKeyboardMarkup(reply_keyboard_jokes, one_time_keyboard=True)
 
 ###########################################
 
+########################
+# bill
+
+async def jokes_command(update, context):
+    await update.message.reply_html(rf"Выберите тип шутки из предложенных!", reply_markup=markup_jokes)
+
+
+async def geek_jokes_command(update, context):
+    func = jokes_func.jokes_chak()
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+
+
+async def punch_jokes_command(update, context):
+    func = jokes_func.jokes_panch()
+    answer = await func
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+    
+    
 ########################
 # black and white
 async def black_and_white_command(update, context):
@@ -75,7 +96,7 @@ async def downloader_img(update, context):
 
     return ConversationHandler.END
 
-
+########################
 # bill
 
 async def bill(update, context):
@@ -93,7 +114,7 @@ async def bill_text(update, context):
     answer = await func
     await update.message.reply_html(rf"{answer}", reply_markup=markup)
 
-
+########################
 # bored_func
 async def get_random_action(update, context):
     func = bored_func.random_event()
@@ -648,8 +669,6 @@ async def email_2_command(update, context):
 def main():
     application = Application.builder().token('6118068525:AAGGfYJ46p8Qe0sYLKC9v8KSsBH7cqybjf4').build()
 
-    # затычки
-
     # легкие команды
     application.add_handler(CommandHandler("start", start_command))
     application.add_handler(CommandHandler("help", help_command))
@@ -660,6 +679,11 @@ def main():
     application.add_handler(CommandHandler("RESULT", result_command))
     application.add_handler(CommandHandler("random_action", get_random_action))
 
+    # jokes
+    application.add_handler(CommandHandler("jokes", jokes_command))
+    application.add_handler(CommandHandler("geek_jokes", geek_jokes_command))
+    application.add_handler(CommandHandler("punch_jokes", punch_jokes_command))
+    
     # bill
     application.add_handler(CommandHandler("bill", bill))
     application.add_handler(CommandHandler("bill_name", bill_name))
