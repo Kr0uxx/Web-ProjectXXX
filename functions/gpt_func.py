@@ -3,8 +3,8 @@ from requests.exceptions import ReadTimeout
 from openai.error import RateLimitError, InvalidRequestError
 from datetime import datetime
 
-# Предоставляем ключ API
-openai.api_key = "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"
+# Ключ удалён, т.к. при выгрузке ключа в сеть, openAI удаляет его, однако же в боте функция рботает, т.к ключ лежит на хостинге
+openai.api_key = ""
 
 
 def ask(prompt, a):  # def которая отвечает за получение ответа , чтобы задать вопрос ask('вопрос')
